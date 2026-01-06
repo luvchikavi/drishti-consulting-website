@@ -1,0 +1,1414 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Drishti Consulting | Vision Into Reality</title>
+    <meta name="description" content="Drishti Consulting - Transforming business vision into technological reality. Expert consulting in sustainability, compliance, and digital transformation.">
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #6366f1;
+            --primary-dark: #4f46e5;
+            --secondary: #0ea5e9;
+            --accent: #8b5cf6;
+            --dark: #0f172a;
+            --darker: #020617;
+            --light: #f8fafc;
+            --gray: #64748b;
+            --success: #10b981;
+            --gradient-1: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            --gradient-2: linear-gradient(135deg, #6366f1 0%, #8b5cf6 50%, #d946ef 100%);
+            --gradient-3: linear-gradient(135deg, #0ea5e9 0%, #6366f1 100%);
+            --glass: rgba(255, 255, 255, 0.05);
+            --glass-border: rgba(255, 255, 255, 0.1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Open Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--darker);
+            color: var(--light);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        /* Animated Background */
+        .bg-animation {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            overflow: hidden;
+        }
+
+        .bg-animation::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background:
+                radial-gradient(circle at 20% 80%, rgba(99, 102, 241, 0.15) 0%, transparent 50%),
+                radial-gradient(circle at 80% 20%, rgba(139, 92, 246, 0.15) 0%, transparent 50%),
+                radial-gradient(circle at 40% 40%, rgba(14, 165, 233, 0.1) 0%, transparent 40%);
+            animation: bgMove 20s ease-in-out infinite;
+        }
+
+        @keyframes bgMove {
+            0%, 100% { transform: translate(0, 0) rotate(0deg); }
+            25% { transform: translate(-5%, 5%) rotate(5deg); }
+            50% { transform: translate(5%, -5%) rotate(-5deg); }
+            75% { transform: translate(-3%, -3%) rotate(3deg); }
+        }
+
+        /* Grid Pattern Overlay */
+        .grid-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image:
+                linear-gradient(rgba(255,255,255,0.02) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(255,255,255,0.02) 1px, transparent 1px);
+            background-size: 50px 50px;
+            z-index: -1;
+        }
+
+        /* Navigation */
+        nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            padding: 20px 5%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            backdrop-filter: blur(20px);
+            background: rgba(2, 6, 23, 0.8);
+            border-bottom: 1px solid var(--glass-border);
+            transition: all 0.3s ease;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            text-decoration: none;
+            color: var(--light);
+        }
+
+        .logo-icon {
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .logo-icon svg {
+            width: 40px;
+            height: 40px;
+        }
+
+        .logo-text {
+            font-size: 24px;
+            font-weight: 700;
+            background: var(--gradient-2);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 40px;
+            list-style: none;
+        }
+
+        .nav-links a {
+            color: var(--gray);
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 15px;
+            transition: color 0.3s ease;
+            position: relative;
+        }
+
+        .nav-links a:hover {
+            color: var(--light);
+        }
+
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: var(--gradient-2);
+            transition: width 0.3s ease;
+        }
+
+        .nav-links a:hover::after {
+            width: 100%;
+        }
+
+        .nav-cta {
+            background: var(--gradient-2);
+            color: white;
+            padding: 12px 28px;
+            border-radius: 30px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 14px;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 20px rgba(99, 102, 241, 0.3);
+        }
+
+        .nav-cta:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 30px rgba(99, 102, 241, 0.5);
+        }
+
+        /* Hero Section */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 120px 5% 80px;
+            position: relative;
+        }
+
+        .hero-content {
+            max-width: 1200px;
+            text-align: center;
+        }
+
+        .sanskrit-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            background: var(--glass);
+            border: 1px solid var(--glass-border);
+            padding: 10px 24px;
+            border-radius: 50px;
+            margin-bottom: 30px;
+            font-size: 14px;
+            color: var(--secondary);
+            backdrop-filter: blur(10px);
+        }
+
+        .sanskrit-text {
+            font-family: 'Open Sans', sans-serif;
+            font-size: 18px;
+            color: var(--accent);
+        }
+
+        .hero h1 {
+            font-size: clamp(36px, 5vw, 56px);
+            font-weight: 700;
+            line-height: 1.2;
+            margin-bottom: 24px;
+            background: linear-gradient(135deg, #fff 0%, #cbd5e1 50%, #94a3b8 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .hero h1 span {
+            background: var(--gradient-2);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .hero-subtitle {
+            font-size: clamp(14px, 2vw, 17px);
+            color: var(--gray);
+            max-width: 600px;
+            margin: 0 auto 40px;
+            line-height: 1.6;
+        }
+
+        .hero-ctas {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .btn-primary {
+            background: var(--gradient-2);
+            color: white;
+            padding: 12px 28px;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 14px;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 30px rgba(99, 102, 241, 0.4);
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 40px rgba(99, 102, 241, 0.6);
+        }
+
+        .btn-secondary {
+            background: var(--glass);
+            border: 1px solid var(--glass-border);
+            color: var(--light);
+            padding: 12px 28px;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 14px;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .btn-secondary:hover {
+            background: rgba(255, 255, 255, 0.1);
+            border-color: rgba(255, 255, 255, 0.2);
+            transform: translateY(-3px);
+        }
+
+        /* Meaning Section */
+        .meaning-section {
+            padding: 100px 5%;
+            position: relative;
+        }
+
+        .meaning-card {
+            max-width: 1000px;
+            margin: 0 auto;
+            background: var(--glass);
+            border: 1px solid var(--glass-border);
+            border-radius: 30px;
+            padding: 60px;
+            backdrop-filter: blur(20px);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .meaning-card::before {
+            content: 'दृष्टि';
+            position: absolute;
+            top: -20px;
+            right: -20px;
+            font-size: 200px;
+            font-family: 'Open Sans', sans-serif;
+            color: rgba(99, 102, 241, 0.05);
+            pointer-events: none;
+        }
+
+        .meaning-card h2 {
+            font-size: 14px;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            color: var(--secondary);
+            margin-bottom: 20px;
+        }
+
+        .meaning-card h3 {
+            font-size: 28px;
+            font-weight: 700;
+            margin-bottom: 20px;
+            font-family: 'Open Sans', sans-serif;
+        }
+
+        .meaning-card h3 span {
+            background: var(--gradient-2);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .meaning-text {
+            font-size: 14px;
+            color: var(--gray);
+            line-height: 1.7;
+            max-width: 800px;
+        }
+
+        .meaning-text strong {
+            color: var(--light);
+        }
+
+        .meaning-features {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 30px;
+            margin-top: 50px;
+        }
+
+        .meaning-feature {
+            text-align: center;
+            padding: 30px;
+            background: rgba(255, 255, 255, 0.02);
+            border-radius: 20px;
+            border: 1px solid var(--glass-border);
+        }
+
+        .meaning-feature-icon {
+            margin-bottom: 15px;
+            color: var(--secondary);
+        }
+
+        .meaning-feature-icon svg {
+            width: 40px;
+            height: 40px;
+        }
+
+        .meaning-feature h4 {
+            font-size: 18px;
+            margin-bottom: 10px;
+            color: var(--light);
+        }
+
+        .meaning-feature p {
+            font-size: 14px;
+            color: var(--gray);
+        }
+
+        /* Services Section */
+        .services {
+            padding: 100px 5%;
+        }
+
+        .section-header {
+            text-align: center;
+            max-width: 700px;
+            margin: 0 auto 70px;
+        }
+
+        .section-label {
+            display: inline-block;
+            font-size: 13px;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            color: var(--secondary);
+            margin-bottom: 20px;
+            background: var(--glass);
+            padding: 8px 20px;
+            border-radius: 30px;
+            border: 1px solid var(--glass-border);
+        }
+
+        .section-header h2 {
+            font-size: clamp(24px, 4vw, 32px);
+            font-weight: 700;
+            margin-bottom: 16px;
+        }
+
+        .section-header p {
+            font-size: 14px;
+            color: var(--gray);
+        }
+
+        .services-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 24px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .service-card {
+            background: var(--glass);
+            border: 1px solid var(--glass-border);
+            border-radius: 20px;
+            padding: 28px;
+            transition: all 0.4s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .service-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: var(--gradient-2);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .service-card:hover {
+            transform: translateY(-10px);
+            border-color: rgba(99, 102, 241, 0.3);
+            box-shadow: 0 20px 60px rgba(99, 102, 241, 0.15);
+        }
+
+        .service-card:hover::before {
+            opacity: 1;
+        }
+
+        .service-icon {
+            width: 50px;
+            height: 50px;
+            background: var(--gradient-2);
+            border-radius: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 18px;
+            box-shadow: 0 8px 24px rgba(99, 102, 241, 0.3);
+        }
+
+        .service-icon svg {
+            width: 24px;
+            height: 24px;
+        }
+
+        .service-card h3 {
+            font-size: 18px;
+            margin-bottom: 12px;
+            color: var(--light);
+        }
+
+        .service-card p {
+            color: var(--gray);
+            font-size: 13px;
+            line-height: 1.6;
+        }
+
+        /* Projects Section */
+        .projects {
+            padding: 100px 5%;
+            background: linear-gradient(180deg, transparent 0%, rgba(99, 102, 241, 0.03) 50%, transparent 100%);
+        }
+
+        .projects-grid {
+            display: grid;
+            gap: 40px;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .project-card {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 36px;
+            background: var(--glass);
+            border: 1px solid var(--glass-border);
+            border-radius: 24px;
+            padding: 36px;
+            transition: all 0.4s ease;
+            align-items: center;
+        }
+
+        .project-card:hover {
+            border-color: rgba(99, 102, 241, 0.3);
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+        }
+
+        .project-card.featured {
+            background: linear-gradient(135deg, rgba(99, 102, 241, 0.1) 0%, rgba(139, 92, 246, 0.1) 100%);
+            border-color: rgba(99, 102, 241, 0.3);
+        }
+
+        .project-card:nth-child(even) {
+            direction: rtl;
+        }
+
+        .project-card:nth-child(even) > * {
+            direction: ltr;
+        }
+
+        .project-content {
+            padding: 20px 0;
+        }
+
+        .project-link {
+            display: inline-block;
+            margin-top: 16px;
+            padding: 10px 20px;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--accent) 100%);
+            color: white;
+            text-decoration: none;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+
+        .project-link:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(99, 102, 241, 0.3);
+        }
+
+        .project-badge {
+            display: inline-block;
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            padding: 6px 16px;
+            border-radius: 20px;
+            margin-bottom: 20px;
+        }
+
+        .badge-flagship {
+            background: var(--gradient-2);
+            color: white;
+        }
+
+        .badge-enterprise {
+            background: rgba(16, 185, 129, 0.2);
+            color: var(--success);
+            border: 1px solid rgba(16, 185, 129, 0.3);
+        }
+
+        .badge-saas {
+            background: rgba(14, 165, 233, 0.2);
+            color: var(--secondary);
+            border: 1px solid rgba(14, 165, 233, 0.3);
+        }
+
+        .project-content h3 {
+            font-size: 22px;
+            margin-bottom: 12px;
+            color: var(--light);
+        }
+
+        .project-content p {
+            color: var(--gray);
+            font-size: 13px;
+            line-height: 1.6;
+            margin-bottom: 20px;
+        }
+
+        .project-tech {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-bottom: 25px;
+        }
+
+        .tech-tag {
+            font-size: 12px;
+            padding: 6px 14px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid var(--glass-border);
+            border-radius: 20px;
+            color: var(--gray);
+        }
+
+        .project-preview {
+            background: linear-gradient(135deg, var(--dark) 0%, var(--darker) 100%);
+            border-radius: 20px;
+            padding: 30px;
+            position: relative;
+            overflow: hidden;
+            min-height: 300px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .project-preview::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 30px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 20px 20px 0 0;
+        }
+
+        .preview-dots {
+            position: absolute;
+            top: 10px;
+            left: 15px;
+            display: flex;
+            gap: 6px;
+        }
+
+        .preview-dots span {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+        }
+
+        .preview-dots span:nth-child(1) { background: #ff5f57; }
+        .preview-dots span:nth-child(2) { background: #febc2e; }
+        .preview-dots span:nth-child(3) { background: #28c840; }
+
+        .preview-content {
+            text-align: center;
+            padding: 20px;
+        }
+
+        .preview-icon {
+            margin-bottom: 15px;
+        }
+
+        .preview-title {
+            font-size: 20px;
+            font-weight: 600;
+            color: var(--light);
+        }
+
+        /* Browser Mockup */
+        .browser-mockup {
+            position: absolute;
+            top: 45px;
+            left: 15px;
+            right: 15px;
+            bottom: 15px;
+            background: #1a1a2e;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 15px 50px rgba(0, 0, 0, 0.4);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .browser-mockup img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            object-position: top left;
+            transition: transform 8s ease-in-out;
+        }
+
+        .project-preview:hover .browser-mockup img {
+            transform: translateY(-20%);
+        }
+
+        /* Founder Section */
+        .founder {
+            padding: 100px 5%;
+        }
+
+        .founder-card {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 350px 1fr;
+            gap: 60px;
+            background: var(--glass);
+            border: 1px solid var(--glass-border);
+            border-radius: 30px;
+            padding: 60px;
+            align-items: center;
+        }
+
+        .founder-image {
+            position: relative;
+        }
+
+        .founder-image-container {
+            width: 100%;
+            aspect-ratio: 1;
+            background: var(--gradient-2);
+            border-radius: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 120px;
+            box-shadow: 0 20px 60px rgba(99, 102, 241, 0.3);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .founder-image-container::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(45deg, transparent 40%, rgba(255,255,255,0.1) 50%, transparent 60%);
+            animation: shine 3s infinite;
+        }
+
+        @keyframes shine {
+            0% { transform: translateX(-100%) rotate(45deg); }
+            100% { transform: translateX(100%) rotate(45deg); }
+        }
+
+        .founder-badges {
+            display: flex;
+            gap: 10px;
+            margin-top: 20px;
+            flex-wrap: wrap;
+        }
+
+        .founder-badge {
+            font-size: 12px;
+            padding: 8px 16px;
+            background: var(--glass);
+            border: 1px solid var(--glass-border);
+            border-radius: 20px;
+            color: var(--gray);
+        }
+
+        .founder-info h2 {
+            font-size: 14px;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            color: var(--secondary);
+            margin-bottom: 15px;
+        }
+
+        .founder-info h3 {
+            font-size: 28px;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+
+        .founder-title {
+            font-size: 16px;
+            color: var(--accent);
+            margin-bottom: 20px;
+        }
+
+        .founder-bio {
+            color: var(--gray);
+            font-size: 13px;
+            line-height: 1.7;
+            margin-bottom: 24px;
+        }
+
+        .founder-stats {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 30px;
+            margin-top: 40px;
+            padding-top: 40px;
+            border-top: 1px solid var(--glass-border);
+        }
+
+        .stat {
+            text-align: center;
+        }
+
+        .stat-value {
+            font-size: 26px;
+            font-weight: 700;
+            background: var(--gradient-2);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .stat-label {
+            font-size: 12px;
+            color: var(--gray);
+            margin-top: 4px;
+        }
+
+        .founder-links {
+            display: flex;
+            gap: 15px;
+            margin-top: 30px;
+        }
+
+        .founder-link {
+            width: 50px;
+            height: 50px;
+            background: var(--glass);
+            border: 1px solid var(--glass-border);
+            border-radius: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-decoration: none;
+            font-size: 22px;
+            transition: all 0.3s ease;
+        }
+
+        .founder-link:hover {
+            background: var(--gradient-2);
+            border-color: transparent;
+            transform: translateY(-3px);
+        }
+
+        /* Contact Section */
+        .contact {
+            padding: 100px 5%;
+            background: linear-gradient(180deg, transparent 0%, rgba(99, 102, 241, 0.05) 100%);
+        }
+
+        .contact-container {
+            max-width: 800px;
+            margin: 0 auto;
+            text-align: center;
+        }
+
+        .contact h2 {
+            font-size: clamp(24px, 4vw, 32px);
+            margin-bottom: 16px;
+        }
+
+        .contact p {
+            font-size: 14px;
+            color: var(--gray);
+            margin-bottom: 40px;
+        }
+
+        .contact-card {
+            background: var(--glass);
+            border: 1px solid var(--glass-border);
+            border-radius: 30px;
+            padding: 50px;
+            backdrop-filter: blur(20px);
+        }
+
+        .contact-methods {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 30px;
+            margin-bottom: 40px;
+        }
+
+        .contact-method {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            padding: 25px;
+            background: rgba(255, 255, 255, 0.02);
+            border-radius: 16px;
+            text-decoration: none;
+            color: var(--light);
+            transition: all 0.3s ease;
+            border: 1px solid transparent;
+        }
+
+        .contact-method:hover {
+            background: rgba(99, 102, 241, 0.1);
+            border-color: rgba(99, 102, 241, 0.3);
+            transform: translateY(-3px);
+        }
+
+        .contact-method-icon {
+            width: 55px;
+            height: 55px;
+            background: var(--gradient-2);
+            border-radius: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            flex-shrink: 0;
+        }
+
+        .contact-method-info {
+            text-align: left;
+        }
+
+        .contact-method-label {
+            font-size: 13px;
+            color: var(--gray);
+            margin-bottom: 5px;
+        }
+
+        .contact-method-value {
+            font-size: 16px;
+            font-weight: 600;
+        }
+
+        /* Footer */
+        footer {
+            padding: 50px 5%;
+            border-top: 1px solid var(--glass-border);
+            text-align: center;
+        }
+
+        .footer-logo {
+            display: inline-flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 20px;
+        }
+
+        .footer-logo .logo-icon {
+            width: 40px;
+            height: 40px;
+            font-size: 20px;
+        }
+
+        .footer-logo .logo-text {
+            font-size: 20px;
+        }
+
+        .footer-tagline {
+            color: var(--gray);
+            font-size: 14px;
+            margin-bottom: 30px;
+        }
+
+        .footer-copyright {
+            font-size: 13px;
+            color: var(--gray);
+        }
+
+        /* Responsive */
+        @media (max-width: 1024px) {
+            .founder-card {
+                grid-template-columns: 1fr;
+                text-align: center;
+            }
+
+            .founder-image {
+                max-width: 300px;
+                margin: 0 auto;
+            }
+
+            .founder-badges {
+                justify-content: center;
+            }
+
+            .project-card {
+                grid-template-columns: 1fr;
+            }
+
+            .project-card:nth-child(even) {
+                direction: ltr;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+            }
+
+            .meaning-features {
+                grid-template-columns: 1fr;
+            }
+
+            .services-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .contact-methods {
+                grid-template-columns: 1fr;
+            }
+
+            .founder-stats {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="bg-animation"></div>
+    <div class="grid-overlay"></div>
+
+    <!-- Navigation -->
+    <nav>
+        <a href="#" class="logo">
+            <div class="logo-icon">
+                <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+                    <!-- Concentric circles with clear outlines -->
+                    <circle cx="50" cy="50" r="45" fill="none" stroke="#4a5568" stroke-width="2"/>
+                    <circle cx="50" cy="50" r="32" fill="none" stroke="#4a5568" stroke-width="2"/>
+                    <circle cx="50" cy="50" r="20" fill="none" stroke="#4a5568" stroke-width="2"/>
+                    <!-- Highlighted center -->
+                    <circle cx="50" cy="50" r="10" fill="none" stroke="#6366f1" stroke-width="2.5"/>
+                    <circle cx="50" cy="50" r="4" fill="#6366f1"/>
+                </svg>
+            </div>
+            <span class="logo-text">Drishti</span>
+        </a>
+        <ul class="nav-links">
+            <li><a href="#meaning">Our Vision</a></li>
+            <li><a href="#services">Services</a></li>
+            <li><a href="#projects">Projects</a></li>
+            <li><a href="#founder">Founder</a></li>
+        </ul>
+        <a href="#contact" class="nav-cta">Get in Touch</a>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="hero-content">
+            <div class="sanskrit-badge">
+                <span>Focused Vision. Precise Execution.</span>
+            </div>
+            <h1>Transform Your <span>Vision</span><br>Into Reality</h1>
+            <p class="hero-subtitle">
+                We help forward-thinking businesses focus their strategic vision and build technology solutions that drive sustainable growth and regulatory compliance.
+            </p>
+            <div class="hero-ctas">
+                <a href="#contact" class="btn-primary">
+                    Start Your Journey
+                    <span>→</span>
+                </a>
+                <a href="#projects" class="btn-secondary">
+                    View Our Work
+                    <span>↓</span>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Meaning Section -->
+    <section class="meaning-section" id="meaning">
+        <div class="meaning-card">
+            <h2>The Philosophy</h2>
+            <h3>Why <span>Drishti</span>?</h3>
+            <p class="meaning-text">
+                In Sanskrit, <strong>Drishti (दृष्टि)</strong> means far more than simply "vision" or "sight." It represents the ability to see beyond the surface—to perceive with <strong>divine insight</strong>, <strong>focused intention</strong>, and <strong>inner wisdom</strong>. In yogic philosophy, drishti is the practice of concentrated gaze that leads to deeper understanding and clarity.
+                <br><br>
+                At Drishti Consulting, we embody this principle: helping businesses <strong>focus their vision</strong> on the right strategic point, cutting through complexity to see the path forward with crystal clarity. We transform abstract business goals into concrete, technology-driven solutions.
+            </p>
+            <div class="meaning-features">
+                <div class="meaning-feature">
+                    <div class="meaning-feature-icon">
+                        <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                            <circle cx="12" cy="12" r="3"/><path d="M12 5c-7 0-10 7-10 7s3 7 10 7 10-7 10-7-3-7-10-7z"/>
+                        </svg>
+                    </div>
+                    <h4>Focused Vision</h4>
+                    <p>Clarity through strategic focus and concentrated expertise</p>
+                </div>
+                <div class="meaning-feature">
+                    <div class="meaning-feature-icon">
+                        <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                            <path d="M12 2v4m0 12v4m-6-10H2m20 0h-4m-2.5-5.5L14 8m-4 8l-1.5 1.5m9-9L16 10m-8 4l-1.5 1.5"/>
+                            <circle cx="12" cy="12" r="3"/>
+                        </svg>
+                    </div>
+                    <h4>Divine Insight</h4>
+                    <p>Deep understanding that transforms challenges into opportunities</p>
+                </div>
+                <div class="meaning-feature">
+                    <div class="meaning-feature-icon">
+                        <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                            <circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2" fill="currentColor"/>
+                        </svg>
+                    </div>
+                    <h4>Precise Execution</h4>
+                    <p>From vision to reality with technological excellence</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Services Section -->
+    <section class="services" id="services">
+        <div class="section-header">
+            <span class="section-label">What We Do</span>
+            <h2>Our Expertise</h2>
+            <p>End-to-end consulting and development services that turn your business vision into powerful digital solutions</p>
+        </div>
+        <div class="services-grid">
+            <div class="service-card">
+                <div class="service-icon">
+                    <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1.5">
+                        <path d="M12 22c4-2 8-6 8-12a8 8 0 10-16 0c0 6 4 10 8 12z"/><path d="M12 8v8m-4-4h8"/>
+                    </svg>
+                </div>
+                <h3>Sustainability & ESG</h3>
+                <p>GHG inventory management, CBAM compliance, carbon footprint tracking, and Environmental Product Declarations (EPD) for businesses navigating the evolving regulatory landscape.</p>
+            </div>
+            <div class="service-card">
+                <div class="service-icon">
+                    <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1.5">
+                        <rect x="4" y="4" width="16" height="16" rx="2"/><path d="M9 9h6m-6 3h6m-6 3h4"/>
+                    </svg>
+                </div>
+                <h3>Custom Software Development</h3>
+                <p>Full-stack development of enterprise applications, from concept to deployment. Modern architectures using React, Django, Next.js, and cloud-native technologies.</p>
+            </div>
+            <div class="service-card">
+                <div class="service-icon">
+                    <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1.5">
+                        <path d="M8 12h8m-8 0a4 4 0 110-8 4 4 0 010 8zm8 0a4 4 0 110 8 4 4 0 010-8z"/>
+                    </svg>
+                </div>
+                <h3>System Integration</h3>
+                <p>Seamless integration between business tools, CRMs, ERPs, and third-party platforms. API development, data synchronization, and workflow automation.</p>
+            </div>
+            <div class="service-card">
+                <div class="service-icon">
+                    <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1.5">
+                        <path d="M3 3v18h18"/><path d="M7 16l4-4 4 4 5-6"/>
+                    </svg>
+                </div>
+                <h3>Business Intelligence</h3>
+                <p>Transform raw data into actionable insights. Custom dashboards, KPI tracking, predictive analytics, and decision-support tools for strategic advantage.</p>
+            </div>
+            <div class="service-card">
+                <div class="service-icon">
+                    <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1.5">
+                        <path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5M2 12l10 5 10-5"/>
+                    </svg>
+                </div>
+                <h3>Compliance Management</h3>
+                <p>Regulatory compliance systems for insurance, environmental reporting, and industry-specific requirements. Automated tracking and audit-ready documentation.</p>
+            </div>
+            <div class="service-card">
+                <div class="service-icon">
+                    <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1.5">
+                        <path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><path d="M14 2v6h6M16 13H8m8 4H8m2-8H8"/>
+                    </svg>
+                </div>
+                <h3>Project Characterization</h3>
+                <p>Comprehensive requirements gathering, functional specifications, UI/UX design, and technical architecture planning before development begins.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Projects Section -->
+    <section class="projects" id="projects">
+        <div class="section-header">
+            <span class="section-label">Our Portfolio</span>
+            <h2>Featured Projects</h2>
+            <p>Real solutions delivering real impact for businesses across industries</p>
+        </div>
+        <div class="projects-grid">
+            <!-- CLIMATERIX - Flagship -->
+            <div class="project-card featured">
+                <div class="project-content">
+                    <span class="project-badge badge-flagship">Flagship Product</span>
+                    <h3>CLIMATERIX</h3>
+                    <p>Comprehensive environmental compliance platform helping Israeli exporters meet EU regulations. Includes GHG inventory management, CBAM compliance module, and EPD tracking—making sustainability affordable and scalable.</p>
+                    <div class="project-tech">
+                        <span class="tech-tag">Next.js 14</span>
+                        <span class="tech-tag">Django REST</span>
+                        <span class="tech-tag">PostgreSQL</span>
+                        <span class="tech-tag">TypeScript</span>
+                        <span class="tech-tag">Tailwind CSS</span>
+                    </div>
+                    <p><strong>Impact:</strong> Enabling 5,000+ Israeli companies to comply with EU CBAM regulations effective 2026, with potential savings of 10-20% on carbon costs through actual vs. default data reporting.</p>
+                    <a href="https://climetrix.io" target="_blank" class="project-link">View Project →</a>
+                </div>
+                <a href="https://climetrix.io" target="_blank" class="project-preview" style="text-decoration: none;">
+                    <div class="preview-dots">
+                        <span></span><span></span><span></span>
+                    </div>
+                    <div class="browser-mockup">
+                        <img src="screenshots/1climetrix.jpg" alt="Climetrix Platform">
+                    </div>
+                </a>
+            </div>
+
+            <!-- Nectra -->
+            <div class="project-card">
+                <div class="project-content">
+                    <span class="project-badge badge-saas">SaaS Platform</span>
+                    <h3>NECTRA</h3>
+                    <p>Enterprise real estate project management system for appraisal offices managing 150+ construction projects annually. Features 7-stage workflow, 16 budget calculators, monthly financial supervision, and multi-tenant SaaS architecture.</p>
+                    <div class="project-tech">
+                        <span class="tech-tag">Django 5.0</span>
+                        <span class="tech-tag">React 18</span>
+                        <span class="tech-tag">Material UI</span>
+                        <span class="tech-tag">Celery</span>
+                        <span class="tech-tag">Redis</span>
+                    </div>
+                    <p><strong>Scope:</strong> 27-30 month financial supervision lifecycle, equity approval workflows, automated monthly balance calculations.</p>
+                    <a href="https://frontendmaterialdashboard.vercel.app" target="_blank" class="project-link">View Project →</a>
+                </div>
+                <a href="https://frontendmaterialdashboard.vercel.app" target="_blank" class="project-preview" style="text-decoration: none;">
+                    <div class="preview-dots">
+                        <span></span><span></span><span></span>
+                    </div>
+                    <div class="browser-mockup">
+                        <img src="screenshots/nectra1.jpeg" alt="Nectra Platform">
+                    </div>
+                </a>
+            </div>
+
+            <!-- TAG -->
+            <div class="project-card">
+                <div class="project-content">
+                    <span class="project-badge badge-enterprise">Enterprise Solution</span>
+                    <h3>TAG Sales Dashboard</h3>
+                    <p>Business intelligence platform for TAG Urbanic (Portugal) featuring real-time sales analytics, broker performance tracking, and two-way Monday.com integration with complete audit trails and change logging.</p>
+                    <div class="project-tech">
+                        <span class="tech-tag">Python</span>
+                        <span class="tech-tag">Streamlit</span>
+                        <span class="tech-tag">Monday.com API</span>
+                        <span class="tech-tag">Plotly</span>
+                        <span class="tech-tag">Pandas</span>
+                    </div>
+                    <p><strong>Features:</strong> KPI dashboards, sales forecasting, decision-making tools, multi-project portfolio tracking.</p>
+                    <a href="https://luvchik.streamlit.app" target="_blank" class="project-link">View Project →</a>
+                </div>
+                <a href="https://luvchik.streamlit.app" target="_blank" class="project-preview" style="text-decoration: none;">
+                    <div class="preview-dots">
+                        <span></span><span></span><span></span>
+                    </div>
+                    <div class="browser-mockup">
+                        <img src="screenshots/1tag.jpeg" alt="TAG Sales Dashboard">
+                    </div>
+                </a>
+            </div>
+
+            <!-- Riscovery -->
+            <div class="project-card">
+                <div class="project-content">
+                    <span class="project-badge badge-saas">In Development</span>
+                    <h3>RISCOVERY</h3>
+                    <p>AI-powered insurance compliance tracking system automating vendor certificate verification. Features OCR document extraction, human verification workflow, compliance gap detection, and automated expiration alerts.</p>
+                    <div class="project-tech">
+                        <span class="tech-tag">Next.js</span>
+                        <span class="tech-tag">Node.js</span>
+                        <span class="tech-tag">PostgreSQL</span>
+                        <span class="tech-tag">Docupipe AI</span>
+                        <span class="tech-tag">Redis</span>
+                    </div>
+                    <p><strong>Solution:</strong> Reduces certificate processing from 15-30 min to 2-5 min with &lt;1% error rate.</p>
+                </div>
+                <div class="project-preview">
+                    <div class="preview-dots">
+                        <span></span><span></span><span></span>
+                    </div>
+                    <div class="preview-content">
+                        <div class="preview-icon">
+                            <svg width="60" height="60" viewBox="0 0 24 24" fill="none" stroke="var(--secondary)" stroke-width="1.5">
+                                <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="M9 12l2 2 4-4"/>
+                            </svg>
+                        </div>
+                        <div class="preview-title">Insurance Compliance System</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Founder Section -->
+    <section class="founder" id="founder">
+        <div class="founder-card">
+            <div class="founder-image">
+                <div class="founder-image-container" style="padding: 0; overflow: hidden;">
+                    <img src="avi.jpeg" alt="Dr. Avi Luvchik" style="width: 100%; height: 100%; object-fit: cover;">
+                </div>
+                <div class="founder-badges">
+                    <span class="founder-badge">PhD Physics</span>
+                    <span class="founder-badge">Imperial College</span>
+                    <span class="founder-badge">Ex-Intel</span>
+                </div>
+            </div>
+            <div class="founder-info">
+                <h2>Meet the Founder</h2>
+                <h3>Dr. Avi Luvchik</h3>
+                <div class="founder-title">Founder & CEO, Drishti Consulting</div>
+                <p class="founder-bio">
+                    Dr. Avi Luvchik brings a unique combination of deep scientific expertise and real-world business acumen to every project. With a <strong>PhD in Physics from Imperial College London</strong>, he spent years at <strong>Intel</strong> as Environmental Engineer and Head of Sustainability in Israel, gaining hands-on experience in corporate environmental management and regulatory compliance.
+                    <br><br>
+                    As former <strong>VP of Business Development at Capital Nature</strong> and <strong>Co-founder of Noah Capital</strong>, a Climate-tech VC investing up to $3M per company, Avi has been at the forefront of the sustainability revolution. This background gives him rare insight into both the technical challenges and business opportunities of environmental compliance.
+                    <br><br>
+                    Today, through Drishti Consulting, Avi helps businesses transform their vision into technology-driven reality—with a special focus on sustainability, compliance, and digital transformation.
+                </p>
+                <div class="founder-stats">
+                    <div class="stat">
+                        <div class="stat-value">15+</div>
+                        <div class="stat-label">Years Experience</div>
+                    </div>
+                    <div class="stat">
+                        <div class="stat-value">20+</div>
+                        <div class="stat-label">Projects Delivered</div>
+                    </div>
+                    <div class="stat">
+                        <div class="stat-value">5+</div>
+                        <div class="stat-label">Industries Served</div>
+                    </div>
+                </div>
+                <div class="founder-links">
+                    <a href="https://www.linkedin.com/in/avi-luvchik-phd-987a981b/" target="_blank" class="founder-link" title="LinkedIn">
+                        <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M20.5 2h-17A1.5 1.5 0 002 3.5v17A1.5 1.5 0 003.5 22h17a1.5 1.5 0 001.5-1.5v-17A1.5 1.5 0 0020.5 2zM8 19H5v-9h3zM6.5 8.25A1.75 1.75 0 118.3 6.5a1.78 1.78 0 01-1.8 1.75zM19 19h-3v-4.74c0-1.42-.6-1.93-1.38-1.93A1.74 1.74 0 0013 14.19a.66.66 0 000 .14V19h-3v-9h2.9v1.3a3.11 3.11 0 012.7-1.4c1.55 0 3.36.86 3.36 3.66z"/>
+                        </svg>
+                    </a>
+                    <a href="mailto:avi@drishticonsulting.com" class="founder-link" title="Email">
+                        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                            <rect x="2" y="4" width="20" height="16" rx="2"/><path d="M22 6l-10 7L2 6"/>
+                        </svg>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section class="contact" id="contact">
+        <div class="contact-container">
+            <span class="section-label">Let's Connect</span>
+            <h2>Ready to Focus Your Vision?</h2>
+            <p>Let's discuss how we can help transform your business goals into powerful technology solutions</p>
+            <div class="contact-card">
+                <div class="contact-methods">
+                    <a href="mailto:avi@drishticonsulting.com" class="contact-method">
+                        <div class="contact-method-icon">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1.5">
+                                <rect x="2" y="4" width="20" height="16" rx="2"/><path d="M22 6l-10 7L2 6"/>
+                            </svg>
+                        </div>
+                        <div class="contact-method-info">
+                            <div class="contact-method-label">Email Us</div>
+                            <div class="contact-method-value">avi@drishticonsulting.com</div>
+                        </div>
+                    </a>
+                    <a href="https://www.linkedin.com/in/avi-luvchik-phd-987a981b/" target="_blank" class="contact-method">
+                        <div class="contact-method-icon">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="white">
+                                <path d="M20.5 2h-17A1.5 1.5 0 002 3.5v17A1.5 1.5 0 003.5 22h17a1.5 1.5 0 001.5-1.5v-17A1.5 1.5 0 0020.5 2zM8 19H5v-9h3zM6.5 8.25A1.75 1.75 0 118.3 6.5a1.78 1.78 0 01-1.8 1.75zM19 19h-3v-4.74c0-1.42-.6-1.93-1.38-1.93A1.74 1.74 0 0013 14.19a.66.66 0 000 .14V19h-3v-9h2.9v1.3a3.11 3.11 0 012.7-1.4c1.55 0 3.36.86 3.36 3.66z"/>
+                            </svg>
+                        </div>
+                        <div class="contact-method-info">
+                            <div class="contact-method-label">Connect on LinkedIn</div>
+                            <div class="contact-method-value">Dr. Avi Luvchik</div>
+                        </div>
+                    </a>
+                </div>
+                <!-- Calendly inline widget -->
+                <div class="calendly-inline-widget" data-url="https://calendly.com/luvchik-drishticonsulting/30min" style="min-width:100%;height:400px;border-radius:12px;overflow:hidden;margin-top:20px;"></div>
+                <script type="text/javascript" src="https://assets.calendly.com/assets/external/widget.js" async></script>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-logo">
+            <div class="logo-icon">
+                <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+                    <circle cx="50" cy="50" r="45" fill="none" stroke="#4a5568" stroke-width="2"/>
+                    <circle cx="50" cy="50" r="32" fill="none" stroke="#4a5568" stroke-width="2"/>
+                    <circle cx="50" cy="50" r="20" fill="none" stroke="#4a5568" stroke-width="2"/>
+                    <circle cx="50" cy="50" r="10" fill="none" stroke="#6366f1" stroke-width="2.5"/>
+                    <circle cx="50" cy="50" r="4" fill="#6366f1"/>
+                </svg>
+            </div>
+            <span class="logo-text">Drishti</span>
+        </div>
+        <p class="footer-tagline">
+            Focused Vision. Precise Execution.
+        </p>
+        <p class="footer-copyright">
+            © 2025 Drishti Consulting. All rights reserved.
+        </p>
+    </footer>
+
+</body>
+</html>
