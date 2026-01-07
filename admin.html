@@ -1455,13 +1455,13 @@
 
         // Force update LHD Insurance to v2.0 (always replace to ensure latest data)
         const LHD_DATA_VERSION = 'v2.0-20260107';
-        const existingLHD = proposals.find(p => p.proposalNumber === 'DRS-2026-001');
+        const existingLHD = proposals.find(p => p.proposalNumber === 'LHD-001-26');
         if (!existingLHD || existingLHD.dataVersion !== LHD_DATA_VERSION) {
             // Remove old version and replace with v2.0
-            proposals = proposals.filter(p => p.proposalNumber !== 'DRS-2026-001');
+            proposals = proposals.filter(p => p.proposalNumber !== 'LHD-001-26');
             const sampleProposal = {
                 id: 2001,
-                proposalNumber: 'DRS-2026-001',
+                proposalNumber: 'LHD-001-26',
                 version: '2.0',
                 dataVersion: LHD_DATA_VERSION,
                 clientId: 1001,
@@ -1510,7 +1510,7 @@
                 id: 1001,
                 projectNumber: 'PRJ-2026-001',
                 proposalId: 2001,
-                proposalNumber: 'DRS-2026-001',
+                proposalNumber: 'LHD-001-26',
                 clientId: 1001,
                 clientName: 'LHD Insurance Consulting',
                 clientEmail: 'moshe@lhd-insurance.co.il',
@@ -2142,6 +2142,7 @@ Webhook: Real-time updates`,
                     </td>
                     <td>
                         <div class="action-btns">
+                            <button class="btn btn-success btn-sm" onclick="previewProposal(${p.id})" title="Preview">👁</button>
                             <button class="btn btn-primary btn-sm" onclick="openProposalEditor(${p.id})">Edit</button>
                             <button class="btn btn-secondary btn-sm" onclick="copyProposalLink(${p.id})">Copy Link</button>
                             ${!hasProject ? `<button class="btn btn-secondary btn-sm" onclick="convertToProject(${p.id})">→ Project</button>` : ''}
@@ -2183,6 +2184,11 @@ Webhook: Real-time updates`,
 
         function openProposalEditor(id) {
             window.open('proposal-editor.html?id=' + id, '_blank');
+        }
+
+        function previewProposal(id) {
+            // Open the client-facing proposal view
+            window.open('proposal-view.html?p=lhd-001', '_blank');
         }
 
         function markAccepted(id) {
