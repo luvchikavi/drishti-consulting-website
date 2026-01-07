@@ -1418,6 +1418,17 @@
                     { name: 'אבי רוזנברג', position: 'Head of Innovation', email: 'avi.r@leumi.co.il', phone: '052-3334455' }
                 ],
                 status: 'lead'
+            },
+            {
+                id: 1006,
+                company: 'Tag Urbanic Investment Management',
+                companyHe: 'תגא אורבניק ניהול השקעות בע"מ',
+                sector: 'realestate',
+                companyId: '515876589',
+                contacts: [
+                    { name: 'Guy Gafni', nameHe: 'גיא גפני', position: 'CEO', email: 'guy@tagurbanic.co.il', phone: '' }
+                ],
+                status: 'active'
             }
         ];
 
@@ -1521,6 +1532,91 @@ POST /api/auth/login`,
                 }
             };
             projects.push(sampleProject);
+            localStorage.setItem('projects', JSON.stringify(projects));
+        }
+
+        // TAG Urbanic proposal (add if not exists)
+        if (!proposals.find(p => p.proposalNumber === 'DRS-2024-TAG')) {
+            const tagProposal = {
+                id: 2002,
+                proposalNumber: 'DRS-2024-TAG',
+                clientId: 1006,
+                clientName: 'Tag Urbanic Investment Management',
+                projectName: 'Monday.com to Excel - Automatic Data Sync',
+                description: 'חיבור ממשק Monday.com לאקסל – סנכרון נתונים אוטומטי. ממשק תצוגה אינטרנטי שיסתנכרן בנתוני אמת מהמאנדיי כל 4 שעות',
+                amount: 7500,
+                currency: 'NIS',
+                hours: 50,
+                hourlyRate: 150,
+                status: 'accepted',
+                validUntil: '2025-01-09',
+                proposalType: 'development',
+                items: [
+                    { description: 'אפיון מבנה הנתונים הרלוונטי במערכת Monday', hours: 10, amount: 1500 },
+                    { description: 'חיבור טכני בין Monday לבין Excel באמצעות API', hours: 20, amount: 3000 },
+                    { description: 'בדיקות תקינות, סנכרון ויציבות', hours: 10, amount: 1500 },
+                    { description: 'ממשק תצוגה אינטרנטי עם סנכרון כל 4 שעות', hours: 10, amount: 1500 }
+                ],
+                notes: 'תנאי תשלום: 50% עם אישור עבודה ו-50% עם קבלת העבודה ואישורה. מאושר: גיא גפני 01/01/2026',
+                created: '2024-12-25T08:00:00.000Z',
+                sentDate: '2024-12-25T08:00:00.000Z',
+                acceptedDate: '2026-01-01T08:00:00.000Z'
+            };
+            proposals.push(tagProposal);
+            localStorage.setItem('proposals', JSON.stringify(proposals));
+        }
+
+        // TAG Urbanic project (completed)
+        if (!projects.find(p => p.projectNumber === 'PRJ-2024-TAG')) {
+            const tagProject = {
+                id: 1002,
+                projectNumber: 'PRJ-2024-TAG',
+                proposalId: 2002,
+                proposalNumber: 'DRS-2024-TAG',
+                clientId: 1006,
+                clientName: 'Tag Urbanic Investment Management',
+                clientEmail: 'guy@tagurbanic.co.il',
+                name: 'Monday.com to Excel - Data Sync Interface',
+                description: 'Automatic data synchronization from Monday.com to Excel with 4-hour refresh',
+                type: 'development',
+                totalBudget: 7500,
+                totalHours: 50,
+                startDate: '2024-12-25',
+                expectedEndDate: '2026-01-01',
+                actualEndDate: '2026-01-01',
+                status: 'completed',
+                overallProgress: 100,
+                stages: [
+                    { id: 0, name: 'Data Structure Analysis', description: 'Monday.com mapping', estimatedHours: 10, actualHours: 10, status: 'completed', completionPercent: 100, startDate: '2024-12-25', completedDate: '2024-12-27', notes: 'Monday.com board structure mapped, all fields identified', blockers: '', actionRequired: '' },
+                    { id: 1, name: 'API Integration Development', description: 'Monday to Excel connection', estimatedHours: 20, actualHours: 18, status: 'completed', completionPercent: 100, startDate: '2024-12-28', completedDate: '2024-12-30', notes: 'Monday.com API connected, Excel output configured', blockers: '', actionRequired: '' },
+                    { id: 2, name: 'Testing & Validation', description: 'Sync verification', estimatedHours: 10, actualHours: 12, status: 'completed', completionPercent: 100, startDate: '2024-12-30', completedDate: '2024-12-31', notes: 'Data sync verified, 4-hour refresh cycle tested successfully', blockers: '', actionRequired: '' },
+                    { id: 3, name: 'Deployment & Handover', description: 'Go-live and training', estimatedHours: 10, actualHours: 8, status: 'completed', completionPercent: 100, startDate: '2024-12-31', completedDate: '2026-01-01', notes: 'System live, client trained on usage', blockers: '', actionRequired: '' }
+                ],
+                totalHoursSpent: 48,
+                shareToken: 'tag001xyz',
+                lastClientView: '2026-01-01T10:00:00.000Z',
+                created: '2024-12-25T08:00:00.000Z',
+                updated: '2026-01-01T12:00:00.000Z',
+                technicalDetails: {
+                    dbSchema: `Monday.com Boards:
+- Properties (id, name, status, value)
+- Investments (id, property_id, amount)
+- Contacts (id, name, email, phone)`,
+                    apiEndpoints: `GET /boards/{id}/items
+GET /items/{id}/column_values
+Excel Export: Auto-refresh every 4 hours
+Webhook: Real-time updates`,
+                    deliverables: [
+                        { name: 'Monday.com API connection', done: true },
+                        { name: 'Excel sync automation', done: true },
+                        { name: '4-hour auto-refresh scheduler', done: true },
+                        { name: 'Web display interface', done: true },
+                        { name: 'Data validation tests', done: true },
+                        { name: 'Client documentation & training', done: true }
+                    ]
+                }
+            };
+            projects.push(tagProject);
             localStorage.setItem('projects', JSON.stringify(projects));
         }
 
