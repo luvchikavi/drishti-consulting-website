@@ -1447,15 +1447,17 @@
         let expenses = JSON.parse(localStorage.getItem('expenses')) || [];
         let projects = JSON.parse(localStorage.getItem('projects')) || [];
 
-        // Sample proposal for demo - LHD Insurance v2.0 (add or update)
+        // Force update LHD Insurance to v2.0 (always replace to ensure latest data)
+        const LHD_DATA_VERSION = 'v2.0-20260107';
         const existingLHD = proposals.find(p => p.proposalNumber === 'DRS-2026-001');
-        if (!existingLHD || existingLHD.version !== '2.0') {
-            // Remove old version if exists
+        if (!existingLHD || existingLHD.dataVersion !== LHD_DATA_VERSION) {
+            // Remove old version and replace with v2.0
             proposals = proposals.filter(p => p.proposalNumber !== 'DRS-2026-001');
             const sampleProposal = {
                 id: 2001,
                 proposalNumber: 'DRS-2026-001',
                 version: '2.0',
+                dataVersion: LHD_DATA_VERSION,
                 clientId: 1001,
                 clientName: 'LHD Insurance Consulting',
                 projectName: 'מודול השוואת אישורי ביטוח - Insurance Certificate Comparison Module',
