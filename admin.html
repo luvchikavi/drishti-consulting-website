@@ -714,6 +714,29 @@
                     </div>
                 </div>
 
+                <div style="margin-bottom: 20px; display: flex; gap: 12px; align-items: center;">
+                    <div style="position: relative; flex: 1; max-width: 400px;">
+                        <input type="text" id="clientSearch" placeholder="Search clients by name, company, email..."
+                            style="width: 100%; padding: 12px 16px 12px 44px; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-radius: 10px; color: var(--light); font-size: 14px;"
+                            oninput="filterClients()">
+                        <svg style="position: absolute; left: 14px; top: 50%; transform: translateY(-50%); width: 18px; height: 18px; color: var(--gray);" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <circle cx="11" cy="11" r="8"/>
+                            <path d="M21 21l-4.35-4.35"/>
+                        </svg>
+                    </div>
+                    <select id="clientIndustryFilter" onchange="filterClients()" style="padding: 12px 16px; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-radius: 10px; color: var(--light); font-size: 14px; min-width: 150px;">
+                        <option value="">All Industries</option>
+                        <option value="Technology">Technology</option>
+                        <option value="Finance">Finance & Insurance</option>
+                        <option value="Healthcare">Healthcare</option>
+                        <option value="Manufacturing">Manufacturing</option>
+                        <option value="Retail">Retail</option>
+                        <option value="Construction">Construction</option>
+                        <option value="Government">Government / Municipal</option>
+                        <option value="Other">Other</option>
+                    </select>
+                </div>
+
                 <div class="data-table">
                     <table>
                         <thead>
@@ -1454,9 +1477,16 @@
             }
         });
 
-        function renderClients() {
+        function renderClients(filteredClients = null) {
             const tbody = document.getElementById('clientsTable');
-            tbody.innerHTML = clients.map(client => {
+            const clientsToRender = filteredClients || clients;
+
+            if (clientsToRender.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="5" style="text-align: center; color: var(--gray);">No clients found</td></tr>';
+                return;
+            }
+
+            tbody.innerHTML = clientsToRender.map(client => {
                 const contacts = client.contacts || [{ name: client.contact, position: client.position, email: client.email, phone: client.phone }];
                 const contactsHtml = contacts.map(c => `${c.name}${c.position ? ' (' + c.position + ')' : ''}`).join('<br>');
                 const emailsHtml = contacts.map(c => c.email).join('<br>');
@@ -1477,6 +1507,35 @@
                     </td>
                 </tr>
             `}).join('');
+        }
+
+        function filterClients() {
+            const searchTerm = document.getElementById('clientSearch').value.toLowerCase().trim();
+            const industryFilter = document.getElementById('clientIndustryFilter').value;
+
+            let filtered = clients;
+
+            // Filter by search term
+            if (searchTerm) {
+                filtered = filtered.filter(client => {
+                    const contacts = client.contacts || [{ name: client.contact, email: client.email }];
+                    const contactMatch = contacts.some(c =>
+                        (c.name && c.name.toLowerCase().includes(searchTerm)) ||
+                        (c.email && c.email.toLowerCase().includes(searchTerm)) ||
+                        (c.position && c.position.toLowerCase().includes(searchTerm))
+                    );
+                    return client.company.toLowerCase().includes(searchTerm) ||
+                           (client.industry && client.industry.toLowerCase().includes(searchTerm)) ||
+                           contactMatch;
+                });
+            }
+
+            // Filter by industry
+            if (industryFilter) {
+                filtered = filtered.filter(client => client.industry === industryFilter);
+            }
+
+            renderClients(filtered);
         }
 
         function deleteClient(id) {
