@@ -803,8 +803,14 @@
             <!-- Projects Page -->
             <div class="page hidden" id="page-projects">
                 <div class="page-header">
-                    <h1 class="page-title">Projects</h1>
-                    <button class="btn btn-primary" onclick="openModal('newProject')">+ New Project</button>
+                    <h1 class="page-title">Ongoing Projects</h1>
+                    <div style="display: flex; gap: 12px;">
+                        <div style="display: flex; border-radius: 8px; overflow: hidden; border: 1px solid rgba(255,255,255,0.1);">
+                            <button id="viewList" onclick="setProjectView('list')" class="btn btn-sm" style="border-radius: 0; border: none; background: var(--primary);">List</button>
+                            <button id="viewGantt" onclick="setProjectView('gantt')" class="btn btn-sm" style="border-radius: 0; border: none; background: rgba(255,255,255,0.05);">Gantt</button>
+                        </div>
+                        <button class="btn btn-primary" onclick="openModal('newProject')">+ New Project</button>
+                    </div>
                 </div>
 
                 <div class="stats-grid">
@@ -844,7 +850,8 @@
                     </select>
                 </div>
 
-                <div class="data-table">
+                <!-- List View -->
+                <div id="projectsListView" class="data-table">
                     <table>
                         <thead>
                             <tr>
@@ -860,6 +867,13 @@
                             <tr><td colspan="6" style="text-align: center; color: var(--gray);">No projects yet. Create one from a proposal or click "+ New Project"</td></tr>
                         </tbody>
                     </table>
+                </div>
+
+                <!-- Gantt View -->
+                <div id="projectsGanttView" style="display: none;">
+                    <div id="ganttContainer" style="background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.08); border-radius: 12px; padding: 20px; overflow-x: auto;">
+                        <div id="ganttChart" style="min-width: 800px;"></div>
+                    </div>
                 </div>
             </div>
 
@@ -2927,6 +2941,111 @@ Webhook: Real-time updates`,
             }
         }
 
+        // Project View Toggle (List/Gantt)
+        let currentProjectView = 'list';
+        function setProjectView(view) {
+            currentProjectView = view;
+            document.getElementById('viewList').style.background = view === 'list' ? 'var(--primary)' : 'rgba(255,255,255,0.05)';
+            document.getElementById('viewGantt').style.background = view === 'gantt' ? 'var(--primary)' : 'rgba(255,255,255,0.05)';
+            document.getElementById('projectsListView').style.display = view === 'list' ? 'block' : 'none';
+            document.getElementById('projectsGanttView').style.display = view === 'gantt' ? 'block' : 'none';
+            if (view === 'gantt') renderGanttChart();
+        }
+
+        // Gantt Chart Rendering
+        function renderGanttChart() {
+            const container = document.getElementById('ganttChart');
+            if (projects.length === 0) {
+                container.innerHTML = '<div style="text-align: center; color: var(--gray); padding: 40px;">No projects to display</div>';
+                return;
+            }
+
+            // Find date range across all projects
+            let minDate = new Date();
+            let maxDate = new Date();
+            projects.forEach(p => {
+                if (p.startDate) {
+                    const start = new Date(p.startDate);
+                    if (start < minDate) minDate = start;
+                }
+                if (p.expectedEndDate) {
+                    const end = new Date(p.expectedEndDate);
+                    if (end > maxDate) maxDate = end;
+                }
+                // Add 2 weeks padding
+                maxDate = new Date(maxDate.getTime() + 14 * 24 * 60 * 60 * 1000);
+            });
+
+            const totalDays = Math.ceil((maxDate - minDate) / (24 * 60 * 60 * 1000)) || 60;
+            const dayWidth = 12;
+            const chartWidth = totalDays * dayWidth;
+
+            // Generate weeks header
+            let weeksHtml = '';
+            let currentWeek = new Date(minDate);
+            while (currentWeek < maxDate) {
+                const weekNum = getWeekNumber(currentWeek);
+                weeksHtml += `<div style="flex: 0 0 ${7 * dayWidth}px; text-align: center; font-size: 10px; color: var(--gray); border-left: 1px solid rgba(255,255,255,0.05);">W${weekNum}</div>`;
+                currentWeek.setDate(currentWeek.getDate() + 7);
+            }
+
+            let html = `
+                <div style="display: flex; font-size: 11px; margin-bottom: 4px;">
+                    <div style="width: 200px; flex-shrink: 0; padding-right: 10px;"></div>
+                    <div style="display: flex; flex: 1; min-width: ${chartWidth}px;">${weeksHtml}</div>
+                </div>
+            `;
+
+            projects.forEach(p => {
+                const projectStart = p.startDate ? new Date(p.startDate) : minDate;
+                const startOffset = Math.max(0, Math.ceil((projectStart - minDate) / (24 * 60 * 60 * 1000)));
+
+                html += `
+                    <div style="display: flex; align-items: stretch; margin-bottom: 8px; background: rgba(255,255,255,0.02); border-radius: 8px; overflow: hidden;">
+                        <div style="width: 200px; flex-shrink: 0; padding: 10px; border-left: 3px solid ${p.status === 'active' ? 'var(--primary)' : p.status === 'completed' ? '#10b981' : '#f59e0b'};">
+                            <div style="font-weight: 600; font-size: 12px; margin-bottom: 2px;">${p.name}</div>
+                            <div style="font-size: 10px; color: var(--gray);">${p.clientName}</div>
+                            <div style="font-size: 10px; color: var(--primary); margin-top: 4px;">${p.overallProgress}% complete</div>
+                        </div>
+                        <div style="flex: 1; position: relative; min-width: ${chartWidth}px; background: rgba(255,255,255,0.01);">
+                `;
+
+                // Render each stage as a bar
+                let stageOffset = startOffset;
+                p.stages.forEach((stage, idx) => {
+                    const stageDuration = Math.ceil(stage.estimatedHours / 8) || 7; // Assume 8 hours/day
+                    const stageWidth = stageDuration * dayWidth;
+                    const colors = {
+                        'not_started': 'rgba(100,116,139,0.4)',
+                        'in_progress': 'var(--primary)',
+                        'completed': '#10b981'
+                    };
+                    const bgColor = colors[stage.status] || colors['not_started'];
+                    const progressWidth = (stage.completionPercent || 0) * stageWidth / 100;
+
+                    html += `
+                        <div style="position: absolute; top: ${10 + idx * 22}px; left: ${stageOffset * dayWidth}px; width: ${stageWidth}px; height: 18px; background: rgba(255,255,255,0.05); border-radius: 4px; overflow: hidden; cursor: pointer;" title="${stage.name}: ${stage.completionPercent}%" onclick="openProjectManagement(${p.id})">
+                            <div style="height: 100%; width: ${progressWidth}px; background: ${bgColor}; border-radius: 4px;"></div>
+                            <span style="position: absolute; left: 4px; top: 2px; font-size: 9px; color: white; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: ${stageWidth - 8}px;">${stage.name}</span>
+                        </div>
+                    `;
+                    stageOffset += stageDuration;
+                });
+
+                html += `</div></div>`;
+            });
+
+            container.innerHTML = html;
+        }
+
+        function getWeekNumber(date) {
+            const d = new Date(Date.UTC(date.getFullYear(), date.getMonth(), date.getDate()));
+            const dayNum = d.getUTCDay() || 7;
+            d.setUTCDate(d.getUTCDate() + 4 - dayNum);
+            const yearStart = new Date(Date.UTC(d.getUTCFullYear(), 0, 1));
+            return Math.ceil((((d - yearStart) / 86400000) + 1) / 7);
+        }
+
         function openProjectManagement(id) {
             const project = projects.find(p => p.id === id);
             if (!project) return;
@@ -3006,6 +3125,40 @@ Webhook: Real-time updates`,
                         <button onclick="addSelectedTasks(${project.id})" class="btn btn-success btn-sm" style="width: 100%; margin-top: 6px;">Add Selected Tasks</button>
                     </div>
                 </div>
+                <div style="background: rgba(139, 92, 246, 0.05); border: 1px solid rgba(139, 92, 246, 0.15); border-radius: 8px; padding: 12px; margin-bottom: 12px;">
+                    <h3 style="margin-bottom: 10px; font-size: 12px; color: #8b5cf6;">📄 Project Documents (Git)</h3>
+                    <div style="display: grid; gap: 8px;">
+                        <div style="display: flex; gap: 8px; align-items: center;">
+                            <input type="text" id="masterPlanPath-${project.id}" value="${project.docs?.masterPlan || ''}" placeholder="/path/to/project/.drishti/master-plan.md" onchange="updateProjectDoc(${project.id}, 'masterPlan', this.value)" style="flex: 1; padding: 6px 10px; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-radius: 4px; color: var(--light); font-size: 11px;">
+                            <span style="font-size: 10px; color: var(--gray); width: 80px;">Master Plan</span>
+                        </div>
+                        <div style="display: flex; gap: 8px; align-items: center;">
+                            <input type="text" id="archDocPath-${project.id}" value="${project.docs?.architecture || ''}" placeholder="/path/to/project/.drishti/architecture.md" onchange="updateProjectDoc(${project.id}, 'architecture', this.value)" style="flex: 1; padding: 6px 10px; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-radius: 4px; color: var(--light); font-size: 11px;">
+                            <span style="font-size: 10px; color: var(--gray); width: 80px;">Architecture</span>
+                        </div>
+                        <div style="display: flex; gap: 8px; align-items: center;">
+                            <input type="text" id="gitRepoPath-${project.id}" value="${project.docs?.gitRepo || ''}" placeholder="https://github.com/user/repo" onchange="updateProjectDoc(${project.id}, 'gitRepo', this.value)" style="flex: 1; padding: 6px 10px; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-radius: 4px; color: var(--light); font-size: 11px;">
+                            <span style="font-size: 10px; color: var(--gray); width: 80px;">Git Repo</span>
+                        </div>
+                        <div style="display: flex; gap: 8px; align-items: center;">
+                            <input type="text" id="localPath-${project.id}" value="${project.docs?.localPath || ''}" placeholder="/Users/you/app/ProjectName" onchange="updateProjectDoc(${project.id}, 'localPath', this.value)" style="flex: 1; padding: 6px 10px; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-radius: 4px; color: var(--light); font-size: 11px;">
+                            <span style="font-size: 10px; color: var(--gray); width: 80px;">Local Path</span>
+                        </div>
+                    </div>
+                    ${project.docs?.gitRepo ? \`<a href="\${project.docs.gitRepo}" target="_blank" class="btn btn-secondary btn-sm" style="margin-top: 8px; width: 100%; text-decoration: none;">Open Git Repository →</a>\` : ''}
+                </div>
+                <div style="background: rgba(16, 185, 129, 0.05); border: 1px solid rgba(16, 185, 129, 0.15); border-radius: 8px; padding: 12px; margin-bottom: 12px;">
+                    <h3 style="margin-bottom: 10px; font-size: 12px; color: #10b981;">⏱️ Hour Logging</h3>
+                    <div style="display: flex; gap: 8px; align-items: center; margin-bottom: 8px;">
+                        <input type="number" id="logHours-${project.id}" placeholder="Hours" min="0" step="0.5" style="width: 80px; padding: 6px 10px; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-radius: 4px; color: var(--light); font-size: 12px;">
+                        <input type="text" id="logNote-${project.id}" placeholder="What did you work on?" style="flex: 1; padding: 6px 10px; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-radius: 4px; color: var(--light); font-size: 12px;">
+                        <button onclick="logProjectHours(${project.id})" class="btn btn-success btn-sm">Log</button>
+                    </div>
+                    <div style="max-height: 100px; overflow-y: auto; font-size: 10px;">
+                        ${(project.hourLogs || []).slice(-5).reverse().map(log => \`<div style="padding: 4px 0; border-bottom: 1px solid rgba(255,255,255,0.05); display: flex; justify-content: space-between;"><span>\${log.note}</span><span style="color: var(--primary);">\${log.hours}h - \${new Date(log.date).toLocaleDateString('he-IL')}</span></div>\`).join('') || '<div style="color: var(--gray);">No hours logged yet</div>'}
+                    </div>
+                    <div style="margin-top: 8px; font-size: 11px; color: var(--success);">Total logged: ${(project.hourLogs || []).reduce((sum, l) => sum + l.hours, 0)} hours</div>
+                </div>
                 <div style="display: flex; gap: 8px; margin-top: 12px;"><select onchange="updateProjectStatus(${project.id}, this.value)" style="padding: 6px 12px; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-radius: 6px; color: var(--light); font-size: 11px;"><option value="active" ${project.status === 'active' ? 'selected' : ''}>Active</option><option value="on_hold" ${project.status === 'on_hold' ? 'selected' : ''}>On Hold</option><option value="completed" ${project.status === 'completed' ? 'selected' : ''}>Completed</option></select><button class="btn btn-secondary" onclick="closeModal('manageProject')" style="flex: 1;">Close</button></div>`;
 
             document.getElementById('manageProjectContent').innerHTML = content;
@@ -3017,6 +3170,39 @@ Webhook: Real-time updates`,
         function updateStageNotes(projectId, idx, value) { const p = projects.find(p => p.id === projectId); if (p) { p.stages[idx].notes = value; saveData(); }}
         function updateStageBlockers(projectId, idx, value) { const p = projects.find(p => p.id === projectId); if (p) { p.stages[idx].blockers = value; saveData(); }}
         function updateStageActionRequired(projectId, idx, value) { const p = projects.find(p => p.id === projectId); if (p) { p.stages[idx].actionRequired = value; saveData(); }}
+
+        // Project Documents
+        function updateProjectDoc(projectId, field, value) {
+            const p = projects.find(p => p.id === projectId);
+            if (p) {
+                if (!p.docs) p.docs = {};
+                p.docs[field] = value;
+                p.updated = new Date().toISOString();
+                saveData();
+                showToast('Document path saved');
+            }
+        }
+
+        // Hour Logging
+        function logProjectHours(projectId) {
+            const p = projects.find(p => p.id === projectId);
+            if (!p) return;
+            const hoursInput = document.getElementById(`logHours-${projectId}`);
+            const noteInput = document.getElementById(`logNote-${projectId}`);
+            const hours = parseFloat(hoursInput.value);
+            const note = noteInput.value.trim();
+            if (!hours || hours <= 0) { showToast('Enter valid hours', 'error'); return; }
+            if (!note) { showToast('Enter a note', 'error'); return; }
+            if (!p.hourLogs) p.hourLogs = [];
+            p.hourLogs.push({ hours, note, date: new Date().toISOString() });
+            p.totalHoursSpent = (p.totalHoursSpent || 0) + hours;
+            p.updated = new Date().toISOString();
+            saveData();
+            hoursInput.value = '';
+            noteInput.value = '';
+            openProjectManagement(projectId); // Refresh modal
+            showToast(`Logged ${hours} hours`);
+        }
 
         // Technical details functions
         function updateTechDetails(projectId, field, value) {
