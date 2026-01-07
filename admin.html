@@ -148,6 +148,11 @@
             color: white;
         }
 
+        .btn-warning {
+            background: #f59e0b;
+            color: white;
+        }
+
         .btn-sm {
             padding: 4px 10px;
             font-size: 10px;
@@ -2869,6 +2874,16 @@ Webhook: Real-time updates`,
                         <button onclick="addDeliverable(${project.id})" class="btn btn-secondary btn-sm" style="margin-top: 6px; width: 100%;">+ Add Deliverable</button>
                     </div>
                 </div>
+                <div style="background: rgba(245, 158, 11, 0.05); border: 1px solid rgba(245, 158, 11, 0.15); border-radius: 8px; padding: 12px; margin-bottom: 12px;">
+                    <h3 style="margin-bottom: 10px; font-size: 12px; color: #f59e0b;">Client Feedback → Tasks</h3>
+                    <textarea id="feedbackInput-${project.id}" placeholder="Paste client feedback here...&#10;&#10;Example:&#10;- Please add export to PDF&#10;- The login is slow&#10;- Need Hebrew support" style="width: 100%; height: 80px; padding: 8px; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-radius: 4px; color: var(--light); font-size: 11px; resize: none; margin-bottom: 8px;"></textarea>
+                    <button onclick="convertFeedbackToTasks(${project.id})" class="btn btn-warning btn-sm" style="width: 100%;">Convert to Tasks</button>
+                    <div id="generatedTasks-${project.id}" style="margin-top: 10px; display: none;">
+                        <div style="font-size: 10px; color: var(--gray-light); margin-bottom: 6px;">GENERATED TASKS (check to add as deliverables):</div>
+                        <div id="tasksList-${project.id}" style="background: rgba(255,255,255,0.02); border-radius: 4px; padding: 6px; max-height: 120px; overflow-y: auto;"></div>
+                        <button onclick="addSelectedTasks(${project.id})" class="btn btn-success btn-sm" style="width: 100%; margin-top: 6px;">Add Selected Tasks</button>
+                    </div>
+                </div>
                 <div style="display: flex; gap: 8px; margin-top: 12px;"><select onchange="updateProjectStatus(${project.id}, this.value)" style="padding: 6px 12px; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-radius: 6px; color: var(--light); font-size: 11px;"><option value="active" ${project.status === 'active' ? 'selected' : ''}>Active</option><option value="on_hold" ${project.status === 'on_hold' ? 'selected' : ''}>On Hold</option><option value="completed" ${project.status === 'completed' ? 'selected' : ''}>Completed</option></select><button class="btn btn-secondary" onclick="closeModal('manageProject')" style="flex: 1;">Close</button></div>`;
 
             document.getElementById('manageProjectContent').innerHTML = content;
@@ -2931,6 +2946,91 @@ Webhook: Real-time updates`,
             if (total === 0) { project.overallProgress = 0; return; }
             project.overallProgress = Math.round(project.stages.reduce((sum, s) => sum + s.completionPercent, 0) / total);
             project.updated = new Date().toISOString();
+        }
+
+        // Convert client feedback to task list
+        function convertFeedbackToTasks(projectId) {
+            const textarea = document.getElementById('feedbackInput-' + projectId);
+            const feedback = textarea.value.trim();
+            if (!feedback) {
+                showToast('Please paste client feedback first');
+                return;
+            }
+
+            // Parse feedback into tasks - look for lines starting with -, *, •, numbers, or just new lines
+            const lines = feedback.split('\n')
+                .map(line => line.trim())
+                .filter(line => line.length > 0)
+                .map(line => {
+                    // Remove common prefixes
+                    return line.replace(/^[-*•→]\s*/, '')
+                               .replace(/^\d+[.)]\s*/, '')
+                               .replace(/^please\s+/i, '')
+                               .trim();
+                })
+                .filter(line => line.length > 3); // Skip very short lines
+
+            // Convert to English task format (imperative form)
+            const tasks = lines.map(line => {
+                // Capitalize first letter
+                let task = line.charAt(0).toUpperCase() + line.slice(1);
+                // Remove trailing punctuation
+                task = task.replace(/[.!?]+$/, '');
+                return task;
+            });
+
+            if (tasks.length === 0) {
+                showToast('No tasks could be extracted from feedback');
+                return;
+            }
+
+            // Show generated tasks
+            const tasksContainer = document.getElementById('generatedTasks-' + projectId);
+            const tasksList = document.getElementById('tasksList-' + projectId);
+
+            tasksList.innerHTML = tasks.map((task, i) => `
+                <div style="display: flex; align-items: center; gap: 6px; padding: 4px 0; border-bottom: 1px solid rgba(255,255,255,0.05);">
+                    <input type="checkbox" id="task-${projectId}-${i}" checked style="width: 14px; height: 14px;">
+                    <input type="text" id="taskText-${projectId}-${i}" value="${task}" style="flex: 1; padding: 4px 6px; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-radius: 4px; color: var(--light); font-size: 11px;">
+                </div>
+            `).join('');
+
+            tasksContainer.style.display = 'block';
+            showToast(tasks.length + ' tasks extracted');
+        }
+
+        function addSelectedTasks(projectId) {
+            const p = projects.find(p => p.id === projectId);
+            if (!p) return;
+
+            if (!p.technicalDetails) p.technicalDetails = { dbSchema: '', apiEndpoints: '', deliverables: [] };
+            if (!p.technicalDetails.deliverables) p.technicalDetails.deliverables = [];
+
+            // Find all checked tasks
+            let addedCount = 0;
+            let i = 0;
+            while (document.getElementById('task-' + projectId + '-' + i)) {
+                const checkbox = document.getElementById('task-' + projectId + '-' + i);
+                const textInput = document.getElementById('taskText-' + projectId + '-' + i);
+
+                if (checkbox.checked && textInput.value.trim()) {
+                    p.technicalDetails.deliverables.push({
+                        name: textInput.value.trim(),
+                        done: false
+                    });
+                    addedCount++;
+                }
+                i++;
+            }
+
+            if (addedCount > 0) {
+                p.updated = new Date().toISOString();
+                saveData();
+                showToast(addedCount + ' tasks added as deliverables');
+                openProjectManagement(projectId); // Refresh modal
+            } else {
+                showToast('No tasks selected');
+            }
         }
 
         function updateProjectStatus(projectId, status) { const p = projects.find(p => p.id === projectId); if (p) { p.status = status; if (status === 'completed') p.actualEndDate = new Date().toISOString(); saveData(); renderProjects(); updateProjectStats(); showToast('Status updated'); }}
