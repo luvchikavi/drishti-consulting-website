@@ -29,5 +29,34 @@
         { "name": "Admin dashboard", "done": false }
       ]
     }
+  },
+  "tag-001": {
+    "n": "Monday.com to Excel - Data Sync Interface",
+    "c": "Tag Urbanic Investment Management",
+    "p": 100,
+    "b": 7500,
+    "h": 50,
+    "hs": 48,
+    "sd": "2024-12-25",
+    "ed": "2026-01-01",
+    "s": [
+      { "n": "Data Structure Analysis", "p": 100, "st": "completed", "eh": 10, "ah": 10, "nt": "Monday.com board structure mapped, fields identified" },
+      { "n": "API Integration Development", "p": 100, "st": "completed", "eh": 20, "ah": 18, "nt": "Monday.com API connected, Excel output configured" },
+      { "n": "Testing & Validation", "p": 100, "st": "completed", "eh": 10, "ah": 12, "nt": "Data sync verified, 4-hour refresh cycle tested" },
+      { "n": "Deployment & Handover", "p": 100, "st": "completed", "eh": 10, "ah": 8, "nt": "System live, client trained on usage" }
+    ],
+    "u": "2026-01-01",
+    "tech": {
+      "db": "Monday.com Boards:\n- Properties\n- Investments\n- Contacts",
+      "api": "GET /boards/{id}/items\nGET /items/{id}/column_values\nExcel Export: Auto-refresh every 4 hours",
+      "deliverables": [
+        { "name": "Monday.com API connection", "done": true },
+        { "name": "Excel sync automation", "done": true },
+        { "name": "4-hour auto-refresh", "done": true },
+        { "name": "Web display interface", "done": true },
+        { "name": "Data validation tests", "done": true },
+        { "name": "Client documentation", "done": true }
+      ]
+    }
   }
 }
