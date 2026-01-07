@@ -1452,18 +1452,38 @@
                 status: 'active',
                 overallProgress: 52,
                 stages: [
-                    { id: 0, name: 'Discovery & Requirements', description: 'Understanding needs', estimatedHours: 32, actualHours: 30, status: 'completed', completionPercent: 100, startDate: '2026-01-05', completedDate: '2026-01-12', notes: 'All requirements documented, stakeholders interviewed', blockers: '' },
-                    { id: 1, name: 'System Design', description: 'Architecture design', estimatedHours: 48, actualHours: 52, status: 'completed', completionPercent: 100, startDate: '2026-01-13', completedDate: '2026-01-25', notes: 'Database schema finalized, UI mockups approved', blockers: '' },
-                    { id: 2, name: 'Development - Phase 1', description: 'Backend development', estimatedHours: 80, actualHours: 65, status: 'in_progress', completionPercent: 75, startDate: '2026-01-26', completedDate: null, notes: 'API endpoints 90% complete, authentication done', blockers: 'Waiting for client API credentials for legacy system integration' },
-                    { id: 3, name: 'Development - Phase 2', description: 'Frontend development', estimatedHours: 80, actualHours: 0, status: 'not_started', completionPercent: 0, startDate: null, completedDate: null, notes: '', blockers: '' },
-                    { id: 4, name: 'Testing & QA', description: 'Quality assurance', estimatedHours: 48, actualHours: 0, status: 'not_started', completionPercent: 0, startDate: null, completedDate: null, notes: '', blockers: '' },
-                    { id: 5, name: 'Deployment & Training', description: 'Go-live', estimatedHours: 32, actualHours: 0, status: 'not_started', completionPercent: 0, startDate: null, completedDate: null, notes: '', blockers: '' }
+                    { id: 0, name: 'Discovery & Requirements', description: 'Understanding needs', estimatedHours: 32, actualHours: 30, status: 'completed', completionPercent: 100, startDate: '2026-01-05', completedDate: '2026-01-12', notes: 'All requirements documented, stakeholders interviewed', blockers: '', actionRequired: '' },
+                    { id: 1, name: 'System Design', description: 'Architecture design', estimatedHours: 48, actualHours: 52, status: 'completed', completionPercent: 100, startDate: '2026-01-13', completedDate: '2026-01-25', notes: 'Database schema finalized, UI mockups approved', blockers: '', actionRequired: '' },
+                    { id: 2, name: 'Development - Phase 1', description: 'Backend development', estimatedHours: 80, actualHours: 65, status: 'in_progress', completionPercent: 75, startDate: '2026-01-26', completedDate: null, notes: 'API endpoints 90% complete, authentication done, JWT auth implemented', blockers: 'Waiting for client API credentials for legacy system integration', actionRequired: 'Please provide API credentials and documentation for the legacy claims system (SOAP/REST endpoints, authentication keys)' },
+                    { id: 3, name: 'Development - Phase 2', description: 'Frontend development', estimatedHours: 80, actualHours: 0, status: 'not_started', completionPercent: 0, startDate: null, completedDate: null, notes: '', blockers: '', actionRequired: '' },
+                    { id: 4, name: 'Testing & QA', description: 'Quality assurance', estimatedHours: 48, actualHours: 0, status: 'not_started', completionPercent: 0, startDate: null, completedDate: null, notes: '', blockers: '', actionRequired: '' },
+                    { id: 5, name: 'Deployment & Training', description: 'Go-live', estimatedHours: 32, actualHours: 0, status: 'not_started', completionPercent: 0, startDate: null, completedDate: null, notes: '', blockers: '', actionRequired: '' }
                 ],
                 totalHoursSpent: 147,
                 shareToken: 'demo123abc',
                 lastClientView: null,
                 created: '2026-01-05T08:00:00.000Z',
-                updated: new Date().toISOString()
+                updated: new Date().toISOString(),
+                // Technical details for client visibility
+                technicalDetails: {
+                    dbSchema: `claims (id, policy_id, status)
+policies (id, client_id, type)
+users (id, email, role)
+audit_log (id, action, date)`,
+                    apiEndpoints: `POST /api/claims
+GET  /api/claims/:id
+PUT  /api/claims/:id/status
+GET  /api/policies
+POST /api/auth/login`,
+                    deliverables: [
+                        { name: 'User authentication system', done: true },
+                        { name: 'Claims submission API', done: true },
+                        { name: 'Policy lookup service', done: true },
+                        { name: 'Status update workflow', done: false },
+                        { name: 'Legacy system integration', done: false },
+                        { name: 'Admin dashboard', done: false }
+                    ]
+                }
             };
             projects.push(sampleProject);
             localStorage.setItem('projects', JSON.stringify(projects));
@@ -2684,7 +2704,8 @@
                             ${stage.status !== 'completed' ? `<div style="display: flex; gap: 8px; margin-bottom: 8px;"><input type="range" min="0" max="100" value="${stage.completionPercent}" onchange="updateStageProgress(${project.id}, ${idx}, this.value)" style="flex: 1;"><input type="number" value="${stage.actualHours}" placeholder="Hrs" onchange="updateStageActualHours(${project.id}, ${idx}, this.value)" style="width: 60px; padding: 4px 8px; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-radius: 4px; color: var(--light); font-size: 12px;">
                             ${stage.status === 'not_started' ? `<button class="btn btn-secondary btn-sm" onclick="startStage(${project.id}, ${idx})">Start</button>` : `<button class="btn btn-success btn-sm" onclick="completeStage(${project.id}, ${idx})">Complete</button>`}</div>
                             <input type="text" placeholder="Notes" value="${stage.notes || ''}" onchange="updateStageNotes(${project.id}, ${idx}, this.value)" style="width: 100%; padding: 6px 10px; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-radius: 4px; color: var(--light); font-size: 12px; margin-bottom: 6px;">
-                            <input type="text" placeholder="Blockers" value="${stage.blockers || ''}" onchange="updateStageBlockers(${project.id}, ${idx}, this.value)" style="width: 100%; padding: 6px 10px; background: rgba(239, 68, 68, 0.1); border: 1px solid rgba(239, 68, 68, 0.2); border-radius: 4px; color: var(--light); font-size: 12px;">` : `<div style="font-size: 12px; color: var(--gray-light);">${stage.completedDate ? 'Completed: ' + new Date(stage.completedDate).toLocaleDateString('he-IL') : ''}</div>`}
+                            <input type="text" placeholder="Blockers" value="${stage.blockers || ''}" onchange="updateStageBlockers(${project.id}, ${idx}, this.value)" style="width: 100%; padding: 6px 10px; background: rgba(239, 68, 68, 0.1); border: 1px solid rgba(239, 68, 68, 0.2); border-radius: 4px; color: var(--light); font-size: 12px; margin-bottom: 6px;">
+                            <input type="text" placeholder="Action Required from Client" value="${stage.actionRequired || ''}" onchange="updateStageActionRequired(${project.id}, ${idx}, this.value)" style="width: 100%; padding: 6px 10px; background: rgba(245, 158, 11, 0.1); border: 1px solid rgba(245, 158, 11, 0.2); border-radius: 4px; color: var(--light); font-size: 12px;">` : `<div style="font-size: 12px; color: var(--gray-light);">${stage.completedDate ? 'Completed: ' + new Date(stage.completedDate).toLocaleDateString('he-IL') : ''}</div>`}
                         </div>`;
                     }).join('')}
                 </div></div>
@@ -2699,6 +2720,7 @@
         function updateStageActualHours(projectId, idx, value) { const p = projects.find(p => p.id === projectId); if (p) { p.stages[idx].actualHours = parseInt(value) || 0; p.totalHoursSpent = p.stages.reduce((sum, s) => sum + (s.actualHours || 0), 0); saveData(); }}
         function updateStageNotes(projectId, idx, value) { const p = projects.find(p => p.id === projectId); if (p) { p.stages[idx].notes = value; saveData(); }}
         function updateStageBlockers(projectId, idx, value) { const p = projects.find(p => p.id === projectId); if (p) { p.stages[idx].blockers = value; saveData(); }}
+        function updateStageActionRequired(projectId, idx, value) { const p = projects.find(p => p.id === projectId); if (p) { p.stages[idx].actionRequired = value; saveData(); }}
 
         function startStage(projectId, idx) { const p = projects.find(p => p.id === projectId); if (p) { p.stages[idx].status = 'in_progress'; p.stages[idx].startDate = new Date().toISOString(); saveData(); openProjectManagement(projectId); }}
         function completeStage(projectId, idx) { const p = projects.find(p => p.id === projectId); if (p) { p.stages[idx].status = 'completed'; p.stages[idx].completionPercent = 100; p.stages[idx].completedDate = new Date().toISOString(); recalculateProjectProgress(p); saveData(); openProjectManagement(projectId); showToast('Stage completed!'); }}
@@ -2713,7 +2735,33 @@
         function updateProjectStatus(projectId, status) { const p = projects.find(p => p.id === projectId); if (p) { p.status = status; if (status === 'completed') p.actualEndDate = new Date().toISOString(); saveData(); renderProjects(); updateProjectStats(); showToast('Status updated'); }}
 
         function encodeProjectData(project) {
-            const data = { n: project.name, c: project.clientName, p: project.overallProgress, b: project.totalBudget, h: project.totalHours, hs: project.stages.reduce((sum, s) => sum + (s.actualHours || 0), 0), sd: project.startDate, ed: project.expectedEndDate, s: project.stages.map(s => ({ n: s.name, p: s.completionPercent, st: s.status, eh: s.estimatedHours, ah: s.actualHours, nt: s.notes, bl: s.blockers })), u: project.updated };
+            const data = {
+                n: project.name,
+                c: project.clientName,
+                p: project.overallProgress,
+                b: project.totalBudget,
+                h: project.totalHours,
+                hs: project.stages.reduce((sum, s) => sum + (s.actualHours || 0), 0),
+                sd: project.startDate,
+                ed: project.expectedEndDate,
+                s: project.stages.map(s => ({
+                    n: s.name,
+                    p: s.completionPercent,
+                    st: s.status,
+                    eh: s.estimatedHours,
+                    ah: s.actualHours,
+                    nt: s.notes,
+                    bl: s.blockers,
+                    ar: s.actionRequired || ''
+                })),
+                u: project.updated,
+                // Technical details
+                tech: project.technicalDetails ? {
+                    db: project.technicalDetails.dbSchema || '',
+                    api: project.technicalDetails.apiEndpoints || '',
+                    deliverables: project.technicalDetails.deliverables || []
+                } : null
+            };
             return btoa(encodeURIComponent(JSON.stringify(data)));
         }
 

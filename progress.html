@@ -44,10 +44,7 @@
             padding: 40px 20px;
         }
 
-        .header {
-            text-align: center;
-            margin-bottom: 40px;
-        }
+        .header { text-align: center; margin-bottom: 40px; }
 
         .lang-toggle {
             position: absolute;
@@ -74,9 +71,7 @@
             color: white;
         }
 
-        .lang-btn:hover {
-            background: rgba(255,255,255,0.1);
-        }
+        .lang-btn:hover { background: rgba(255,255,255,0.1); }
 
         .logo-container {
             display: flex;
@@ -86,10 +81,7 @@
             margin-bottom: 8px;
         }
 
-        .logo-icon {
-            width: 52px;
-            height: 52px;
-        }
+        .logo-icon { width: 52px; height: 52px; }
 
         .logo-text {
             font-size: 32px;
@@ -114,10 +106,7 @@
             margin-bottom: 8px;
         }
 
-        .client-name {
-            color: var(--gray-light);
-            font-size: 16px;
-        }
+        .client-name { color: var(--gray-light); font-size: 16px; }
 
         .progress-card {
             background: rgba(99, 102, 241, 0.1);
@@ -128,11 +117,7 @@
             text-align: center;
         }
 
-        .progress-label {
-            font-size: 14px;
-            color: var(--gray-light);
-            margin-bottom: 12px;
-        }
+        .progress-label { font-size: 14px; color: var(--gray-light); margin-bottom: 12px; }
 
         .progress-bar-container {
             background: rgba(255, 255, 255, 0.1);
@@ -158,11 +143,7 @@
             background-clip: text;
         }
 
-        .dates {
-            margin-top: 20px;
-            font-size: 14px;
-            color: var(--gray-light);
-        }
+        .dates { margin-top: 20px; font-size: 14px; color: var(--gray-light); }
 
         .stats-grid {
             display: grid;
@@ -179,19 +160,8 @@
             text-align: center;
         }
 
-        .stat-value {
-            font-size: 28px;
-            font-weight: 700;
-            color: var(--light);
-            margin-bottom: 4px;
-        }
-
-        .stat-label {
-            font-size: 12px;
-            color: var(--gray);
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-        }
+        .stat-value { font-size: 28px; font-weight: 700; color: var(--light); margin-bottom: 4px; }
+        .stat-label { font-size: 12px; color: var(--gray); text-transform: uppercase; letter-spacing: 0.5px; }
 
         .charts-grid {
             display: grid;
@@ -207,17 +177,8 @@
             padding: 24px;
         }
 
-        .chart-title {
-            font-size: 14px;
-            font-weight: 600;
-            margin-bottom: 16px;
-            color: var(--gray-light);
-        }
-
-        .chart-container {
-            position: relative;
-            height: 200px;
-        }
+        .chart-title { font-size: 14px; font-weight: 600; margin-bottom: 16px; color: var(--gray-light); }
+        .chart-container { position: relative; height: 200px; }
 
         .section-title {
             font-size: 18px;
@@ -227,15 +188,8 @@
             border-bottom: 1px solid rgba(255, 255, 255, 0.1);
         }
 
-        .timeline {
-            position: relative;
-            padding-left: 30px;
-        }
-
-        body.rtl .timeline {
-            padding-left: 0;
-            padding-right: 30px;
-        }
+        .timeline { position: relative; padding-left: 30px; }
+        body.rtl .timeline { padding-left: 0; padding-right: 30px; }
 
         .timeline::before {
             content: '';
@@ -247,10 +201,7 @@
             background: rgba(255, 255, 255, 0.1);
         }
 
-        body.rtl .timeline::before {
-            left: auto;
-            right: 10px;
-        }
+        body.rtl .timeline::before { left: auto; right: 10px; }
 
         .stage {
             position: relative;
@@ -279,26 +230,16 @@
             border: 2px solid var(--gray);
         }
 
-        body.rtl .stage-icon {
-            left: auto;
-            right: -30px;
-        }
+        body.rtl .stage-icon { left: auto; right: -30px; }
 
         .stage.completed .stage-icon { background: var(--success); border-color: var(--success); color: white; }
         .stage.in_progress .stage-icon { background: var(--primary); border-color: var(--primary); color: white; }
 
-        .stage-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: flex-start;
-            margin-bottom: 8px;
-        }
-
+        .stage-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 8px; }
         .stage-name { font-weight: 600; font-size: 15px; }
         .stage-progress { font-size: 14px; color: var(--gray-light); }
         .stage.completed .stage-progress { color: var(--success); }
         .stage.in_progress .stage-progress { color: var(--primary); }
-
         .stage-hours { font-size: 12px; color: var(--gray); margin-bottom: 8px; }
 
         .stage-notes {
@@ -316,15 +257,258 @@
             letter-spacing: 0.5px;
         }
 
-        .blockers {
-            background: rgba(239, 68, 68, 0.1);
-            border: 1px solid rgba(239, 68, 68, 0.2);
-            border-radius: 8px;
-            padding: 10px;
-            font-size: 13px;
-            margin-top: 10px;
+        /* Enhanced Blockers Section */
+        .blockers-section {
+            background: rgba(239, 68, 68, 0.08);
+            border: 1px solid rgba(239, 68, 68, 0.25);
+            border-radius: 12px;
+            padding: 20px;
+            margin: 30px 0;
+        }
+
+        .blockers-header {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 16px;
+        }
+
+        .blockers-icon {
+            width: 24px;
+            height: 24px;
+            background: var(--danger);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+        }
+
+        .blockers-title {
+            font-size: 16px;
+            font-weight: 600;
             color: #fca5a5;
         }
+
+        .blocker-item {
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 8px;
+            padding: 14px;
+            margin-bottom: 10px;
+        }
+
+        .blocker-item:last-child { margin-bottom: 0; }
+
+        .blocker-text { color: #fca5a5; font-size: 14px; margin-bottom: 8px; }
+
+        .blocker-action {
+            background: rgba(239, 68, 68, 0.15);
+            border: 1px solid rgba(239, 68, 68, 0.3);
+            border-radius: 6px;
+            padding: 10px;
+            font-size: 13px;
+        }
+
+        .action-label {
+            color: var(--warning);
+            font-size: 11px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 4px;
+        }
+
+        .action-text { color: var(--light); }
+
+        /* Technical Details Section */
+        .tech-section {
+            background: rgba(99, 102, 241, 0.05);
+            border: 1px solid rgba(99, 102, 241, 0.2);
+            border-radius: 12px;
+            padding: 20px;
+            margin: 30px 0;
+        }
+
+        .tech-header {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 16px;
+        }
+
+        .tech-icon {
+            width: 24px;
+            height: 24px;
+            background: var(--primary);
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+        }
+
+        .tech-title { font-size: 16px; font-weight: 600; }
+
+        .tech-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 16px;
+        }
+
+        .tech-card {
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 8px;
+            padding: 14px;
+        }
+
+        .tech-card-title {
+            font-size: 12px;
+            color: var(--gray-light);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 8px;
+        }
+
+        .tech-card-content { font-size: 14px; }
+
+        .code-block {
+            background: rgba(0, 0, 0, 0.4);
+            border-radius: 6px;
+            padding: 12px;
+            font-family: 'Monaco', 'Consolas', monospace;
+            font-size: 11px;
+            overflow-x: auto;
+            white-space: pre;
+            color: #a5f3fc;
+            margin-top: 8px;
+        }
+
+        .deliverables-list {
+            list-style: none;
+            padding: 0;
+        }
+
+        .deliverables-list li {
+            padding: 8px 0;
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 13px;
+        }
+
+        .deliverables-list li:last-child { border-bottom: none; }
+
+        .deliverable-status {
+            width: 18px;
+            height: 18px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 10px;
+        }
+
+        .deliverable-done { background: var(--success); color: white; }
+        .deliverable-pending { background: var(--gray); color: white; }
+
+        /* Client Feedback Section */
+        .feedback-section {
+            background: rgba(14, 165, 233, 0.08);
+            border: 1px solid rgba(14, 165, 233, 0.25);
+            border-radius: 12px;
+            padding: 24px;
+            margin: 30px 0;
+        }
+
+        .feedback-header {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .feedback-icon {
+            width: 28px;
+            height: 28px;
+            background: var(--secondary);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+        }
+
+        .feedback-title { font-size: 18px; font-weight: 600; }
+        .feedback-subtitle { color: var(--gray-light); font-size: 14px; margin-bottom: 20px; }
+
+        .feedback-form { display: flex; flex-direction: column; gap: 16px; }
+
+        .form-group { display: flex; flex-direction: column; gap: 6px; }
+        .form-label { font-size: 13px; color: var(--gray-light); font-weight: 500; }
+
+        .form-textarea {
+            background: rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            padding: 14px;
+            color: var(--light);
+            font-family: inherit;
+            font-size: 14px;
+            resize: vertical;
+            min-height: 100px;
+        }
+
+        .form-textarea:focus {
+            outline: none;
+            border-color: var(--secondary);
+        }
+
+        .form-textarea::placeholder { color: var(--gray); }
+
+        .form-actions {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-primary {
+            background: var(--gradient);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(99, 102, 241, 0.3);
+        }
+
+        .btn-success {
+            background: var(--success);
+            color: white;
+        }
+
+        .btn-success:hover { background: #059669; }
+
+        .btn-outline {
+            background: transparent;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            color: var(--light);
+        }
+
+        .btn-outline:hover { background: rgba(255, 255, 255, 0.05); }
 
         .current-stage-card {
             background: rgba(99, 102, 241, 0.1);
@@ -358,11 +542,31 @@
         .error-message { text-align: center; padding: 60px 20px; }
         .error-message h2 { color: var(--danger); margin-bottom: 16px; }
 
+        /* Toast notification */
+        .toast {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            background: var(--success);
+            color: white;
+            padding: 16px 24px;
+            border-radius: 10px;
+            font-weight: 600;
+            transform: translateY(100px);
+            opacity: 0;
+            transition: all 0.3s;
+            z-index: 2000;
+        }
+
+        .toast.show { transform: translateY(0); opacity: 1; }
+
         @media (max-width: 768px) {
-            .stats-grid, .charts-grid { grid-template-columns: 1fr; }
+            .stats-grid, .charts-grid, .tech-grid { grid-template-columns: 1fr; }
             .project-name { font-size: 22px; }
             .progress-value { font-size: 42px; }
             .lang-toggle { position: static; justify-content: center; margin-bottom: 20px; }
+            .form-actions { flex-direction: column; }
+            .btn { width: 100%; justify-content: center; }
         }
     </style>
 </head>
@@ -370,6 +574,7 @@
     <div class="container" id="content">
         <!-- Content loaded by JavaScript -->
     </div>
+    <div class="toast" id="toast"></div>
 
     <script>
         // Translations
@@ -402,7 +607,25 @@
                 errorLoading: 'Unable to Load Project',
                 errorLoadingMsg: 'There was an error loading the project data. Please contact your project manager.',
                 spent: 'Spent',
-                remaining: 'Remaining'
+                remaining: 'Remaining',
+                actionRequired: 'Action Required From You',
+                blockersAndIssues: 'Blockers & Issues',
+                needsAttention: 'This item needs your attention',
+                technicalProgress: 'Technical Progress',
+                databaseSchema: 'Database Schema',
+                apiEndpoints: 'API Endpoints',
+                keyDeliverables: 'Key Deliverables',
+                codePreview: 'Code Preview',
+                yourFeedback: 'Your Feedback',
+                feedbackSubtitle: 'Share your thoughts, questions, or concerns about the project progress',
+                feedbackPlaceholder: 'Write your comments, questions, or suggestions here...',
+                sendFeedback: 'Send Feedback',
+                approveProgress: 'Approve Progress',
+                requestChanges: 'Request Changes',
+                feedbackSent: 'Thank you! Your feedback has been sent.',
+                approvalSent: 'Progress approved! Thank you.',
+                done: 'Done',
+                pending: 'Pending'
             },
             he: {
                 subtitle: 'לוח מעקב התקדמות פרויקט',
@@ -432,7 +655,25 @@
                 errorLoading: 'שגיאה בטעינה',
                 errorLoadingMsg: 'אירעה שגיאה בטעינת נתוני הפרויקט. אנא פנו למנהל הפרויקט.',
                 spent: 'הושקעו',
-                remaining: 'נותרו'
+                remaining: 'נותרו',
+                actionRequired: 'נדרשת פעולה מצדכם',
+                blockersAndIssues: 'חסמים ובעיות',
+                needsAttention: 'פריט זה דורש את תשומת לבכם',
+                technicalProgress: 'התקדמות טכנית',
+                databaseSchema: 'סכמת מסד נתונים',
+                apiEndpoints: 'נקודות קצה API',
+                keyDeliverables: 'תוצרים מרכזיים',
+                codePreview: 'תצוגה מקדימה של קוד',
+                yourFeedback: 'המשוב שלכם',
+                feedbackSubtitle: 'שתפו את המחשבות, השאלות או החששות שלכם לגבי התקדמות הפרויקט',
+                feedbackPlaceholder: 'כתבו כאן את ההערות, השאלות או ההצעות שלכם...',
+                sendFeedback: 'שלח משוב',
+                approveProgress: 'אשר התקדמות',
+                requestChanges: 'בקש שינויים',
+                feedbackSent: 'תודה! המשוב שלכם נשלח.',
+                approvalSent: 'ההתקדמות אושרה! תודה.',
+                done: 'הושלם',
+                pending: 'ממתין'
             }
         };
 
@@ -461,6 +702,57 @@
             currentLang = lang;
             document.body.classList.toggle('rtl', lang === 'he');
             renderProgress();
+        }
+
+        function showToast(message) {
+            const toast = document.getElementById('toast');
+            toast.textContent = message;
+            toast.classList.add('show');
+            setTimeout(() => toast.classList.remove('show'), 3000);
+        }
+
+        function sendFeedback(type) {
+            const textarea = document.getElementById('feedbackText');
+            const message = textarea ? textarea.value : '';
+            const project = projectData;
+
+            if (type === 'feedback' && !message.trim()) {
+                alert(currentLang === 'he' ? 'אנא כתבו משוב לפני השליחה' : 'Please write your feedback before sending');
+                return;
+            }
+
+            const subject = type === 'approval'
+                ? `Progress Approved: ${project.n}`
+                : `Client Feedback: ${project.n}`;
+
+            const body = type === 'approval'
+                ? `Client has approved the current progress (${project.p}%) for project: ${project.n}`
+                : `Feedback from client for project: ${project.n}\n\nMessage:\n${message}`;
+
+            // Using Formspree for form submission
+            fetch('https://formspree.io/f/xnnqbqkk', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    project: project.n,
+                    client: project.c,
+                    type: type,
+                    progress: project.p + '%',
+                    message: message || 'Progress Approved',
+                    _subject: subject
+                })
+            }).then(response => {
+                if (response.ok) {
+                    showToast(type === 'approval' ? t('approvalSent') : t('feedbackSent'));
+                    if (textarea) textarea.value = '';
+                }
+            }).catch(() => {
+                // Fallback to mailto
+                const mailtoLink = `mailto:avi@drishticonsulting.com?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+                window.open(mailtoLink, '_blank');
+                showToast(type === 'approval' ? t('approvalSent') : t('feedbackSent'));
+                if (textarea) textarea.value = '';
+            });
         }
 
         function renderCharts(project) {
@@ -513,22 +805,110 @@
                         responsive: true,
                         maintainAspectRatio: false,
                         indexAxis: 'y',
-                        plugins: {
-                            legend: { display: false }
-                        },
+                        plugins: { legend: { display: false } },
                         scales: {
-                            x: {
-                                grid: { color: 'rgba(255,255,255,0.05)' },
-                                ticks: { color: '#94a3b8' }
-                            },
-                            y: {
-                                grid: { display: false },
-                                ticks: { color: '#94a3b8' }
-                            }
+                            x: { grid: { color: 'rgba(255,255,255,0.05)' }, ticks: { color: '#94a3b8' } },
+                            y: { grid: { display: false }, ticks: { color: '#94a3b8' } }
                         }
                     }
                 });
             }
+        }
+
+        function renderBlockers(project) {
+            const blockers = project.s.filter(s => s.bl && s.bl.trim()).map(s => ({
+                stage: s.n,
+                blocker: s.bl,
+                action: s.ar // action required from client
+            }));
+
+            if (blockers.length === 0) return '';
+
+            return `
+                <div class="blockers-section">
+                    <div class="blockers-header">
+                        <div class="blockers-icon">⚠</div>
+                        <div class="blockers-title">${t('blockersAndIssues')}</div>
+                    </div>
+                    ${blockers.map(b => `
+                        <div class="blocker-item">
+                            <div class="blocker-text"><strong>${b.stage}:</strong> ${b.blocker}</div>
+                            ${b.action ? `
+                                <div class="blocker-action">
+                                    <div class="action-label">${t('actionRequired')}</div>
+                                    <div class="action-text">${b.action}</div>
+                                </div>
+                            ` : ''}
+                        </div>
+                    `).join('')}
+                </div>
+            `;
+        }
+
+        function renderTechnicalSection(project) {
+            if (!project.tech) return '';
+
+            const tech = project.tech;
+            return `
+                <div class="tech-section">
+                    <div class="tech-header">
+                        <div class="tech-icon">⚡</div>
+                        <div class="tech-title">${t('technicalProgress')}</div>
+                    </div>
+                    <div class="tech-grid">
+                        ${tech.db ? `
+                            <div class="tech-card">
+                                <div class="tech-card-title">${t('databaseSchema')}</div>
+                                <div class="code-block">${tech.db}</div>
+                            </div>
+                        ` : ''}
+                        ${tech.api ? `
+                            <div class="tech-card">
+                                <div class="tech-card-title">${t('apiEndpoints')}</div>
+                                <div class="code-block">${tech.api}</div>
+                            </div>
+                        ` : ''}
+                    </div>
+                    ${tech.deliverables && tech.deliverables.length > 0 ? `
+                        <div class="tech-card" style="margin-top: 16px;">
+                            <div class="tech-card-title">${t('keyDeliverables')}</div>
+                            <ul class="deliverables-list">
+                                ${tech.deliverables.map(d => `
+                                    <li>
+                                        <span class="deliverable-status ${d.done ? 'deliverable-done' : 'deliverable-pending'}">${d.done ? '✓' : '○'}</span>
+                                        <span>${d.name}</span>
+                                    </li>
+                                `).join('')}
+                            </ul>
+                        </div>
+                    ` : ''}
+                </div>
+            `;
+        }
+
+        function renderFeedbackSection() {
+            return `
+                <div class="feedback-section">
+                    <div class="feedback-header">
+                        <div class="feedback-icon">💬</div>
+                        <div class="feedback-title">${t('yourFeedback')}</div>
+                    </div>
+                    <div class="feedback-subtitle">${t('feedbackSubtitle')}</div>
+                    <div class="feedback-form">
+                        <div class="form-group">
+                            <textarea id="feedbackText" class="form-textarea" placeholder="${t('feedbackPlaceholder')}"></textarea>
+                        </div>
+                        <div class="form-actions">
+                            <button class="btn btn-primary" onclick="sendFeedback('feedback')">
+                                ✉ ${t('sendFeedback')}
+                            </button>
+                            <button class="btn btn-success" onclick="sendFeedback('approval')">
+                                ✓ ${t('approveProgress')}
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            `;
         }
 
         function renderProgress() {
@@ -634,6 +1014,8 @@
                     </div>
                 </div>
 
+                ${renderBlockers(project)}
+
                 ${currentStage ? `
                 <div class="current-stage-card">
                     <div class="current-stage-label">${t('currentStage')}</div>
@@ -645,9 +1027,10 @@
                         <span>${currentStage.p}%</span>
                     </div>
                     ${currentStage.nt ? `<div class="stage-notes"><strong>${t('whatsDone')}:</strong><br>${currentStage.nt}</div>` : ''}
-                    ${currentStage.bl ? `<div class="blockers"><strong>${t('currentBlockers')}:</strong><br>${currentStage.bl}</div>` : ''}
                 </div>
                 ` : ''}
+
+                ${renderTechnicalSection(project)}
 
                 <h2 class="section-title">${t('projectTimeline')}</h2>
                 <div class="timeline">
@@ -671,6 +1054,8 @@
                     <div class="stage-hours" style="margin-top: 8px;">${t('estimated')}: ${nextStage.eh} ${t('hours')}</div>
                 </div>
                 ` : ''}
+
+                ${renderFeedbackSection()}
 
                 <div class="footer">
                     <p>${t('questions')} <a href="mailto:avi@drishticonsulting.com">avi@drishticonsulting.com</a></p>
