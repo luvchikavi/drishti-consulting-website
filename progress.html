@@ -911,11 +911,29 @@
             `;
         }
 
-        function renderProgress() {
+        async function renderProgress() {
             const urlParams = new URLSearchParams(window.location.search);
-            const data = urlParams.get('d');
+            const projectId = urlParams.get('p'); // Short project ID
+            const data = urlParams.get('d'); // Full encoded data (legacy)
 
-            if (!data) {
+            let project = null;
+
+            // Try short project ID first (fetch from JSON file)
+            if (projectId) {
+                try {
+                    const response = await fetch('projects-data.json');
+                    const projectsData = await response.json();
+                    project = projectsData[projectId];
+                } catch (e) {
+                    console.error('Failed to load project:', e);
+                }
+            }
+            // Fall back to encoded data in URL
+            else if (data) {
+                project = decodeProjectData(data);
+            }
+
+            if (!project) {
                 document.getElementById('content').innerHTML = `
                     <div class="error-message">
                         <div class="logo-container">
@@ -929,22 +947,7 @@
                 return;
             }
 
-            const project = decodeProjectData(data);
             projectData = project;
-
-            if (!project) {
-                document.getElementById('content').innerHTML = `
-                    <div class="error-message">
-                        <div class="logo-container">
-                            <svg class="logo-icon" viewBox="0 0 100 100"><circle cx="50" cy="50" r="45" fill="none" stroke="#4a5568" stroke-width="2"/><circle cx="50" cy="50" r="32" fill="none" stroke="#4a5568" stroke-width="2"/><circle cx="50" cy="50" r="20" fill="none" stroke="#4a5568" stroke-width="2"/><circle cx="50" cy="50" r="10" fill="none" stroke="#6366f1" stroke-width="2.5"/><circle cx="50" cy="50" r="4" fill="#6366f1"/></svg>
-                            <span class="logo-text">Drishti</span>
-                        </div>
-                        <h2>${t('errorLoading')}</h2>
-                        <p>${t('errorLoadingMsg')}</p>
-                    </div>
-                `;
-                return;
-            }
 
             const currentStage = project.s.find(s => s.st === 'in_progress') || project.s.find(s => s.st === 'not_started');
             const nextStage = project.s.find(s => s.st === 'not_started');

@@ -1,0 +1,33 @@
+{
+  "lhd-001": {
+    "n": "Insurance Claims Management System",
+    "c": "LHD Insurance Consulting",
+    "p": 52,
+    "b": 85000,
+    "h": 320,
+    "hs": 147,
+    "sd": "2026-01-05",
+    "ed": "2026-03-30",
+    "s": [
+      { "n": "Discovery & Requirements", "p": 100, "st": "completed", "eh": 32, "ah": 30, "nt": "All requirements documented" },
+      { "n": "System Design", "p": 100, "st": "completed", "eh": 48, "ah": 52, "nt": "Database schema finalized, UI mockups approved" },
+      { "n": "Development - Phase 1", "p": 75, "st": "in_progress", "eh": 80, "ah": 65, "nt": "API endpoints 90% complete", "bl": "Waiting for client API credentials", "ar": "Please provide API credentials for legacy system" },
+      { "n": "Development - Phase 2", "p": 0, "st": "not_started", "eh": 80, "ah": 0 },
+      { "n": "Testing & QA", "p": 0, "st": "not_started", "eh": 48, "ah": 0 },
+      { "n": "Deployment & Training", "p": 0, "st": "not_started", "eh": 32, "ah": 0 }
+    ],
+    "u": "2026-01-07",
+    "tech": {
+      "db": "claims (id, policy_id, status)\npolicies (id, client_id, type)\nusers (id, email, role)",
+      "api": "POST /api/claims\nGET /api/claims/:id\nPUT /api/claims/:id/status",
+      "deliverables": [
+        { "name": "User authentication", "done": true },
+        { "name": "Claims API", "done": true },
+        { "name": "Policy lookup", "done": true },
+        { "name": "Status workflow", "done": false },
+        { "name": "Legacy integration", "done": false },
+        { "name": "Admin dashboard", "done": false }
+      ]
+    }
+  }
+}
