@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Project Progress - Drishti Consulting</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Heebo:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;500;600;700&family=Heebo:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -26,7 +26,7 @@
         }
 
         body {
-            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            font-family: 'Open Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
             background: var(--darker);
             color: var(--light);
             min-height: 100vh;
@@ -677,7 +677,14 @@
                 feedbackSent: 'Thank you! Your feedback has been sent.',
                 approvalSent: 'Progress approved! Thank you.',
                 done: 'Done',
-                pending: 'Pending'
+                pending: 'Pending',
+                budgetHealth: 'Budget vs Spent',
+                timeline: 'Time Progress',
+                budget: 'Budget',
+                onTrack: 'On Track',
+                overBudget: 'Over Budget',
+                daysRemaining: 'days remaining',
+                daysElapsed: 'days elapsed'
             },
             he: {
                 subtitle: 'לוח מעקב התקדמות פרויקט',
@@ -725,7 +732,14 @@
                 feedbackSent: 'תודה! המשוב שלכם נשלח.',
                 approvalSent: 'ההתקדמות אושרה! תודה.',
                 done: 'הושלם',
-                pending: 'ממתין'
+                pending: 'ממתין',
+                budgetHealth: 'תקציב מול הוצאות',
+                timeline: 'התקדמות בזמן',
+                budget: 'תקציב',
+                onTrack: 'בזמן',
+                overBudget: 'חריגה',
+                daysRemaining: 'ימים נותרו',
+                daysElapsed: 'ימים חלפו'
             }
         };
 
@@ -808,7 +822,7 @@
         }
 
         function renderCharts(project) {
-            // Stage Progress Pie Chart
+            // Stage Progress Pie Chart - Purple gradient theme
             const completedStages = project.s.filter(s => s.st === 'completed').length;
             const inProgressStages = project.s.filter(s => s.st === 'in_progress').length;
             const upcomingStages = project.s.filter(s => s.st === 'not_started').length;
@@ -821,7 +835,7 @@
                         labels: [t('completed'), t('inProgress'), t('upcoming')],
                         datasets: [{
                             data: [completedStages, inProgressStages, upcomingStages],
-                            backgroundColor: ['#10b981', '#6366f1', '#374151'],
+                            backgroundColor: ['#a78bfa', '#8b5cf6', '#4c1d95'],
                             borderWidth: 0
                         }]
                     },
@@ -839,7 +853,59 @@
                 });
             }
 
-            // Hours Breakdown Bar Chart
+            // Budget Health Gauge - Green theme
+            const budgetCtx = document.getElementById('budgetChart');
+            if (budgetCtx) {
+                const budgetUsedPercent = project.h > 0 ? Math.round((project.hs / project.h) * 100) : 0;
+                const budgetRemaining = 100 - budgetUsedPercent;
+                const isOverBudget = budgetUsedPercent > project.p; // spent more % than progress
+
+                new Chart(budgetCtx, {
+                    type: 'doughnut',
+                    data: {
+                        labels: [t('spent'), t('remaining')],
+                        datasets: [{
+                            data: [budgetUsedPercent, Math.max(0, budgetRemaining)],
+                            backgroundColor: isOverBudget ? ['#f87171', '#1f2937'] : ['#34d399', '#1f2937'],
+                            borderWidth: 0
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        rotation: -90,
+                        circumference: 180,
+                        plugins: {
+                            legend: { display: false },
+                            tooltip: {
+                                callbacks: {
+                                    label: (ctx) => `${ctx.label}: ${ctx.raw}%`
+                                }
+                            }
+                        },
+                        cutout: '75%'
+                    },
+                    plugins: [{
+                        id: 'centerText',
+                        afterDraw: (chart) => {
+                            const ctx = chart.ctx;
+                            const centerX = chart.width / 2;
+                            const centerY = chart.height - 30;
+                            ctx.save();
+                            ctx.font = 'bold 28px Open Sans';
+                            ctx.fillStyle = isOverBudget ? '#f87171' : '#34d399';
+                            ctx.textAlign = 'center';
+                            ctx.fillText(`${budgetUsedPercent}%`, centerX, centerY);
+                            ctx.font = '12px Open Sans';
+                            ctx.fillStyle = '#94a3b8';
+                            ctx.fillText(isOverBudget ? t('overBudget') : t('onTrack'), centerX, centerY + 20);
+                            ctx.restore();
+                        }
+                    }]
+                });
+            }
+
+            // Hours Breakdown Bar Chart - Blue gradient theme
             const hoursCtx = document.getElementById('hoursChart');
             if (hoursCtx) {
                 new Chart(hoursCtx, {
@@ -848,7 +914,7 @@
                         labels: [t('spent'), t('remaining')],
                         datasets: [{
                             data: [project.hs, Math.max(0, project.h - project.hs)],
-                            backgroundColor: ['#6366f1', '#374151'],
+                            backgroundColor: ['#38bdf8', '#0c4a6e'],
                             borderRadius: 8,
                             borderSkipped: false
                         }]
@@ -859,8 +925,60 @@
                         indexAxis: 'y',
                         plugins: { legend: { display: false } },
                         scales: {
-                            x: { grid: { color: 'rgba(255,255,255,0.05)' }, ticks: { color: '#94a3b8' } },
-                            y: { grid: { display: false }, ticks: { color: '#94a3b8' } }
+                            x: {
+                                grid: { color: 'rgba(255,255,255,0.05)' },
+                                ticks: { color: '#38bdf8' },
+                                max: project.h
+                            },
+                            y: { grid: { display: false }, ticks: { color: '#38bdf8', font: { weight: '600' } } }
+                        }
+                    }
+                });
+            }
+
+            // Timeline Progress Chart - Orange theme
+            const timelineCtx = document.getElementById('timelineChart');
+            if (timelineCtx) {
+                const startDate = new Date(project.sd);
+                const endDate = new Date(project.ed);
+                const today = new Date();
+                const totalDays = Math.ceil((endDate - startDate) / (1000 * 60 * 60 * 24));
+                const daysElapsed = Math.max(0, Math.ceil((today - startDate) / (1000 * 60 * 60 * 24)));
+                const daysRemaining = Math.max(0, totalDays - daysElapsed);
+                const timePercent = totalDays > 0 ? Math.min(100, Math.round((daysElapsed / totalDays) * 100)) : 0;
+
+                new Chart(timelineCtx, {
+                    type: 'bar',
+                    data: {
+                        labels: [t('daysElapsed'), t('daysRemaining')],
+                        datasets: [{
+                            data: [daysElapsed, daysRemaining],
+                            backgroundColor: ['#fb923c', '#431407'],
+                            borderRadius: 8,
+                            borderSkipped: false
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        indexAxis: 'y',
+                        plugins: {
+                            legend: { display: false },
+                            title: {
+                                display: true,
+                                text: `${timePercent}% of time elapsed`,
+                                color: '#fb923c',
+                                font: { size: 14, weight: '600' },
+                                padding: { bottom: 10 }
+                            }
+                        },
+                        scales: {
+                            x: {
+                                grid: { color: 'rgba(255,255,255,0.05)' },
+                                ticks: { color: '#fb923c' },
+                                max: totalDays
+                            },
+                            y: { grid: { display: false }, ticks: { color: '#fb923c', font: { weight: '600' } } }
                         }
                     }
                 });
@@ -1054,17 +1172,29 @@
                     </div>
                 </div>
 
-                <div class="charts-grid">
-                    <div class="chart-card">
-                        <div class="chart-title">${t('stageProgress')}</div>
+                <div class="charts-grid" style="grid-template-columns: repeat(2, 1fr);">
+                    <div class="chart-card" style="background: linear-gradient(135deg, rgba(99, 102, 241, 0.1) 0%, rgba(139, 92, 246, 0.1) 100%);">
+                        <div class="chart-title" style="color: #a78bfa;">${t('stageProgress')}</div>
                         <div class="chart-container">
                             <canvas id="stageChart"></canvas>
                         </div>
                     </div>
-                    <div class="chart-card">
-                        <div class="chart-title">${t('hoursBreakdown')}</div>
+                    <div class="chart-card" style="background: linear-gradient(135deg, rgba(16, 185, 129, 0.1) 0%, rgba(5, 150, 105, 0.1) 100%);">
+                        <div class="chart-title" style="color: #34d399;">${t('budgetHealth')}</div>
+                        <div class="chart-container">
+                            <canvas id="budgetChart"></canvas>
+                        </div>
+                    </div>
+                    <div class="chart-card" style="background: linear-gradient(135deg, rgba(14, 165, 233, 0.1) 0%, rgba(6, 182, 212, 0.1) 100%);">
+                        <div class="chart-title" style="color: #38bdf8;">${t('hoursBreakdown')}</div>
                         <div class="chart-container">
                             <canvas id="hoursChart"></canvas>
+                        </div>
+                    </div>
+                    <div class="chart-card" style="background: linear-gradient(135deg, rgba(251, 146, 60, 0.1) 0%, rgba(249, 115, 22, 0.1) 100%);">
+                        <div class="chart-title" style="color: #fb923c;">${t('timeline')}</div>
+                        <div class="chart-container">
+                            <canvas id="timelineChart"></canvas>
                         </div>
                     </div>
                 </div>
