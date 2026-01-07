@@ -62,6 +62,7 @@
             border-radius: 8px;
             cursor: pointer;
             font-size: 13px;
+            font-family: inherit;
             transition: all 0.2s;
         }
 
@@ -478,6 +479,7 @@
             border-radius: 8px;
             font-size: 14px;
             font-weight: 600;
+            font-family: inherit;
             cursor: pointer;
             transition: all 0.2s;
             display: flex;
@@ -822,7 +824,7 @@
         }
 
         function renderCharts(project) {
-            // Stage Progress Pie Chart - Purple gradient theme
+            // VIBRANT Stage Progress Chart - Rainbow colors
             const completedStages = project.s.filter(s => s.st === 'completed').length;
             const inProgressStages = project.s.filter(s => s.st === 'in_progress').length;
             const upcomingStages = project.s.filter(s => s.st === 'not_started').length;
@@ -835,8 +837,10 @@
                         labels: [t('completed'), t('inProgress'), t('upcoming')],
                         datasets: [{
                             data: [completedStages, inProgressStages, upcomingStages],
-                            backgroundColor: ['#a78bfa', '#8b5cf6', '#4c1d95'],
-                            borderWidth: 0
+                            backgroundColor: ['#22c55e', '#f59e0b', '#ef4444'],  // Green, Orange, Red
+                            hoverBackgroundColor: ['#16a34a', '#d97706', '#dc2626'],
+                            borderWidth: 3,
+                            borderColor: '#0f172a'
                         }]
                     },
                     options: {
@@ -845,28 +849,47 @@
                         plugins: {
                             legend: {
                                 position: 'bottom',
-                                labels: { color: '#94a3b8', padding: 15, font: { size: 12 } }
+                                labels: {
+                                    color: '#e2e8f0',
+                                    padding: 12,
+                                    font: { size: 11, weight: '600' },
+                                    usePointStyle: true,
+                                    pointStyle: 'circle'
+                                }
                             }
                         },
-                        cutout: '65%'
+                        cutout: '60%'
                     }
                 });
             }
 
-            // Budget Health Gauge - Green theme
+            // COLORFUL Budget Health - Multi-color gradient gauge
             const budgetCtx = document.getElementById('budgetChart');
             if (budgetCtx) {
                 const budgetUsedPercent = project.h > 0 ? Math.round((project.hs / project.h) * 100) : 0;
-                const budgetRemaining = 100 - budgetUsedPercent;
-                const isOverBudget = budgetUsedPercent > project.p; // spent more % than progress
+                const progressPercent = project.p;
+
+                // Compare budget spent vs progress made
+                const efficiency = progressPercent > 0 ? (budgetUsedPercent / progressPercent) : 1;
+                let statusColor, statusText;
+                if (efficiency <= 0.9) {
+                    statusColor = '#22c55e'; statusText = 'Excellent';
+                } else if (efficiency <= 1.1) {
+                    statusColor = '#3b82f6'; statusText = t('onTrack');
+                } else if (efficiency <= 1.3) {
+                    statusColor = '#f59e0b'; statusText = 'Watch';
+                } else {
+                    statusColor = '#ef4444'; statusText = t('overBudget');
+                }
 
                 new Chart(budgetCtx, {
                     type: 'doughnut',
                     data: {
                         labels: [t('spent'), t('remaining')],
                         datasets: [{
-                            data: [budgetUsedPercent, Math.max(0, budgetRemaining)],
-                            backgroundColor: isOverBudget ? ['#f87171', '#1f2937'] : ['#34d399', '#1f2937'],
+                            data: [budgetUsedPercent, Math.max(0, 100 - budgetUsedPercent)],
+                            backgroundColor: [statusColor, 'rgba(255,255,255,0.1)'],
+                            hoverBackgroundColor: [statusColor, 'rgba(255,255,255,0.15)'],
                             borderWidth: 0
                         }]
                     },
@@ -875,47 +898,48 @@
                         maintainAspectRatio: false,
                         rotation: -90,
                         circumference: 180,
-                        plugins: {
-                            legend: { display: false },
-                            tooltip: {
-                                callbacks: {
-                                    label: (ctx) => `${ctx.label}: ${ctx.raw}%`
-                                }
-                            }
-                        },
-                        cutout: '75%'
+                        plugins: { legend: { display: false } },
+                        cutout: '70%'
                     },
                     plugins: [{
                         id: 'centerText',
                         afterDraw: (chart) => {
                             const ctx = chart.ctx;
                             const centerX = chart.width / 2;
-                            const centerY = chart.height - 30;
+                            const centerY = chart.height - 25;
                             ctx.save();
-                            ctx.font = 'bold 28px Open Sans';
-                            ctx.fillStyle = isOverBudget ? '#f87171' : '#34d399';
+                            ctx.font = 'bold 32px Open Sans, Heebo, sans-serif';
+                            ctx.fillStyle = statusColor;
                             ctx.textAlign = 'center';
                             ctx.fillText(`${budgetUsedPercent}%`, centerX, centerY);
-                            ctx.font = '12px Open Sans';
-                            ctx.fillStyle = '#94a3b8';
-                            ctx.fillText(isOverBudget ? t('overBudget') : t('onTrack'), centerX, centerY + 20);
+                            ctx.font = 'bold 13px Open Sans, Heebo, sans-serif';
+                            ctx.fillStyle = statusColor;
+                            ctx.fillText(statusText, centerX, centerY + 22);
                             ctx.restore();
                         }
                     }]
                 });
             }
 
-            // Hours Breakdown Bar Chart - Blue gradient theme
+            // RAINBOW Hours Bar Chart - Multiple vibrant colors per stage
             const hoursCtx = document.getElementById('hoursChart');
             if (hoursCtx) {
+                const stageNames = project.s.map(s => s.n.substring(0, 15) + (s.n.length > 15 ? '...' : ''));
+                const stageHours = project.s.map(s => s.ah || 0);
+                const rainbowColors = [
+                    '#ef4444', '#f97316', '#f59e0b', '#84cc16', '#22c55e', '#14b8a6',
+                    '#06b6d4', '#3b82f6', '#6366f1', '#8b5cf6', '#a855f7', '#ec4899'
+                ];
+
                 new Chart(hoursCtx, {
                     type: 'bar',
                     data: {
-                        labels: [t('spent'), t('remaining')],
+                        labels: stageNames,
                         datasets: [{
-                            data: [project.hs, Math.max(0, project.h - project.hs)],
-                            backgroundColor: ['#38bdf8', '#0c4a6e'],
-                            borderRadius: 8,
+                            label: t('hours'),
+                            data: stageHours,
+                            backgroundColor: rainbowColors.slice(0, project.s.length),
+                            borderRadius: 6,
                             borderSkipped: false
                         }]
                     },
@@ -923,20 +947,33 @@
                         responsive: true,
                         maintainAspectRatio: false,
                         indexAxis: 'y',
-                        plugins: { legend: { display: false } },
+                        plugins: {
+                            legend: { display: false },
+                            tooltip: {
+                                backgroundColor: 'rgba(15, 23, 42, 0.95)',
+                                titleColor: '#f1f5f9',
+                                bodyColor: '#cbd5e1',
+                                borderColor: 'rgba(255,255,255,0.1)',
+                                borderWidth: 1,
+                                padding: 12,
+                                cornerRadius: 8
+                            }
+                        },
                         scales: {
                             x: {
                                 grid: { color: 'rgba(255,255,255,0.05)' },
-                                ticks: { color: '#38bdf8' },
-                                max: project.h
+                                ticks: { color: '#94a3b8', font: { size: 10 } }
                             },
-                            y: { grid: { display: false }, ticks: { color: '#38bdf8', font: { weight: '600' } } }
+                            y: {
+                                grid: { display: false },
+                                ticks: { color: '#e2e8f0', font: { size: 10, weight: '500' } }
+                            }
                         }
                     }
                 });
             }
 
-            // Timeline Progress Chart - Orange theme
+            // COLORFUL Timeline Polar Area Chart
             const timelineCtx = document.getElementById('timelineChart');
             if (timelineCtx) {
                 const startDate = new Date(project.sd);
@@ -946,39 +983,56 @@
                 const daysElapsed = Math.max(0, Math.ceil((today - startDate) / (1000 * 60 * 60 * 24)));
                 const daysRemaining = Math.max(0, totalDays - daysElapsed);
                 const timePercent = totalDays > 0 ? Math.min(100, Math.round((daysElapsed / totalDays) * 100)) : 0;
+                const progressPercent = project.p;
+
+                // Are we ahead or behind schedule?
+                const scheduleStatus = progressPercent >= timePercent;
 
                 new Chart(timelineCtx, {
-                    type: 'bar',
+                    type: 'polarArea',
                     data: {
-                        labels: [t('daysElapsed'), t('daysRemaining')],
+                        labels: [t('daysElapsed'), t('daysRemaining'), t('completed')],
                         datasets: [{
-                            data: [daysElapsed, daysRemaining],
-                            backgroundColor: ['#fb923c', '#431407'],
-                            borderRadius: 8,
-                            borderSkipped: false
+                            data: [daysElapsed, daysRemaining, progressPercent],
+                            backgroundColor: [
+                                'rgba(251, 146, 60, 0.8)',   // Orange - elapsed
+                                'rgba(34, 197, 94, 0.8)',   // Green - remaining
+                                'rgba(99, 102, 241, 0.8)'   // Purple - progress
+                            ],
+                            borderColor: [
+                                '#fb923c',
+                                '#22c55e',
+                                '#6366f1'
+                            ],
+                            borderWidth: 2
                         }]
                     },
                     options: {
                         responsive: true,
                         maintainAspectRatio: false,
-                        indexAxis: 'y',
                         plugins: {
-                            legend: { display: false },
+                            legend: {
+                                position: 'bottom',
+                                labels: {
+                                    color: '#e2e8f0',
+                                    padding: 10,
+                                    font: { size: 10, weight: '500' },
+                                    usePointStyle: true
+                                }
+                            },
                             title: {
                                 display: true,
-                                text: `${timePercent}% of time elapsed`,
-                                color: '#fb923c',
-                                font: { size: 14, weight: '600' },
-                                padding: { bottom: 10 }
+                                text: scheduleStatus ? 'On Schedule' : 'Behind Schedule',
+                                color: scheduleStatus ? '#22c55e' : '#f59e0b',
+                                font: { size: 13, weight: '700' },
+                                padding: { bottom: 8 }
                             }
                         },
                         scales: {
-                            x: {
-                                grid: { color: 'rgba(255,255,255,0.05)' },
-                                ticks: { color: '#fb923c' },
-                                max: totalDays
-                            },
-                            y: { grid: { display: false }, ticks: { color: '#fb923c', font: { weight: '600' } } }
+                            r: {
+                                grid: { color: 'rgba(255,255,255,0.08)' },
+                                ticks: { display: false }
+                            }
                         }
                     }
                 });
@@ -1173,26 +1227,26 @@
                 </div>
 
                 <div class="charts-grid" style="grid-template-columns: repeat(2, 1fr);">
-                    <div class="chart-card" style="background: linear-gradient(135deg, rgba(99, 102, 241, 0.1) 0%, rgba(139, 92, 246, 0.1) 100%);">
-                        <div class="chart-title" style="color: #a78bfa;">${t('stageProgress')}</div>
+                    <div class="chart-card" style="background: linear-gradient(135deg, rgba(34, 197, 94, 0.15) 0%, rgba(245, 158, 11, 0.15) 50%, rgba(239, 68, 68, 0.15) 100%); border: 1px solid rgba(34, 197, 94, 0.3);">
+                        <div class="chart-title" style="color: #4ade80; font-weight: 700;">${t('stageProgress')}</div>
                         <div class="chart-container">
                             <canvas id="stageChart"></canvas>
                         </div>
                     </div>
-                    <div class="chart-card" style="background: linear-gradient(135deg, rgba(16, 185, 129, 0.1) 0%, rgba(5, 150, 105, 0.1) 100%);">
-                        <div class="chart-title" style="color: #34d399;">${t('budgetHealth')}</div>
+                    <div class="chart-card" style="background: linear-gradient(135deg, rgba(59, 130, 246, 0.15) 0%, rgba(34, 197, 94, 0.15) 50%, rgba(245, 158, 11, 0.1) 100%); border: 1px solid rgba(59, 130, 246, 0.3);">
+                        <div class="chart-title" style="color: #60a5fa; font-weight: 700;">${t('budgetHealth')}</div>
                         <div class="chart-container">
                             <canvas id="budgetChart"></canvas>
                         </div>
                     </div>
-                    <div class="chart-card" style="background: linear-gradient(135deg, rgba(14, 165, 233, 0.1) 0%, rgba(6, 182, 212, 0.1) 100%);">
-                        <div class="chart-title" style="color: #38bdf8;">${t('hoursBreakdown')}</div>
+                    <div class="chart-card" style="background: linear-gradient(135deg, rgba(239, 68, 68, 0.12) 0%, rgba(249, 115, 22, 0.12) 20%, rgba(245, 158, 11, 0.12) 40%, rgba(132, 204, 22, 0.12) 60%, rgba(6, 182, 212, 0.12) 80%, rgba(168, 85, 247, 0.12) 100%); border: 1px solid rgba(249, 115, 22, 0.3);">
+                        <div class="chart-title" style="background: linear-gradient(90deg, #ef4444, #f97316, #eab308, #22c55e, #06b6d4, #8b5cf6); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; font-weight: 700;">${t('hoursBreakdown')}</div>
                         <div class="chart-container">
                             <canvas id="hoursChart"></canvas>
                         </div>
                     </div>
-                    <div class="chart-card" style="background: linear-gradient(135deg, rgba(251, 146, 60, 0.1) 0%, rgba(249, 115, 22, 0.1) 100%);">
-                        <div class="chart-title" style="color: #fb923c;">${t('timeline')}</div>
+                    <div class="chart-card" style="background: linear-gradient(135deg, rgba(251, 146, 60, 0.2) 0%, rgba(34, 197, 94, 0.15) 50%, rgba(99, 102, 241, 0.15) 100%); border: 1px solid rgba(251, 146, 60, 0.3);">
+                        <div class="chart-title" style="color: #fb923c; font-weight: 700;">${t('timeline')}</div>
                         <div class="chart-container">
                             <canvas id="timelineChart"></canvas>
                         </div>
