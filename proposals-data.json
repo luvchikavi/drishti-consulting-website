@@ -40,14 +40,13 @@
     ],
     "items": [
       { "desc": "אפיון מפורט ותכנון", "hours": 20, "notes": "" },
-      { "desc": "הקמת תשתית וארכיטקטורה", "hours": 25, "notes": "Backend + DB + Cloud" },
-      { "desc": "Knowledge Base ביטוחים", "hours": 25, "notes": "מיפוי + Rule Engine" },
+      { "desc": "הקמת תשתית וארכיטקטורה", "hours": 30, "notes": "Backend + DB + Cloud" },
+      { "desc": "Knowledge Base ביטוחים", "hours": 30, "notes": "מיפוי + Rule Engine" },
       { "desc": "שאלון דינמי", "hours": 35, "notes": "לוגיקה + UI" },
       { "desc": "מנוע יצירת RFQ", "hours": 30, "notes": "Word/PDF generation" },
-      { "desc": "מודול השוואת אישורי ביטוח", "hours": 35, "notes": "השוואה מול דרישות מכרז" },
-      { "desc": "מנוע OCR/AI", "hours": 35, "notes": "ניתוח מסמכים אוטומטי" },
+      { "desc": "מודול השוואת אישורי ביטוח", "hours": 55, "notes": "השוואה מול דרישות מכרז + OCR/AI" },
       { "desc": "ממשק משתמש (UI/UX)", "hours": 20, "notes": "React Frontend" },
-      { "desc": "בדיקות והטמעה", "hours": 15, "notes": "QA" }
+      { "desc": "בדיקות והטמעה", "hours": 20, "notes": "QA" }
     ],
     "payment": [
       { "pct": 40, "desc": "עם חתימת ההסכם" },
