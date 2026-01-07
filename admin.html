@@ -1444,9 +1444,12 @@
         ];
 
         let clients = JSON.parse(localStorage.getItem('clients')) || [];
-        if (clients.length === 0) {
+        const dataInitialized = localStorage.getItem('dataInitialized');
+        if (!dataInitialized) {
+            // First time - load sample data
             clients = sampleClients;
             localStorage.setItem('clients', JSON.stringify(clients));
+            localStorage.setItem('dataInitialized', 'true');
         }
         let proposals = JSON.parse(localStorage.getItem('proposals')) || [];
         let invoices = JSON.parse(localStorage.getItem('invoices')) || [];
