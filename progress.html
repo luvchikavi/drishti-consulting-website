@@ -561,12 +561,64 @@
         .toast.show { transform: translateY(0); opacity: 1; }
 
         @media (max-width: 768px) {
-            .stats-grid, .charts-grid, .tech-grid { grid-template-columns: 1fr; }
-            .project-name { font-size: 22px; }
-            .progress-value { font-size: 42px; }
-            .lang-toggle { position: static; justify-content: center; margin-bottom: 20px; }
-            .form-actions { flex-direction: column; }
-            .btn { width: 100%; justify-content: center; }
+            .container { padding: 20px 16px; }
+            .header { margin-bottom: 24px; }
+            .logo-container { gap: 10px; }
+            .logo-icon { width: 40px; height: 40px; }
+            .logo-text { font-size: 24px; }
+            .subtitle { font-size: 11px; letter-spacing: 1px; }
+            .project-name { font-size: 20px; margin-top: 20px; }
+            .client-name { font-size: 14px; }
+            .progress-card { padding: 20px; margin: 20px 0; }
+            .progress-value { font-size: 36px; }
+            .progress-label { font-size: 12px; }
+            .dates { font-size: 12px; }
+            .stats-grid { grid-template-columns: 1fr; gap: 10px; margin: 20px 0; }
+            .stat-card { padding: 14px; }
+            .stat-value { font-size: 22px; }
+            .stat-label { font-size: 10px; }
+            .charts-grid { grid-template-columns: 1fr; gap: 16px; margin: 20px 0; }
+            .chart-card { padding: 16px; }
+            .chart-container { height: 180px; }
+            .section-title { font-size: 16px; margin: 30px 0 16px; }
+            .timeline { padding-left: 24px; }
+            body.rtl .timeline { padding-left: 0; padding-right: 24px; }
+            .stage { padding: 12px; margin-bottom: 12px; }
+            .stage-icon { left: -24px; width: 16px; height: 16px; font-size: 10px; }
+            body.rtl .stage-icon { left: auto; right: -24px; }
+            .stage-name { font-size: 13px; }
+            .stage-progress { font-size: 12px; }
+            .stage-hours { font-size: 11px; }
+            .stage-notes { padding: 8px; font-size: 12px; }
+            .blockers-section { padding: 16px; margin: 20px 0; }
+            .blockers-title { font-size: 14px; }
+            .blocker-item { padding: 12px; }
+            .blocker-text { font-size: 13px; }
+            .blocker-action { padding: 8px; font-size: 12px; }
+            .tech-section { padding: 16px; margin: 20px 0; }
+            .tech-grid { grid-template-columns: 1fr; gap: 12px; }
+            .tech-card { padding: 12px; }
+            .code-block { font-size: 10px; padding: 10px; }
+            .current-stage-card { padding: 16px; margin: 20px 0; }
+            .current-stage-name { font-size: 16px; }
+            .feedback-section { padding: 16px; margin: 20px 0; }
+            .feedback-title { font-size: 16px; }
+            .feedback-subtitle { font-size: 13px; }
+            .form-textarea { min-height: 80px; font-size: 14px; }
+            .form-actions { flex-direction: column; gap: 10px; }
+            .btn { width: 100%; justify-content: center; padding: 14px 20px; }
+            .lang-toggle { position: static; justify-content: center; margin-bottom: 16px; }
+            .lang-btn { padding: 6px 12px; font-size: 12px; }
+            .footer { margin-top: 30px; padding-top: 20px; }
+            .footer-contact { font-size: 11px; }
+        }
+
+        @media (max-width: 480px) {
+            .container { padding: 16px 12px; }
+            .project-name { font-size: 18px; }
+            .progress-value { font-size: 32px; }
+            .stat-value { font-size: 20px; }
+            .stage-header { flex-direction: column; align-items: flex-start; gap: 4px; }
         }
     </style>
 </head>
