@@ -33,7 +33,7 @@
             background: var(--darker);
             color: var(--light);
             min-height: 100vh;
-            font-size: 14px;
+            font-size: 12px;
         }
 
         /* Login Screen */
@@ -77,14 +77,14 @@
         }
 
         .form-group {
-            margin-bottom: 20px;
+            margin-bottom: 12px;
             text-align: left;
         }
 
         .form-group label {
             display: block;
-            margin-bottom: 8px;
-            font-size: 12px;
+            margin-bottom: 4px;
+            font-size: 10px;
             color: var(--gray-light);
             text-transform: uppercase;
             letter-spacing: 0.5px;
@@ -92,12 +92,12 @@
 
         .form-group input, .form-group select, .form-group textarea {
             width: 100%;
-            padding: 12px 16px;
+            padding: 8px 12px;
             background: rgba(255,255,255,0.05);
             border: 1px solid rgba(255,255,255,0.1);
-            border-radius: 10px;
+            border-radius: 6px;
             color: var(--light);
-            font-size: 14px;
+            font-size: 12px;
             font-family: inherit;
             transition: all 0.3s;
         }
@@ -109,25 +109,24 @@
         }
 
         .btn {
-            padding: 12px 24px;
+            padding: 6px 14px;
             border: none;
-            border-radius: 10px;
-            font-size: 14px;
+            border-radius: 6px;
+            font-size: 11px;
             font-weight: 600;
             cursor: pointer;
-            transition: all 0.3s;
+            transition: all 0.2s;
             font-family: inherit;
         }
 
         .btn-primary {
             background: var(--gradient);
             color: white;
-            width: 100%;
         }
 
         .btn-primary:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 10px 30px rgba(99, 102, 241, 0.3);
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(99, 102, 241, 0.3);
         }
 
         .btn-secondary {
@@ -150,8 +149,8 @@
         }
 
         .btn-sm {
-            padding: 8px 16px;
-            font-size: 12px;
+            padding: 4px 10px;
+            font-size: 10px;
         }
 
         /* Dashboard */
@@ -167,27 +166,27 @@
             position: fixed;
             top: 0;
             left: 0;
-            width: 240px;
+            width: 180px;
             height: 100vh;
             background: rgba(255,255,255,0.02);
             border-right: 1px solid rgba(255,255,255,0.08);
-            padding: 24px;
+            padding: 16px;
         }
 
         .sidebar-logo {
             display: flex;
             align-items: center;
-            gap: 12px;
-            margin-bottom: 40px;
+            gap: 8px;
+            margin-bottom: 24px;
         }
 
         .sidebar-logo svg {
-            width: 40px;
-            height: 40px;
+            width: 28px;
+            height: 28px;
         }
 
         .sidebar-logo span {
-            font-size: 18px;
+            font-size: 14px;
             font-weight: 700;
             background: var(--gradient);
             -webkit-background-clip: text;
@@ -197,13 +196,14 @@
         .nav-item {
             display: flex;
             align-items: center;
-            gap: 12px;
-            padding: 12px 16px;
-            border-radius: 10px;
+            gap: 8px;
+            padding: 8px 12px;
+            border-radius: 6px;
             color: var(--gray-light);
             cursor: pointer;
-            transition: all 0.3s;
-            margin-bottom: 8px;
+            transition: all 0.2s;
+            margin-bottom: 4px;
+            font-size: 12px;
         }
 
         .nav-item:hover, .nav-item.active {
@@ -216,13 +216,13 @@
         }
 
         .nav-item svg {
-            width: 20px;
-            height: 20px;
+            width: 16px;
+            height: 16px;
         }
 
         .main-content {
-            margin-left: 240px;
-            padding: 30px;
+            margin-left: 180px;
+            padding: 20px;
             min-height: 100vh;
         }
 
@@ -230,11 +230,11 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 30px;
+            margin-bottom: 16px;
         }
 
         .page-title {
-            font-size: 24px;
+            font-size: 18px;
             font-weight: 700;
         }
 
@@ -242,27 +242,27 @@
         .stats-grid {
             display: grid;
             grid-template-columns: repeat(4, 1fr);
-            gap: 20px;
-            margin-bottom: 30px;
+            gap: 12px;
+            margin-bottom: 16px;
         }
 
         .stat-card {
             background: rgba(255,255,255,0.03);
             border: 1px solid rgba(255,255,255,0.08);
-            border-radius: 16px;
-            padding: 24px;
+            border-radius: 8px;
+            padding: 12px 16px;
         }
 
         .stat-card h3 {
-            font-size: 12px;
+            font-size: 10px;
             color: var(--gray);
             text-transform: uppercase;
             letter-spacing: 0.5px;
-            margin-bottom: 8px;
+            margin-bottom: 4px;
         }
 
         .stat-card .value {
-            font-size: 32px;
+            font-size: 22px;
             font-weight: 700;
             background: var(--gradient);
             -webkit-background-clip: text;
@@ -273,7 +273,7 @@
         .data-table {
             background: rgba(255,255,255,0.03);
             border: 1px solid rgba(255,255,255,0.08);
-            border-radius: 16px;
+            border-radius: 8px;
             overflow: hidden;
         }
 
@@ -283,14 +283,14 @@
         }
 
         .data-table th, .data-table td {
-            padding: 16px 20px;
+            padding: 8px 12px;
             text-align: left;
             border-bottom: 1px solid rgba(255,255,255,0.05);
         }
 
         .data-table th {
             background: rgba(99, 102, 241, 0.1);
-            font-size: 12px;
+            font-size: 10px;
             text-transform: uppercase;
             letter-spacing: 0.5px;
             color: var(--gray-light);
@@ -303,9 +303,9 @@
 
         .status-badge {
             display: inline-block;
-            padding: 4px 12px;
-            border-radius: 20px;
-            font-size: 11px;
+            padding: 3px 8px;
+            border-radius: 10px;
+            font-size: 9px;
             font-weight: 600;
             text-transform: uppercase;
         }
@@ -327,7 +327,7 @@
 
         .action-btns {
             display: flex;
-            gap: 8px;
+            gap: 6px;
         }
 
         /* Modal */
@@ -351,10 +351,10 @@
         .modal {
             background: var(--dark);
             border: 1px solid rgba(255,255,255,0.1);
-            border-radius: 20px;
-            padding: 30px;
+            border-radius: 12px;
+            padding: 20px;
             width: 100%;
-            max-width: 500px;
+            max-width: 450px;
             max-height: 90vh;
             overflow-y: auto;
         }
@@ -363,11 +363,11 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 24px;
+            margin-bottom: 16px;
         }
 
         .modal-title {
-            font-size: 20px;
+            font-size: 16px;
             font-weight: 700;
         }
 
@@ -376,19 +376,19 @@
             border: none;
             color: var(--gray);
             cursor: pointer;
-            font-size: 24px;
+            font-size: 18px;
         }
 
         .form-row {
             display: grid;
             grid-template-columns: 1fr 1fr;
-            gap: 16px;
+            gap: 10px;
         }
 
         .form-actions {
             display: flex;
-            gap: 12px;
-            margin-top: 24px;
+            gap: 8px;
+            margin-top: 16px;
         }
 
         .form-actions .btn {
@@ -2709,8 +2709,34 @@ POST /api/auth/login`,
                         </div>`;
                     }).join('')}
                 </div></div>
-                <div style="background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.08); border-radius: 12px; padding: 16px;"><h3 style="margin-bottom: 12px; font-size: 14px;">Client Portal</h3><div style="display: flex; gap: 8px; align-items: center; flex-wrap: wrap;"><input type="text" id="shareLink-${project.id}" value="${window.location.origin}/progress.html?d=${encodeProjectData(project)}" readonly style="flex: 1; min-width: 200px; padding: 8px 12px; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-radius: 6px; color: var(--light); font-size: 11px;"><button class="btn btn-secondary btn-sm" onclick="copyShareLink(${project.id})">Copy Link</button><button class="btn btn-primary btn-sm" onclick="sendToClient(${project.id})">Email Client</button></div></div>
-                <div style="display: flex; gap: 12px; margin-top: 20px;"><select onchange="updateProjectStatus(${project.id}, this.value)" style="padding: 10px 16px; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-radius: 8px; color: var(--light);"><option value="active" ${project.status === 'active' ? 'selected' : ''}>Active</option><option value="on_hold" ${project.status === 'on_hold' ? 'selected' : ''}>On Hold</option><option value="completed" ${project.status === 'completed' ? 'selected' : ''}>Completed</option></select><button class="btn btn-secondary" onclick="closeModal('manageProject')" style="flex: 1;">Close</button></div>`;
+                <div style="background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.08); border-radius: 8px; padding: 12px; margin-bottom: 12px;"><h3 style="margin-bottom: 10px; font-size: 12px;">Client Portal</h3><div style="display: flex; gap: 6px; align-items: center; flex-wrap: wrap;"><input type="text" id="shareLink-${project.id}" value="${window.location.origin}/progress.html?d=${encodeProjectData(project)}" readonly style="flex: 1; min-width: 180px; padding: 6px 10px; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-radius: 4px; color: var(--light); font-size: 10px;"><button class="btn btn-secondary btn-sm" onclick="copyShareLink(${project.id})">Copy</button><button class="btn btn-primary btn-sm" onclick="sendToClient(${project.id})">Email</button></div></div>
+                <div style="background: rgba(99, 102, 241, 0.05); border: 1px solid rgba(99, 102, 241, 0.15); border-radius: 8px; padding: 12px; margin-bottom: 12px;">
+                    <h3 style="margin-bottom: 10px; font-size: 12px; color: var(--primary);">Technical Details (Visible to Client)</h3>
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 10px;">
+                        <div>
+                            <label style="font-size: 10px; color: var(--gray-light); display: block; margin-bottom: 4px;">DATABASE SCHEMA</label>
+                            <textarea placeholder="e.g. users (id, email, role)&#10;orders (id, user_id, status)" onchange="updateTechDetails(${project.id}, 'dbSchema', this.value)" style="width: 100%; height: 80px; padding: 6px 8px; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-radius: 4px; color: var(--light); font-size: 10px; font-family: monospace; resize: none;">${project.technicalDetails?.dbSchema || ''}</textarea>
+                        </div>
+                        <div>
+                            <label style="font-size: 10px; color: var(--gray-light); display: block; margin-bottom: 4px;">API ENDPOINTS</label>
+                            <textarea placeholder="e.g. POST /api/users&#10;GET /api/orders" onchange="updateTechDetails(${project.id}, 'apiEndpoints', this.value)" style="width: 100%; height: 80px; padding: 6px 8px; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-radius: 4px; color: var(--light); font-size: 10px; font-family: monospace; resize: none;">${project.technicalDetails?.apiEndpoints || ''}</textarea>
+                        </div>
+                    </div>
+                    <div>
+                        <label style="font-size: 10px; color: var(--gray-light); display: block; margin-bottom: 4px;">KEY DELIVERABLES</label>
+                        <div id="deliverables-${project.id}" style="background: rgba(255,255,255,0.02); border-radius: 4px; padding: 6px; max-height: 100px; overflow-y: auto;">
+                            ${(project.technicalDetails?.deliverables || []).map((d, i) => `
+                                <div style="display: flex; align-items: center; gap: 6px; padding: 4px 0; border-bottom: 1px solid rgba(255,255,255,0.05);">
+                                    <input type="checkbox" ${d.done ? 'checked' : ''} onchange="updateDeliverable(${project.id}, ${i}, 'done', this.checked)" style="width: 14px; height: 14px;">
+                                    <input type="text" value="${d.name}" onchange="updateDeliverable(${project.id}, ${i}, 'name', this.value)" style="flex: 1; padding: 4px 6px; background: transparent; border: none; color: var(--light); font-size: 11px;">
+                                    <button onclick="removeDeliverable(${project.id}, ${i})" style="background: none; border: none; color: var(--danger); cursor: pointer; font-size: 14px;">×</button>
+                                </div>
+                            `).join('')}
+                        </div>
+                        <button onclick="addDeliverable(${project.id})" class="btn btn-secondary btn-sm" style="margin-top: 6px; width: 100%;">+ Add Deliverable</button>
+                    </div>
+                </div>
+                <div style="display: flex; gap: 8px; margin-top: 12px;"><select onchange="updateProjectStatus(${project.id}, this.value)" style="padding: 6px 12px; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-radius: 6px; color: var(--light); font-size: 11px;"><option value="active" ${project.status === 'active' ? 'selected' : ''}>Active</option><option value="on_hold" ${project.status === 'on_hold' ? 'selected' : ''}>On Hold</option><option value="completed" ${project.status === 'completed' ? 'selected' : ''}>Completed</option></select><button class="btn btn-secondary" onclick="closeModal('manageProject')" style="flex: 1;">Close</button></div>`;
 
             document.getElementById('manageProjectContent').innerHTML = content;
             document.getElementById('modal-manageProject').classList.add('active');
@@ -2721,6 +2747,48 @@ POST /api/auth/login`,
         function updateStageNotes(projectId, idx, value) { const p = projects.find(p => p.id === projectId); if (p) { p.stages[idx].notes = value; saveData(); }}
         function updateStageBlockers(projectId, idx, value) { const p = projects.find(p => p.id === projectId); if (p) { p.stages[idx].blockers = value; saveData(); }}
         function updateStageActionRequired(projectId, idx, value) { const p = projects.find(p => p.id === projectId); if (p) { p.stages[idx].actionRequired = value; saveData(); }}
+
+        // Technical details functions
+        function updateTechDetails(projectId, field, value) {
+            const p = projects.find(p => p.id === projectId);
+            if (p) {
+                if (!p.technicalDetails) p.technicalDetails = { dbSchema: '', apiEndpoints: '', deliverables: [] };
+                p.technicalDetails[field] = value;
+                p.updated = new Date().toISOString();
+                saveData();
+            }
+        }
+
+        function updateDeliverable(projectId, idx, field, value) {
+            const p = projects.find(p => p.id === projectId);
+            if (p && p.technicalDetails?.deliverables?.[idx]) {
+                p.technicalDetails.deliverables[idx][field] = value;
+                p.updated = new Date().toISOString();
+                saveData();
+            }
+        }
+
+        function addDeliverable(projectId) {
+            const p = projects.find(p => p.id === projectId);
+            if (p) {
+                if (!p.technicalDetails) p.technicalDetails = { dbSchema: '', apiEndpoints: '', deliverables: [] };
+                if (!p.technicalDetails.deliverables) p.technicalDetails.deliverables = [];
+                p.technicalDetails.deliverables.push({ name: 'New deliverable', done: false });
+                p.updated = new Date().toISOString();
+                saveData();
+                openProjectManagement(projectId);
+            }
+        }
+
+        function removeDeliverable(projectId, idx) {
+            const p = projects.find(p => p.id === projectId);
+            if (p && p.technicalDetails?.deliverables) {
+                p.technicalDetails.deliverables.splice(idx, 1);
+                p.updated = new Date().toISOString();
+                saveData();
+                openProjectManagement(projectId);
+            }
+        }
 
         function startStage(projectId, idx) { const p = projects.find(p => p.id === projectId); if (p) { p.stages[idx].status = 'in_progress'; p.stages[idx].startDate = new Date().toISOString(); saveData(); openProjectManagement(projectId); }}
         function completeStage(projectId, idx) { const p = projects.find(p => p.id === projectId); if (p) { p.stages[idx].status = 'completed'; p.stages[idx].completionPercent = 100; p.stages[idx].completedDate = new Date().toISOString(); recalculateProjectProgress(p); saveData(); openProjectManagement(projectId); showToast('Stage completed!'); }}
