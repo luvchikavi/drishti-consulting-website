@@ -1,0 +1,469 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Project Progress - Drishti Consulting</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        :root {
+            --primary: #6366f1;
+            --primary-dark: #4f46e5;
+            --secondary: #0ea5e9;
+            --accent: #8b5cf6;
+            --dark: #0f172a;
+            --darker: #020617;
+            --light: #f8fafc;
+            --gray: #64748b;
+            --gray-light: #94a3b8;
+            --success: #10b981;
+            --warning: #f59e0b;
+            --danger: #ef4444;
+            --gradient: linear-gradient(135deg, #6366f1 0%, #8b5cf6 50%, #d946ef 100%);
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: var(--darker);
+            color: var(--light);
+            min-height: 100vh;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .logo {
+            font-size: 24px;
+            font-weight: 700;
+            background: var(--gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 8px;
+        }
+
+        .subtitle {
+            color: var(--gray);
+            font-size: 14px;
+        }
+
+        .project-name {
+            font-size: 28px;
+            font-weight: 700;
+            margin-top: 30px;
+            margin-bottom: 8px;
+        }
+
+        .client-name {
+            color: var(--gray-light);
+            font-size: 16px;
+        }
+
+        .progress-card {
+            background: rgba(99, 102, 241, 0.1);
+            border: 1px solid rgba(99, 102, 241, 0.2);
+            border-radius: 16px;
+            padding: 30px;
+            margin: 30px 0;
+            text-align: center;
+        }
+
+        .progress-label {
+            font-size: 14px;
+            color: var(--gray-light);
+            margin-bottom: 12px;
+        }
+
+        .progress-bar-container {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            height: 20px;
+            overflow: hidden;
+            margin-bottom: 12px;
+        }
+
+        .progress-bar {
+            background: var(--gradient);
+            height: 100%;
+            border-radius: 10px;
+            transition: width 0.5s ease;
+        }
+
+        .progress-value {
+            font-size: 48px;
+            font-weight: 700;
+            background: var(--gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .dates {
+            margin-top: 20px;
+            font-size: 14px;
+            color: var(--gray-light);
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+            margin: 30px 0;
+        }
+
+        .stat-card {
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 12px;
+            padding: 20px;
+            text-align: center;
+        }
+
+        .stat-value {
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--light);
+            margin-bottom: 4px;
+        }
+
+        .stat-label {
+            font-size: 12px;
+            color: var(--gray);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .section-title {
+            font-size: 18px;
+            font-weight: 600;
+            margin: 40px 0 20px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .timeline {
+            position: relative;
+            padding-left: 30px;
+        }
+
+        .timeline::before {
+            content: '';
+            position: absolute;
+            left: 10px;
+            top: 0;
+            bottom: 0;
+            width: 2px;
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        .stage {
+            position: relative;
+            margin-bottom: 20px;
+            padding: 16px;
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 12px;
+        }
+
+        .stage.completed {
+            border-color: rgba(16, 185, 129, 0.3);
+        }
+
+        .stage.in_progress {
+            border-color: var(--primary);
+            background: rgba(99, 102, 241, 0.05);
+        }
+
+        .stage-icon {
+            position: absolute;
+            left: -30px;
+            top: 20px;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            background: var(--darker);
+            border: 2px solid var(--gray);
+        }
+
+        .stage.completed .stage-icon {
+            background: var(--success);
+            border-color: var(--success);
+            color: white;
+        }
+
+        .stage.in_progress .stage-icon {
+            background: var(--primary);
+            border-color: var(--primary);
+            color: white;
+        }
+
+        .stage-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 8px;
+        }
+
+        .stage-name {
+            font-weight: 600;
+            font-size: 15px;
+        }
+
+        .stage-progress {
+            font-size: 14px;
+            color: var(--gray-light);
+        }
+
+        .stage.completed .stage-progress {
+            color: var(--success);
+        }
+
+        .stage.in_progress .stage-progress {
+            color: var(--primary);
+        }
+
+        .stage-hours {
+            font-size: 12px;
+            color: var(--gray);
+            margin-bottom: 8px;
+        }
+
+        .stage-notes {
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 8px;
+            padding: 10px;
+            font-size: 13px;
+            margin-top: 10px;
+        }
+
+        .stage-notes strong {
+            color: var(--gray-light);
+            font-size: 11px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .blockers {
+            background: rgba(239, 68, 68, 0.1);
+            border: 1px solid rgba(239, 68, 68, 0.2);
+            border-radius: 8px;
+            padding: 10px;
+            font-size: 13px;
+            margin-top: 10px;
+            color: #fca5a5;
+        }
+
+        .current-stage-card {
+            background: rgba(99, 102, 241, 0.1);
+            border: 1px solid rgba(99, 102, 241, 0.3);
+            border-radius: 12px;
+            padding: 20px;
+            margin: 30px 0;
+        }
+
+        .current-stage-label {
+            font-size: 12px;
+            color: var(--primary);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 8px;
+        }
+
+        .current-stage-name {
+            font-size: 20px;
+            font-weight: 600;
+            margin-bottom: 12px;
+        }
+
+        .footer {
+            text-align: center;
+            margin-top: 50px;
+            padding-top: 30px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            color: var(--gray);
+            font-size: 14px;
+        }
+
+        .footer a {
+            color: var(--primary);
+            text-decoration: none;
+        }
+
+        .error-message {
+            text-align: center;
+            padding: 60px 20px;
+        }
+
+        .error-message h2 {
+            color: var(--danger);
+            margin-bottom: 16px;
+        }
+
+        @media (max-width: 600px) {
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .project-name {
+                font-size: 22px;
+            }
+
+            .progress-value {
+                font-size: 36px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container" id="content">
+        <!-- Content loaded by JavaScript -->
+    </div>
+
+    <script>
+        function decodeProjectData(encoded) {
+            try {
+                return JSON.parse(decodeURIComponent(atob(encoded)));
+            } catch (e) {
+                return null;
+            }
+        }
+
+        function formatDate(dateStr) {
+            if (!dateStr) return '-';
+            return new Date(dateStr).toLocaleDateString('en-US', {
+                year: 'numeric',
+                month: 'short',
+                day: 'numeric'
+            });
+        }
+
+        function renderProgress() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const data = urlParams.get('d');
+
+            if (!data) {
+                document.getElementById('content').innerHTML = `
+                    <div class="error-message">
+                        <div class="logo">Drishti Consulting</div>
+                        <h2>Invalid Link</h2>
+                        <p>This progress link is invalid or has expired. Please contact your project manager for an updated link.</p>
+                    </div>
+                `;
+                return;
+            }
+
+            const project = decodeProjectData(data);
+            if (!project) {
+                document.getElementById('content').innerHTML = `
+                    <div class="error-message">
+                        <div class="logo">Drishti Consulting</div>
+                        <h2>Unable to Load Project</h2>
+                        <p>There was an error loading the project data. Please contact your project manager.</p>
+                    </div>
+                `;
+                return;
+            }
+
+            const currentStage = project.s.find(s => s.st === 'in_progress') || project.s.find(s => s.st === 'not_started');
+            const nextStage = project.s.find(s => s.st === 'not_started');
+            const completedCount = project.s.filter(s => s.st === 'completed').length;
+            const budgetUsed = project.h > 0 ? Math.round((project.hs / project.h) * project.b) : 0;
+
+            document.getElementById('content').innerHTML = `
+                <div class="header">
+                    <div class="logo">Drishti Consulting</div>
+                    <div class="subtitle">Project Progress Dashboard</div>
+                    <h1 class="project-name">${project.n}</h1>
+                    <div class="client-name">${project.c}</div>
+                </div>
+
+                <div class="progress-card">
+                    <div class="progress-label">Overall Progress</div>
+                    <div class="progress-bar-container">
+                        <div class="progress-bar" style="width: ${project.p}%"></div>
+                    </div>
+                    <div class="progress-value">${project.p}%</div>
+                    <div class="dates">
+                        Started: ${formatDate(project.sd)} &nbsp;|&nbsp; Expected: ${formatDate(project.ed)}
+                    </div>
+                </div>
+
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-value">${project.hs} hrs</div>
+                        <div class="stat-label">of ${project.h} hours</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-value">₪${budgetUsed.toLocaleString()}</div>
+                        <div class="stat-label">of ₪${project.b.toLocaleString()}</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-value">${completedCount}/${project.s.length}</div>
+                        <div class="stat-label">Stages Complete</div>
+                    </div>
+                </div>
+
+                ${currentStage ? `
+                <div class="current-stage-card">
+                    <div class="current-stage-label">Current Stage</div>
+                    <div class="current-stage-name">${currentStage.n}</div>
+                    <div style="display: flex; align-items: center; gap: 12px;">
+                        <div style="flex: 1; background: rgba(255,255,255,0.1); border-radius: 6px; height: 8px; overflow: hidden;">
+                            <div style="background: var(--gradient); height: 100%; width: ${currentStage.p}%;"></div>
+                        </div>
+                        <span>${currentStage.p}%</span>
+                    </div>
+                    ${currentStage.nt ? `<div class="stage-notes"><strong>What's Done:</strong><br>${currentStage.nt}</div>` : ''}
+                    ${currentStage.bl ? `<div class="blockers"><strong>Current Blockers:</strong><br>${currentStage.bl}</div>` : ''}
+                </div>
+                ` : ''}
+
+                <h2 class="section-title">Project Timeline</h2>
+                <div class="timeline">
+                    ${project.s.map((stage, idx) => `
+                        <div class="stage ${stage.st}">
+                            <div class="stage-icon">${stage.st === 'completed' ? '✓' : stage.st === 'in_progress' ? '►' : idx + 1}</div>
+                            <div class="stage-header">
+                                <div class="stage-name">${stage.n}</div>
+                                <div class="stage-progress">${stage.st === 'completed' ? 'Completed' : stage.st === 'in_progress' ? `${stage.p}% In Progress` : 'Upcoming'}</div>
+                            </div>
+                            <div class="stage-hours">${stage.ah}/${stage.eh} hours</div>
+                            ${stage.st === 'completed' && stage.nt ? `<div class="stage-notes">${stage.nt}</div>` : ''}
+                        </div>
+                    `).join('')}
+                </div>
+
+                ${nextStage && nextStage !== currentStage ? `
+                <h2 class="section-title">What's Next</h2>
+                <div class="stat-card" style="text-align: left;">
+                    <div class="stage-name">${nextStage.n}</div>
+                    <div class="stage-hours" style="margin-top: 8px;">Estimated: ${nextStage.eh} hours</div>
+                </div>
+                ` : ''}
+
+                <div class="footer">
+                    <p>Questions? Contact us at <a href="mailto:avi@drishticonsulting.com">avi@drishticonsulting.com</a></p>
+                    <p style="margin-top: 8px; font-size: 12px;">Last updated: ${project.u ? formatDate(project.u) : 'Recently'}</p>
+                    <p style="margin-top: 20px;">&copy; ${new Date().getFullYear()} Drishti Consulting</p>
+                </div>
+            `;
+        }
+
+        renderProgress();
+    </script>
+</body>
+</html>

@@ -612,6 +612,14 @@
                     </svg>
                     Proposals
                 </div>
+                <div class="nav-item" data-page="projects">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/>
+                        <line x1="12" y1="11" x2="12" y2="17"/>
+                        <line x1="9" y1="14" x2="15" y2="14"/>
+                    </svg>
+                    Projects
+                </div>
                 <div class="nav-item" data-page="invoices">
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                         <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
@@ -776,6 +784,69 @@
                         </thead>
                         <tbody id="proposalsTable">
                             <!-- Dynamic content -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Projects Page -->
+            <div class="page hidden" id="page-projects">
+                <div class="page-header">
+                    <h1 class="page-title">Projects</h1>
+                    <button class="btn btn-primary" onclick="openModal('newProject')">+ New Project</button>
+                </div>
+
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <h3>Active Projects</h3>
+                        <div class="value" id="activeProjectsCount">0</div>
+                    </div>
+                    <div class="stat-card">
+                        <h3>Total Projects</h3>
+                        <div class="value" id="totalProjectsCount">0</div>
+                    </div>
+                    <div class="stat-card">
+                        <h3>On Track</h3>
+                        <div class="value" id="onTrackProjects" style="color: #10b981;">0</div>
+                    </div>
+                    <div class="stat-card">
+                        <h3>Needs Attention</h3>
+                        <div class="value" id="attentionProjects" style="color: #f59e0b;">0</div>
+                    </div>
+                </div>
+
+                <div style="margin-bottom: 20px; display: flex; gap: 12px; align-items: center;">
+                    <div style="position: relative; flex: 1; max-width: 400px;">
+                        <input type="text" id="projectSearch" placeholder="Search projects..."
+                            style="width: 100%; padding: 12px 16px 12px 44px; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-radius: 10px; color: var(--light); font-size: 14px;"
+                            oninput="filterProjects()">
+                        <svg style="position: absolute; left: 14px; top: 50%; transform: translateY(-50%); width: 18px; height: 18px; color: var(--gray);" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <circle cx="11" cy="11" r="8"/>
+                            <path d="M21 21l-4.35-4.35"/>
+                        </svg>
+                    </div>
+                    <select id="projectStatusFilter" onchange="filterProjects()" style="padding: 12px 16px; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-radius: 10px; color: var(--light); font-size: 14px; min-width: 150px;">
+                        <option value="">All Status</option>
+                        <option value="active">Active</option>
+                        <option value="on_hold">On Hold</option>
+                        <option value="completed">Completed</option>
+                    </select>
+                </div>
+
+                <div class="data-table">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Project #</th>
+                                <th>Client</th>
+                                <th>Project Name</th>
+                                <th>Progress</th>
+                                <th>Status</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="projectsTable">
+                            <tr><td colspan="6" style="text-align: center; color: var(--gray);">No projects yet. Create one from a proposal or click "+ New Project"</td></tr>
                         </tbody>
                     </table>
                 </div>
@@ -1195,6 +1266,101 @@
         </div>
     </div>
 
+    <!-- New Project Modal -->
+    <div class="modal-overlay" id="modal-newProject">
+        <div class="modal" style="max-width: 700px;">
+            <div class="modal-header">
+                <h2 class="modal-title">Create New Project</h2>
+                <button class="modal-close" onclick="closeModal('newProject')">&times;</button>
+            </div>
+            <form id="newProjectForm">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Client</label>
+                        <select id="projectClient" required>
+                            <option value="">Select client...</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>From Proposal (optional)</label>
+                        <select id="projectProposal">
+                            <option value="">No proposal linked</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>Project Name</label>
+                    <input type="text" id="projectName" required placeholder="e.g., Insurance Advisory System">
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Project Type</label>
+                        <select id="projectType" required onchange="loadStageTemplate()">
+                            <option value="">Select type...</option>
+                            <option value="development">System Development</option>
+                            <option value="characterization">Characterization Phase</option>
+                            <option value="consulting">Consulting</option>
+                            <option value="custom">Custom (Define stages manually)</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Total Budget (₪)</label>
+                        <input type="number" id="projectBudget" required placeholder="43000">
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Total Hours</label>
+                        <input type="number" id="projectHours" required placeholder="285" onchange="recalculateStageHours()">
+                    </div>
+                    <div class="form-group">
+                        <label>Start Date</label>
+                        <input type="date" id="projectStartDate" required>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>Expected End Date</label>
+                    <input type="date" id="projectEndDate" required>
+                </div>
+                <div class="form-group">
+                    <label>Description</label>
+                    <textarea id="projectDescription" rows="2" placeholder="Brief project description..."></textarea>
+                </div>
+
+                <!-- Stages Section -->
+                <div style="margin-top: 20px; padding-top: 20px; border-top: 1px solid rgba(255,255,255,0.1);">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
+                        <label style="font-size: 14px; font-weight: 600;">Project Stages</label>
+                        <button type="button" class="btn btn-secondary btn-sm" onclick="addProjectStage()">+ Add Stage</button>
+                    </div>
+                    <div id="stagesList" style="max-height: 300px; overflow-y: auto;">
+                        <div style="color: var(--gray); font-size: 13px; text-align: center; padding: 20px;">
+                            Select a project type to load stage template, or add stages manually
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-actions">
+                    <button type="button" class="btn btn-secondary" onclick="closeModal('newProject')">Cancel</button>
+                    <button type="submit" class="btn btn-primary">Create Project</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Project Management Modal -->
+    <div class="modal-overlay" id="modal-manageProject">
+        <div class="modal" style="max-width: 800px; max-height: 95vh;">
+            <div class="modal-header">
+                <h2 class="modal-title" id="manageProjectTitle">Manage Project</h2>
+                <button class="modal-close" onclick="closeModal('manageProject')">&times;</button>
+            </div>
+            <div id="manageProjectContent">
+                <!-- Dynamic content loaded by openProjectManagement() -->
+            </div>
+        </div>
+    </div>
+
     <!-- Toast -->
     <div class="toast" id="toast">Saved successfully!</div>
 
@@ -1263,6 +1429,31 @@
         let proposals = JSON.parse(localStorage.getItem('proposals')) || [];
         let invoices = JSON.parse(localStorage.getItem('invoices')) || [];
         let expenses = JSON.parse(localStorage.getItem('expenses')) || [];
+        let projects = JSON.parse(localStorage.getItem('projects')) || [];
+
+        // Stage templates by project type
+        const stageTemplates = {
+            development: [
+                { name: 'Discovery & Requirements', percent: 10, description: 'Understanding needs, documenting requirements' },
+                { name: 'System Design', percent: 15, description: 'Architecture, database design, UI mockups' },
+                { name: 'Development - Phase 1', percent: 25, description: 'Core functionality, backend development' },
+                { name: 'Development - Phase 2', percent: 25, description: 'Frontend, integrations, features' },
+                { name: 'Testing & QA', percent: 15, description: 'Testing, bug fixes, quality assurance' },
+                { name: 'Deployment & Training', percent: 10, description: 'Go-live, documentation, user training' }
+            ],
+            characterization: [
+                { name: 'Initial Assessment', percent: 20, description: 'Current state analysis' },
+                { name: 'Stakeholder Interviews', percent: 25, description: 'Gathering requirements from users' },
+                { name: 'Requirements Documentation', percent: 30, description: 'Writing detailed specifications' },
+                { name: 'Recommendations Report', percent: 25, description: 'Final deliverable with recommendations' }
+            ],
+            consulting: [
+                { name: 'Kickoff & Discovery', percent: 15, description: 'Project initiation, understanding context' },
+                { name: 'Analysis & Research', percent: 35, description: 'Deep dive, data analysis, research' },
+                { name: 'Strategy Development', percent: 30, description: 'Developing recommendations' },
+                { name: 'Final Deliverables', percent: 20, description: 'Reports, presentations, handoff' }
+            ]
+        };
 
         // Login
         document.getElementById('loginForm').addEventListener('submit', function(e) {
@@ -1311,6 +1502,10 @@
                     renderExpenses();
                     updateExpenseStats();
                 }
+                if (page === 'projects') {
+                    renderProjects();
+                    updateProjectStats();
+                }
                 if (page === 'analytics') {
                     updateAnalytics();
                 }
@@ -1330,6 +1525,13 @@
                 // Set default date to today
                 document.getElementById('expenseDate').value = new Date().toISOString().split('T')[0];
             }
+            if (name === 'newProject') {
+                updateProjectClientSelect();
+                updateProjectProposalSelect();
+                document.getElementById('projectStartDate').value = new Date().toISOString().split('T')[0];
+                // Clear stages list
+                document.getElementById('stagesList').innerHTML = '<div style="color: var(--gray); font-size: 13px; text-align: center; padding: 20px;">Select a project type to load stage template, or add stages manually</div>';
+            }
         }
 
         function closeModal(name) {
@@ -1345,6 +1547,9 @@
             }
             if (name === 'newExpense') {
                 resetExpenseForm();
+            }
+            if (name === 'newProject') {
+                resetProjectForm();
             }
         }
 
@@ -1676,7 +1881,9 @@
 
         function renderProposals() {
             const tbody = document.getElementById('proposalsTable');
-            tbody.innerHTML = proposals.map(p => `
+            tbody.innerHTML = proposals.map(p => {
+                const hasProject = projects.some(proj => proj.proposalId === p.id);
+                return `
                 <tr>
                     <td><strong>${p.number}</strong></td>
                     <td>${p.clientName}</td>
@@ -1687,12 +1894,14 @@
                         <div class="action-btns">
                             <button class="btn btn-secondary btn-sm" onclick="editProposal(${p.id})">Edit</button>
                             <button class="btn btn-success btn-sm" onclick="generateProposal(${p.id})">Generate</button>
-                            <button class="btn btn-secondary btn-sm" onclick="markSent(${p.id})">Mark Sent</button>
+                            ${p.status !== 'sent' ? `<button class="btn btn-secondary btn-sm" onclick="markSent(${p.id})">Mark Sent</button>` : ''}
+                            ${p.status === 'sent' && !hasProject ? `<button class="btn btn-primary btn-sm" onclick="convertToProject(${p.id})">→ Project</button>` : ''}
+                            ${hasProject ? `<span style="color: var(--success); font-size: 11px;">✓ Project</span>` : ''}
                             <button class="btn btn-danger btn-sm" onclick="deleteProposal(${p.id})">Delete</button>
                         </div>
                     </td>
                 </tr>
-            `).join('');
+            `}).join('');
         }
 
         function generateProposal(id) {
@@ -1866,6 +2075,7 @@
             localStorage.setItem('proposals', JSON.stringify(proposals));
             localStorage.setItem('invoices', JSON.stringify(invoices));
             localStorage.setItem('expenses', JSON.stringify(expenses));
+            localStorage.setItem('projects', JSON.stringify(projects));
         }
 
         // Invoice management
@@ -2235,6 +2445,263 @@
             toast.textContent = message;
             toast.classList.add('show');
             setTimeout(() => toast.classList.remove('show'), 3000);
+        }
+
+        // =============================================
+        // PROJECT MANAGEMENT
+        // =============================================
+
+        let currentStages = [];
+        let stageIndex = 0;
+        let currentManagingProjectId = null;
+
+        function updateProjectClientSelect() {
+            const select = document.getElementById('projectClient');
+            select.innerHTML = '<option value="">Select client...</option>' +
+                clients.map(c => `<option value="${c.id}">${c.company}</option>`).join('');
+        }
+
+        function updateProjectProposalSelect() {
+            const select = document.getElementById('projectProposal');
+            const sentProposals = proposals.filter(p => p.status === 'sent');
+            select.innerHTML = '<option value="">No proposal linked</option>' +
+                sentProposals.map(p => `<option value="${p.id}">${p.number} - ${p.project} (₪${p.amount.toLocaleString()})</option>`).join('');
+        }
+
+        function loadStageTemplate() {
+            const type = document.getElementById('projectType').value;
+            const totalHours = parseInt(document.getElementById('projectHours').value) || 0;
+
+            if (type && type !== 'custom' && stageTemplates[type]) {
+                currentStages = stageTemplates[type].map((stage, idx) => ({
+                    id: idx, name: stage.name, description: stage.description,
+                    estimatedHours: totalHours > 0 ? Math.round(totalHours * stage.percent / 100) : 0,
+                    percent: stage.percent, actualHours: 0, status: 'not_started',
+                    completionPercent: 0, startDate: null, completedDate: null, notes: '', blockers: ''
+                }));
+                stageIndex = currentStages.length;
+            } else if (type === 'custom') {
+                currentStages = [];
+                stageIndex = 0;
+            }
+            renderStagesList();
+        }
+
+        function recalculateStageHours() {
+            const totalHours = parseInt(document.getElementById('projectHours').value) || 0;
+            currentStages.forEach(stage => {
+                if (stage.percent) stage.estimatedHours = Math.round(totalHours * stage.percent / 100);
+            });
+            renderStagesList();
+        }
+
+        function addProjectStage() {
+            currentStages.push({ id: stageIndex++, name: '', description: '', estimatedHours: 0, actualHours: 0, status: 'not_started', completionPercent: 0, startDate: null, completedDate: null, notes: '', blockers: '' });
+            renderStagesList();
+        }
+
+        function removeStage(id) {
+            currentStages = currentStages.filter(s => s.id !== id);
+            renderStagesList();
+        }
+
+        function renderStagesList() {
+            const container = document.getElementById('stagesList');
+            if (currentStages.length === 0) {
+                container.innerHTML = '<div style="color: var(--gray); font-size: 13px; text-align: center; padding: 20px;">Select a project type to load stage template, or add stages manually</div>';
+                return;
+            }
+            container.innerHTML = currentStages.map((stage, idx) => `
+                <div style="background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.08); border-radius: 8px; padding: 12px; margin-bottom: 10px; position: relative;">
+                    <button type="button" onclick="removeStage(${stage.id})" style="position: absolute; top: 8px; right: 8px; background: rgba(239, 68, 68, 0.2); border: none; color: #ef4444; width: 20px; height: 20px; border-radius: 50%; cursor: pointer; font-size: 14px;">&times;</button>
+                    <div style="display: flex; gap: 10px; margin-bottom: 8px;">
+                        <span style="background: var(--primary); color: white; width: 24px; height: 24px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 600;">${idx + 1}</span>
+                        <input type="text" value="${stage.name}" placeholder="Stage name" onchange="updateStageName(${stage.id}, this.value)" style="flex: 1; padding: 6px 10px; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-radius: 6px; color: var(--light); font-size: 13px;">
+                        <input type="number" value="${stage.estimatedHours}" placeholder="Hours" onchange="updateStageHours(${stage.id}, this.value)" style="width: 80px; padding: 6px 10px; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-radius: 6px; color: var(--light); font-size: 13px; text-align: center;">
+                    </div>
+                    <input type="text" value="${stage.description || ''}" placeholder="Stage description (optional)" onchange="updateStageDescription(${stage.id}, this.value)" style="width: 100%; padding: 6px 10px; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-radius: 6px; color: var(--light); font-size: 12px;">
+                </div>
+            `).join('');
+        }
+
+        function updateStageName(id, value) { const s = currentStages.find(s => s.id === id); if (s) s.name = value; }
+        function updateStageHours(id, value) { const s = currentStages.find(s => s.id === id); if (s) s.estimatedHours = parseInt(value) || 0; }
+        function updateStageDescription(id, value) { const s = currentStages.find(s => s.id === id); if (s) s.description = value; }
+
+        function generateShareToken() { return Math.random().toString(36).substring(2, 10) + Date.now().toString(36); }
+
+        document.getElementById('newProjectForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            if (currentStages.length === 0) { alert('Please add at least one project stage'); return; }
+            if (currentStages.filter(s => !s.name.trim()).length > 0) { alert('All stages must have a name'); return; }
+
+            const clientId = parseInt(document.getElementById('projectClient').value);
+            const client = clients.find(c => c.id === clientId);
+            const proposalId = parseInt(document.getElementById('projectProposal').value) || null;
+            const proposal = proposalId ? proposals.find(p => p.id === proposalId) : null;
+
+            const project = {
+                id: Date.now(),
+                projectNumber: 'PRJ-2026-' + String(projects.length + 1).padStart(3, '0'),
+                proposalId, proposalNumber: proposal ? proposal.number : null,
+                clientId, clientName: client ? client.company : 'Unknown',
+                clientEmail: client && client.contacts ? client.contacts[0].email : '',
+                name: document.getElementById('projectName').value,
+                description: document.getElementById('projectDescription').value,
+                type: document.getElementById('projectType').value,
+                totalBudget: parseFloat(document.getElementById('projectBudget').value),
+                totalHours: parseInt(document.getElementById('projectHours').value),
+                startDate: document.getElementById('projectStartDate').value,
+                expectedEndDate: document.getElementById('projectEndDate').value,
+                actualEndDate: null, status: 'active', overallProgress: 0,
+                stages: currentStages.map((s, idx) => ({ ...s, id: idx })),
+                totalHoursSpent: 0, shareToken: generateShareToken(),
+                lastClientView: null, created: new Date().toISOString(), updated: new Date().toISOString()
+            };
+
+            projects.push(project);
+            saveData();
+            renderProjects();
+            updateProjectStats();
+            closeModal('newProject');
+            this.reset();
+            currentStages = [];
+            showToast('Project created!');
+        });
+
+        function resetProjectForm() {
+            document.getElementById('newProjectForm').reset();
+            currentStages = [];
+            stageIndex = 0;
+            document.getElementById('stagesList').innerHTML = '<div style="color: var(--gray); font-size: 13px; text-align: center; padding: 20px;">Select a project type to load stage template, or add stages manually</div>';
+        }
+
+        function renderProjects(filteredProjects = null) {
+            const tbody = document.getElementById('projectsTable');
+            const list = filteredProjects || projects;
+            if (list.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="6" style="text-align: center; color: var(--gray);">No projects yet</td></tr>';
+                return;
+            }
+            tbody.innerHTML = list.map(p => {
+                const progress = p.overallProgress || 0;
+                const statusColors = { active: 'status-active', on_hold: 'status-pending', completed: 'status-sent' };
+                return `<tr>
+                    <td><strong>${p.projectNumber}</strong></td>
+                    <td>${p.clientName}</td>
+                    <td>${p.name}</td>
+                    <td style="min-width: 150px;"><div style="display: flex; align-items: center; gap: 8px;"><div style="flex: 1; background: rgba(255,255,255,0.1); border-radius: 4px; height: 8px; overflow: hidden;"><div style="background: var(--gradient); height: 100%; width: ${progress}%;"></div></div><span style="font-size: 12px;">${progress}%</span></div></td>
+                    <td><span class="status-badge ${statusColors[p.status] || 'status-pending'}">${p.status.replace('_', ' ')}</span></td>
+                    <td><div class="action-btns"><button class="btn btn-primary btn-sm" onclick="openProjectManagement(${p.id})">Manage</button><button class="btn btn-danger btn-sm" onclick="deleteProject(${p.id})">Delete</button></div></td>
+                </tr>`;
+            }).join('');
+        }
+
+        function filterProjects() {
+            const search = document.getElementById('projectSearch').value.toLowerCase().trim();
+            const status = document.getElementById('projectStatusFilter').value;
+            let filtered = projects;
+            if (search) filtered = filtered.filter(p => p.name.toLowerCase().includes(search) || p.clientName.toLowerCase().includes(search) || p.projectNumber.toLowerCase().includes(search));
+            if (status) filtered = filtered.filter(p => p.status === status);
+            renderProjects(filtered);
+        }
+
+        function updateProjectStats() {
+            document.getElementById('activeProjectsCount').textContent = projects.filter(p => p.status === 'active').length;
+            document.getElementById('totalProjectsCount').textContent = projects.length;
+            document.getElementById('onTrackProjects').textContent = projects.filter(p => p.status === 'active' && p.overallProgress > 0).length;
+            document.getElementById('attentionProjects').textContent = projects.filter(p => p.status === 'on_hold').length;
+        }
+
+        function deleteProject(id) {
+            if (confirm('Delete this project?')) {
+                projects = projects.filter(p => p.id !== id);
+                saveData(); renderProjects(); updateProjectStats();
+                showToast('Project deleted');
+            }
+        }
+
+        function openProjectManagement(id) {
+            const project = projects.find(p => p.id === id);
+            if (!project) return;
+            currentManagingProjectId = id;
+            document.getElementById('manageProjectTitle').textContent = project.projectNumber + ': ' + project.name;
+
+            const totalHoursSpent = project.stages.reduce((sum, s) => sum + (s.actualHours || 0), 0);
+            const completedStages = project.stages.filter(s => s.status === 'completed').length;
+
+            const content = `
+                <div style="margin-bottom: 20px; padding: 16px; background: rgba(99, 102, 241, 0.1); border-radius: 12px;">
+                    <div style="display: flex; justify-content: space-between; margin-bottom: 12px;"><span style="color: var(--gray-light);">Client: ${project.clientName}</span><span style="color: var(--gray-light);">Budget: ₪${project.totalBudget.toLocaleString()}</span></div>
+                    <div style="margin-bottom: 8px; font-size: 14px;">Overall Progress</div>
+                    <div style="display: flex; align-items: center; gap: 12px;"><div style="flex: 1; background: rgba(255,255,255,0.1); border-radius: 6px; height: 12px; overflow: hidden;"><div style="background: var(--gradient); height: 100%; width: ${project.overallProgress}%;"></div></div><span style="font-size: 18px; font-weight: 600;">${project.overallProgress}%</span></div>
+                    <div style="display: flex; justify-content: space-between; margin-top: 12px; font-size: 13px; color: var(--gray-light);"><span>Time: ${totalHoursSpent}/${project.totalHours} hours</span><span>Stages: ${completedStages}/${project.stages.length} completed</span></div>
+                </div>
+                <div style="margin-bottom: 20px;"><h3 style="margin-bottom: 12px; font-size: 14px;">Project Stages</h3><div style="max-height: 350px; overflow-y: auto;">
+                    ${project.stages.map((stage, idx) => {
+                        const icon = stage.status === 'completed' ? '✓' : stage.status === 'in_progress' ? '►' : '○';
+                        const color = stage.status === 'completed' ? '#10b981' : stage.status === 'in_progress' ? '#6366f1' : '#64748b';
+                        return `<div style="background: rgba(255,255,255,0.02); border: 1px solid ${stage.status === 'in_progress' ? 'var(--primary)' : 'rgba(255,255,255,0.08)'}; border-radius: 8px; padding: 12px; margin-bottom: 8px;">
+                            <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 8px;"><span style="color: ${color}; font-size: 16px;">${icon}</span><span style="font-weight: 600; flex: 1;">${idx + 1}. ${stage.name}</span><span style="font-size: 12px; color: var(--gray-light);">${stage.actualHours}/${stage.estimatedHours} hrs</span><span style="font-size: 12px; color: ${color};">${stage.completionPercent}%</span></div>
+                            ${stage.status !== 'completed' ? `<div style="display: flex; gap: 8px; margin-bottom: 8px;"><input type="range" min="0" max="100" value="${stage.completionPercent}" onchange="updateStageProgress(${project.id}, ${idx}, this.value)" style="flex: 1;"><input type="number" value="${stage.actualHours}" placeholder="Hrs" onchange="updateStageActualHours(${project.id}, ${idx}, this.value)" style="width: 60px; padding: 4px 8px; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-radius: 4px; color: var(--light); font-size: 12px;">
+                            ${stage.status === 'not_started' ? `<button class="btn btn-secondary btn-sm" onclick="startStage(${project.id}, ${idx})">Start</button>` : `<button class="btn btn-success btn-sm" onclick="completeStage(${project.id}, ${idx})">Complete</button>`}</div>
+                            <input type="text" placeholder="Notes" value="${stage.notes || ''}" onchange="updateStageNotes(${project.id}, ${idx}, this.value)" style="width: 100%; padding: 6px 10px; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-radius: 4px; color: var(--light); font-size: 12px; margin-bottom: 6px;">
+                            <input type="text" placeholder="Blockers" value="${stage.blockers || ''}" onchange="updateStageBlockers(${project.id}, ${idx}, this.value)" style="width: 100%; padding: 6px 10px; background: rgba(239, 68, 68, 0.1); border: 1px solid rgba(239, 68, 68, 0.2); border-radius: 4px; color: var(--light); font-size: 12px;">` : `<div style="font-size: 12px; color: var(--gray-light);">${stage.completedDate ? 'Completed: ' + new Date(stage.completedDate).toLocaleDateString('he-IL') : ''}</div>`}
+                        </div>`;
+                    }).join('')}
+                </div></div>
+                <div style="background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.08); border-radius: 12px; padding: 16px;"><h3 style="margin-bottom: 12px; font-size: 14px;">Client Portal</h3><div style="display: flex; gap: 8px; align-items: center; flex-wrap: wrap;"><input type="text" id="shareLink-${project.id}" value="${window.location.origin}/progress.html?d=${encodeProjectData(project)}" readonly style="flex: 1; min-width: 200px; padding: 8px 12px; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-radius: 6px; color: var(--light); font-size: 11px;"><button class="btn btn-secondary btn-sm" onclick="copyShareLink(${project.id})">Copy Link</button><button class="btn btn-primary btn-sm" onclick="sendToClient(${project.id})">Email Client</button></div></div>
+                <div style="display: flex; gap: 12px; margin-top: 20px;"><select onchange="updateProjectStatus(${project.id}, this.value)" style="padding: 10px 16px; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-radius: 8px; color: var(--light);"><option value="active" ${project.status === 'active' ? 'selected' : ''}>Active</option><option value="on_hold" ${project.status === 'on_hold' ? 'selected' : ''}>On Hold</option><option value="completed" ${project.status === 'completed' ? 'selected' : ''}>Completed</option></select><button class="btn btn-secondary" onclick="closeModal('manageProject')" style="flex: 1;">Close</button></div>`;
+
+            document.getElementById('manageProjectContent').innerHTML = content;
+            document.getElementById('modal-manageProject').classList.add('active');
+        }
+
+        function updateStageProgress(projectId, idx, value) { const p = projects.find(p => p.id === projectId); if (p) { p.stages[idx].completionPercent = parseInt(value); recalculateProjectProgress(p); saveData(); }}
+        function updateStageActualHours(projectId, idx, value) { const p = projects.find(p => p.id === projectId); if (p) { p.stages[idx].actualHours = parseInt(value) || 0; p.totalHoursSpent = p.stages.reduce((sum, s) => sum + (s.actualHours || 0), 0); saveData(); }}
+        function updateStageNotes(projectId, idx, value) { const p = projects.find(p => p.id === projectId); if (p) { p.stages[idx].notes = value; saveData(); }}
+        function updateStageBlockers(projectId, idx, value) { const p = projects.find(p => p.id === projectId); if (p) { p.stages[idx].blockers = value; saveData(); }}
+
+        function startStage(projectId, idx) { const p = projects.find(p => p.id === projectId); if (p) { p.stages[idx].status = 'in_progress'; p.stages[idx].startDate = new Date().toISOString(); saveData(); openProjectManagement(projectId); }}
+        function completeStage(projectId, idx) { const p = projects.find(p => p.id === projectId); if (p) { p.stages[idx].status = 'completed'; p.stages[idx].completionPercent = 100; p.stages[idx].completedDate = new Date().toISOString(); recalculateProjectProgress(p); saveData(); openProjectManagement(projectId); showToast('Stage completed!'); }}
+
+        function recalculateProjectProgress(project) {
+            const total = project.stages.length;
+            if (total === 0) { project.overallProgress = 0; return; }
+            project.overallProgress = Math.round(project.stages.reduce((sum, s) => sum + s.completionPercent, 0) / total);
+            project.updated = new Date().toISOString();
+        }
+
+        function updateProjectStatus(projectId, status) { const p = projects.find(p => p.id === projectId); if (p) { p.status = status; if (status === 'completed') p.actualEndDate = new Date().toISOString(); saveData(); renderProjects(); updateProjectStats(); showToast('Status updated'); }}
+
+        function encodeProjectData(project) {
+            const data = { n: project.name, c: project.clientName, p: project.overallProgress, b: project.totalBudget, h: project.totalHours, hs: project.stages.reduce((sum, s) => sum + (s.actualHours || 0), 0), sd: project.startDate, ed: project.expectedEndDate, s: project.stages.map(s => ({ n: s.name, p: s.completionPercent, st: s.status, eh: s.estimatedHours, ah: s.actualHours, nt: s.notes, bl: s.blockers })), u: project.updated };
+            return btoa(encodeURIComponent(JSON.stringify(data)));
+        }
+
+        function copyShareLink(projectId) { const input = document.getElementById('shareLink-' + projectId); input.select(); document.execCommand('copy'); showToast('Link copied!'); }
+
+        function sendToClient(projectId) {
+            const p = projects.find(p => p.id === projectId); if (!p) return;
+            const link = document.getElementById('shareLink-' + projectId).value;
+            const subject = encodeURIComponent(`Project Update: ${p.name}`);
+            const body = encodeURIComponent(`Hi,\n\nHere's the latest progress update for "${p.name}".\n\nProgress: ${p.overallProgress}%\n\nView details: ${link}\n\nBest regards,\nDrishti Consulting`);
+            window.open(`mailto:${p.clientEmail}?subject=${subject}&body=${body}`, '_blank');
+        }
+
+        function convertToProject(proposalId) {
+            const proposal = proposals.find(p => p.id === proposalId); if (!proposal) return;
+            openModal('newProject');
+            setTimeout(() => {
+                document.getElementById('projectProposal').value = proposalId;
+                document.getElementById('projectClient').value = proposal.clientId;
+                document.getElementById('projectName').value = proposal.project;
+                document.getElementById('projectBudget').value = proposal.amount;
+                document.getElementById('projectHours').value = proposal.hours || '';
+                document.getElementById('projectType').value = proposal.type || '';
+                document.getElementById('projectDescription').value = proposal.description || '';
+                if (proposal.type && proposal.type !== 'custom') loadStageTemplate();
+            }, 100);
         }
 
         // Initialize
