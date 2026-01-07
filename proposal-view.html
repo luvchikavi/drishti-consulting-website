@@ -587,6 +587,18 @@
                     </div>
                 </div>
 
+                <!-- Comments / Notes -->
+                ${p.comments ? `
+                <div class="section">
+                    <h2 class="section-title">6. הערות</h2>
+                    <div class="section-content">
+                        <div style="font-size: 13px; color: var(--gray); line-height: 2;">
+                            ${p.comments.map(c => `<p>${c}</p>`).join('')}
+                        </div>
+                    </div>
+                </div>
+                ` : ''}
+
                 <!-- Version History -->
                 ${p.versions ? `
                 <div class="section">
