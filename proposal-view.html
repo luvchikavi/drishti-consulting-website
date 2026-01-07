@@ -507,13 +507,61 @@
                 <div class="section">
                     <h2 class="section-title">1. תקציר מנהלים</h2>
                     <div class="section-content">
-                        <p>${p.summary}</p>
+                        <p style="margin-bottom: 20px;">${p.summary}</p>
+                        ${p.objectives ? `
+                        <h4 style="color: var(--secondary); margin-bottom: 12px;">יעדי המערכת</h4>
+                        <ul style="list-style: none; padding: 0;">
+                            ${p.objectives.map(obj => `<li style="padding: 6px 0; padding-right: 20px; position: relative; color: var(--gray);"><span style="position: absolute; right: 0; color: var(--primary);">•</span>${obj}</li>`).join('')}
+                        </ul>
+                        ` : ''}
                     </div>
                 </div>
 
-                <!-- Scope & Pricing -->
+                <!-- Scope / Modules -->
+                ${p.scope ? `
                 <div class="section">
-                    <h2 class="section-title">2. היקף הפרויקט ועלויות</h2>
+                    <h2 class="section-title">2. היקף הפרויקט - שלב 1</h2>
+                    <div class="section-content">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th style="width: 200px;">מודול</th>
+                                    <th>תיאור</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                ${p.scope.map(m => `
+                                    <tr>
+                                        <td><strong>${m.module}</strong></td>
+                                        <td style="color: var(--gray);">${m.desc}</td>
+                                    </tr>
+                                `).join('')}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                ` : ''}
+
+                <!-- Sectors -->
+                ${p.sectors ? `
+                <div class="section">
+                    <h2 class="section-title">3. סקטורים נתמכים</h2>
+                    <div class="section-content">
+                        <div style="display: grid; grid-template-columns: repeat(5, 1fr); gap: 12px;">
+                            ${p.sectors.map(s => `
+                                <div style="background: rgba(99, 102, 241, 0.1); border: 1px solid rgba(99, 102, 241, 0.3); border-radius: 10px; padding: 12px; text-align: center; font-size: 12px;">
+                                    <strong style="display: block; color: var(--secondary); font-size: 11px; margin-bottom: 4px;">${s.code}</strong>
+                                    ${s.name}
+                                </div>
+                            `).join('')}
+                        </div>
+                    </div>
+                </div>
+                ` : ''}
+
+                <!-- Pricing -->
+                <div class="section">
+                    <h2 class="section-title">4. הצעת מחיר</h2>
                     <div class="section-content">
                         <table>
                             <thead>
@@ -550,7 +598,7 @@
 
                 <!-- Payment Terms -->
                 <div class="section">
-                    <h2 class="section-title">3. תנאי תשלום</h2>
+                    <h2 class="section-title">5. תנאי תשלום</h2>
                     <div class="section-content">
                         <div class="payment-grid">
                             ${p.payment.map(term => `
@@ -580,7 +628,7 @@
 
                 <!-- Timeline -->
                 <div class="section">
-                    <h2 class="section-title">4. לוחות זמנים</h2>
+                    <h2 class="section-title">6. לוחות זמנים</h2>
                     <div class="section-content">
                         <p style="text-align: center; margin-bottom: 15px;">משך הפרויקט המוערך: <strong>${p.duration}</strong></p>
                         <div class="timeline">
@@ -596,7 +644,7 @@
 
                 <!-- Terms -->
                 <div class="section">
-                    <h2 class="section-title">5. תנאים כלליים</h2>
+                    <h2 class="section-title">7. תנאים כלליים</h2>
                     <div class="section-content">
                         <div class="list-grid">
                             <div class="list-section included">
@@ -618,7 +666,7 @@
                 <!-- Comments / Notes -->
                 ${p.comments ? `
                 <div class="section">
-                    <h2 class="section-title">6. הערות</h2>
+                    <h2 class="section-title">8. הערות</h2>
                     <div class="section-content">
                         <div style="font-size: 13px; color: var(--gray); line-height: 2;">
                             ${p.comments.map(c => `<p>${c}</p>`).join('')}
