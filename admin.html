@@ -1431,6 +1431,44 @@
         let expenses = JSON.parse(localStorage.getItem('expenses')) || [];
         let projects = JSON.parse(localStorage.getItem('projects')) || [];
 
+        // Sample project for demo
+        if (projects.length === 0) {
+            const sampleProject = {
+                id: 1001,
+                projectNumber: 'PRJ-2026-001',
+                proposalId: null,
+                proposalNumber: null,
+                clientId: 1001,
+                clientName: 'LHD Insurance Consulting',
+                clientEmail: 'moshe@lhd-insurance.co.il',
+                name: 'Insurance Claims Management System',
+                description: 'Digital transformation of claims processing workflow',
+                type: 'development',
+                totalBudget: 85000,
+                totalHours: 320,
+                startDate: '2026-01-05',
+                expectedEndDate: '2026-03-30',
+                actualEndDate: null,
+                status: 'active',
+                overallProgress: 52,
+                stages: [
+                    { id: 0, name: 'Discovery & Requirements', description: 'Understanding needs', estimatedHours: 32, actualHours: 30, status: 'completed', completionPercent: 100, startDate: '2026-01-05', completedDate: '2026-01-12', notes: 'All requirements documented, stakeholders interviewed', blockers: '' },
+                    { id: 1, name: 'System Design', description: 'Architecture design', estimatedHours: 48, actualHours: 52, status: 'completed', completionPercent: 100, startDate: '2026-01-13', completedDate: '2026-01-25', notes: 'Database schema finalized, UI mockups approved', blockers: '' },
+                    { id: 2, name: 'Development - Phase 1', description: 'Backend development', estimatedHours: 80, actualHours: 65, status: 'in_progress', completionPercent: 75, startDate: '2026-01-26', completedDate: null, notes: 'API endpoints 90% complete, authentication done', blockers: 'Waiting for client API credentials for legacy system integration' },
+                    { id: 3, name: 'Development - Phase 2', description: 'Frontend development', estimatedHours: 80, actualHours: 0, status: 'not_started', completionPercent: 0, startDate: null, completedDate: null, notes: '', blockers: '' },
+                    { id: 4, name: 'Testing & QA', description: 'Quality assurance', estimatedHours: 48, actualHours: 0, status: 'not_started', completionPercent: 0, startDate: null, completedDate: null, notes: '', blockers: '' },
+                    { id: 5, name: 'Deployment & Training', description: 'Go-live', estimatedHours: 32, actualHours: 0, status: 'not_started', completionPercent: 0, startDate: null, completedDate: null, notes: '', blockers: '' }
+                ],
+                totalHoursSpent: 147,
+                shareToken: 'demo123abc',
+                lastClientView: null,
+                created: '2026-01-05T08:00:00.000Z',
+                updated: new Date().toISOString()
+            };
+            projects.push(sampleProject);
+            localStorage.setItem('projects', JSON.stringify(projects));
+        }
+
         // Stage templates by project type
         const stageTemplates = {
             development: [
