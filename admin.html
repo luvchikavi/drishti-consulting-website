@@ -1447,36 +1447,50 @@
         let expenses = JSON.parse(localStorage.getItem('expenses')) || [];
         let projects = JSON.parse(localStorage.getItem('projects')) || [];
 
-        // Sample proposal for demo - LHD Insurance (add if not exists)
-        if (!proposals.find(p => p.proposalNumber === 'DRS-2026-001')) {
+        // Sample proposal for demo - LHD Insurance v2.0 (add or update)
+        const existingLHD = proposals.find(p => p.proposalNumber === 'DRS-2026-001');
+        if (!existingLHD || existingLHD.version !== '2.0') {
+            // Remove old version if exists
+            proposals = proposals.filter(p => p.proposalNumber !== 'DRS-2026-001');
             const sampleProposal = {
                 id: 2001,
                 proposalNumber: 'DRS-2026-001',
+                version: '2.0',
                 clientId: 1001,
                 clientName: 'LHD Insurance Consulting',
-                projectName: 'מערכת ניהול ייעוץ ביטוח - Insurance Advisory Management System',
-                description: 'פיתוח מערכת ניהול ייעוץ ביטוח מקיפה הכוללת: ניהול לקוחות, מנוע RFQ חכם, מחולל מסמכי RFQ, ניהול תהליך RFQ, ודשבורד עם מפת סיכונים',
-                amount: 43000,
+                projectName: 'מודול השוואת אישורי ביטוח - Insurance Certificate Comparison Module',
+                description: 'בניית מודול להשוואת דרישות בתנאי מכרז של לקוחות מול אישורי הביטוח שמסופקים על ידי נותני שירות לאותם לקוחות',
+                amount: 48000,
+                amountWithVat: 56640,
                 currency: 'NIS',
-                hours: 285,
-                hourlyRate: 151,
+                hours: 240,
+                hourlyRate: 200,
                 status: 'sent',
-                validUntil: '2026-02-05',
+                validUntil: '2026-02-07',
                 proposalType: 'development',
-                items: [
-                    { description: 'אפיון מפורט ותכנון', hours: 20, amount: 3020 },
-                    { description: 'הקמת תשתית וארכיטקטורה (Backend + DB + Cloud)', hours: 25, amount: 3775 },
-                    { description: 'מודול ניהול לקוחות (CRUD + סקטורים)', hours: 30, amount: 4530 },
-                    { description: 'Knowledge Base ביטוחים (מיפוי + Rule Engine)', hours: 25, amount: 3775 },
-                    { description: 'שאלון דינמי (לוגיקה + UI)', hours: 35, amount: 5285 },
-                    { description: 'מנוע יצירת RFQ (Word/PDF generation)', hours: 30, amount: 4530 },
-                    { description: 'דשבורד ראשי + מפת סיכונים (אינטראקטיבי + גרפים)', hours: 55, amount: 8305 },
-                    { description: 'ממשק משתמש UI/UX (React Frontend)', hours: 35, amount: 5285 },
-                    { description: 'בדיקות והטמעה (QA)', hours: 30, amount: 4530 }
+                lineItems: [
+                    { description: 'אפיון מפורט ותכנון מערכת', hours: 25, rate: 200 },
+                    { description: 'הקמת תשתית וארכיטקטורה (Backend + DB + Cloud)', hours: 30, rate: 200 },
+                    { description: 'מודול השוואתי לפרמטרים של אישורי ביטוח', hours: 45, rate: 200 },
+                    { description: 'Knowledge Base ביטוחים (מיפוי + Rule Engine)', hours: 30, rate: 200 },
+                    { description: 'מנוע OCR להשוואת הצעות', hours: 40, rate: 200 },
+                    { description: 'מנוע OCR / AI', hours: 35, rate: 200 },
+                    { description: 'ממשק משתמש UI/UX (React Frontend)', hours: 20, rate: 200 },
+                    { description: 'בדיקות והטמעה (QA)', hours: 15, rate: 200 }
                 ],
-                notes: 'תנאי תשלום: 40% עם חתימת ההסכם, 40% השלמת מנוע RFQ, 20% מסירת הפרויקט. משך פרויקט: 8 שבועות. תחזוקה שוטפת לאחר 3 חודשים: ₪2,500/חודש',
+                executiveSummary: 'הצעה זו מתייחסת לפיתוח מודול להשוואת דרישות בתנאי מכרז של לקוחות מול אישורי הביטוח שמסופקים על ידי נותני שירות לאותם לקוחות. המערכת תכלול מנוע OCR/AI לניתוח מסמכים, מודול השוואה חכם, וממשק משתמש נוח.',
+                included: '• פיתוח מלא של המודול\n• מנוע OCR / AI\n• הקמת תשתית ענן\n• תיעוד טכני ומדריך למשתמש\n• 3 חודשי תמיכה (באגים)',
+                excluded: '• עלויות ענן שוטפות\n• הזנת נתונים ראשונית\n• *מודל חלוקת רווחים ייבחן בהמשך לאחר סיום הביצוע - יש עלות תחזוקה שוטפת למערכת שתיבחן בהמשך',
+                paymentNotes: 'תנאי תשלום: 40% עם חתימת ההסכם, 40% באמצע הפרויקט, 20% מסירת הפרויקט.\n\n*מודל חלוקת רווחים ייבחן בהמשך לאחר סיום הביצוע.',
+                projectDuration: '6 שבועות',
+                versions: [
+                    { version: '1.0', date: '2026-01-05T08:00:00.000Z', note: 'גרסה ראשונית' },
+                    { version: '2.0', date: new Date().toISOString(), note: 'עדכון: מודול השוואת אישורי ביטוח, הוספת OCR/AI, הסרת דשבורד וניהול לקוחות' }
+                ],
+                notes: 'תנאי תשלום: 40% עם חתימת ההסכם, 40% באמצע הפרויקט, 20% מסירת הפרויקט. משך פרויקט: 6 שבועות. *מודל חלוקת רווחים ייבחן בהמשך לאחר סיום הביצוע',
                 created: '2026-01-05T08:00:00.000Z',
-                sentDate: '2026-01-05T08:00:00.000Z'
+                sentDate: '2026-01-07T08:00:00.000Z',
+                updated: new Date().toISOString()
             };
             proposals.push(sampleProposal);
             localStorage.setItem('proposals', JSON.stringify(proposals));
