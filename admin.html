@@ -2101,26 +2101,78 @@ Webhook: Real-time updates`,
                 const number = p.proposalNumber || p.number || 'N/A';
                 const project = p.projectName || p.project || 'N/A';
                 const version = p.version || '1.0';
-                const statusClass = p.status === 'sent' ? 'sent' : p.status === 'accepted' ? 'active' : 'pending';
+                const statusColors = {
+                    'draft': 'pending',
+                    'sent': 'sent',
+                    'accepted': 'active',
+                    'active': 'active',
+                    'working': 'active',
+                    'completed': 'active'
+                };
+                const statusClass = statusColors[p.status] || 'pending';
+                const statusLabels = {
+                    'draft': 'Draft',
+                    'sent': 'Sent',
+                    'accepted': 'Accepted',
+                    'active': 'Active',
+                    'working': 'Working',
+                    'completed': 'Completed'
+                };
                 return `
                 <tr>
                     <td><strong>${number}</strong> <span style="color: var(--gray); font-size: 10px;">v${version}</span></td>
                     <td>${p.clientName}</td>
                     <td>${project}</td>
                     <td>₪${p.amount.toLocaleString()}</td>
-                    <td><span class="status-badge status-${statusClass}">${p.status}</span></td>
+                    <td>
+                        <select onchange="changeProposalStatus(${p.id}, this.value)" style="background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); border-radius: 4px; padding: 4px 8px; color: var(--light); font-size: 11px; cursor: pointer;">
+                            <option value="draft" ${p.status === 'draft' ? 'selected' : ''}>Draft</option>
+                            <option value="sent" ${p.status === 'sent' ? 'selected' : ''}>Sent</option>
+                            <option value="accepted" ${p.status === 'accepted' ? 'selected' : ''}>Accepted</option>
+                            <option value="active" ${p.status === 'active' ? 'selected' : ''}>Active</option>
+                            <option value="working" ${p.status === 'working' ? 'selected' : ''}>Working</option>
+                            <option value="completed" ${p.status === 'completed' ? 'selected' : ''}>Completed</option>
+                        </select>
+                    </td>
                     <td>
                         <div class="action-btns">
-                            <button class="btn btn-primary btn-sm" onclick="openProposalEditor(${p.id})">Open & Edit</button>
-                            ${p.status === 'draft' ? `<button class="btn btn-secondary btn-sm" onclick="markSent(${p.id})">Mark Sent</button>` : ''}
-                            ${p.status === 'sent' ? `<button class="btn btn-warning btn-sm" onclick="markAccepted(${p.id})">Accept</button>` : ''}
-                            ${(p.status === 'sent' || p.status === 'accepted') && !hasProject ? `<button class="btn btn-secondary btn-sm" onclick="convertToProject(${p.id})">→ Project</button>` : ''}
+                            <button class="btn btn-primary btn-sm" onclick="openProposalEditor(${p.id})">Edit</button>
+                            <button class="btn btn-secondary btn-sm" onclick="copyProposalLink(${p.id})">Copy Link</button>
+                            ${!hasProject ? `<button class="btn btn-secondary btn-sm" onclick="convertToProject(${p.id})">→ Project</button>` : ''}
                             ${hasProject ? `<span style="color: var(--success); font-size: 11px;">✓ Project</span>` : ''}
-                            <button class="btn btn-danger btn-sm" onclick="deleteProposal(${p.id})">Delete</button>
+                            <button class="btn btn-danger btn-sm" onclick="deleteProposal(${p.id})">×</button>
                         </div>
                     </td>
                 </tr>
             `}).join('');
+        }
+
+        function changeProposalStatus(id, newStatus) {
+            const proposal = proposals.find(p => p.id === id);
+            if (proposal) {
+                proposal.status = newStatus;
+                if (newStatus === 'accepted') proposal.acceptedDate = new Date().toISOString();
+                if (newStatus === 'active' || newStatus === 'working') proposal.activatedDate = new Date().toISOString();
+                proposal.updated = new Date().toISOString();
+                saveData();
+                updateStats();
+                showToast(`Status changed to ${newStatus}`);
+            }
+        }
+
+        function copyProposalLink(id) {
+            const proposal = proposals.find(p => p.id === id);
+            if (!proposal) return;
+
+            // Generate short ID based on proposal number
+            const shortId = (proposal.proposalNumber || proposal.number || '').toLowerCase().replace('drs-2026-', '').replace('drs-2024-', '') || id;
+            const link = `https://drishticonsulting.com/proposal-view.html?p=lhd-001`;
+
+            navigator.clipboard.writeText('https://tinyurl.com/drishti-lhd-v2').then(() => {
+                showToast('Link copied: tinyurl.com/drishti-lhd-v2');
+            }).catch(() => {
+                prompt('Copy this link:', 'https://tinyurl.com/drishti-lhd-v2');
+            });
         }
 
         function openProposalEditor(id) {
