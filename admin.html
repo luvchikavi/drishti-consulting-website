@@ -1550,7 +1550,8 @@ POST /api/auth/login`,
                 clientName: 'Tag Urbanic Investment Management',
                 projectName: 'Monday.com to Excel - Automatic Data Sync',
                 description: 'חיבור ממשק Monday.com לאקסל – סנכרון נתונים אוטומטי. ממשק תצוגה אינטרנטי שיסתנכרן בנתוני אמת מהמאנדיי כל 4 שעות',
-                amount: 8775,
+                amount: 7500,
+                amountWithVat: 8775,
                 currency: 'NIS',
                 hours: 20,
                 hourlyRate: 375,
@@ -1559,12 +1560,12 @@ POST /api/auth/login`,
                 proposalType: 'development',
                 paidAmount: 3835,
                 items: [
-                    { description: 'אפיון מבנה הנתונים הרלוונטי במערכת Monday', hours: 4, amount: 1500 },
-                    { description: 'חיבור טכני בין Monday לבין Excel באמצעות API', hours: 8, amount: 3000 },
-                    { description: 'בדיקות תקינות, סנכרון ויציבות', hours: 4, amount: 1755 },
-                    { description: 'ממשק תצוגה אינטרנטי עם סנכרון כל 4 שעות', hours: 4, amount: 2520 }
+                    { description: 'אפיון מבנה הנתונים הרלוונטי במערכת Monday', hours: 5, amount: 1875 },
+                    { description: 'חיבור טכני בין Monday לבין Excel באמצעות API / אוטומציה', hours: 8, amount: 3000 },
+                    { description: 'בדיקות תקינות, סנכרון ויציבות', hours: 4, amount: 1500 },
+                    { description: 'ממשק תצוגה אינטרנטי שיסתנכרן בנתוני אמת מהמאנדיי כל 4 שעות', hours: 3, amount: 1125 }
                 ],
-                notes: 'תנאי תשלום: 50% עם אישור עבודה ו-50% עם קבלת העבודה ואישורה. מאושר: גיא גפני 01/01/2026',
+                notes: 'תנאי תשלום: 50% עם אישור עבודה ו-50% עם קבלת העבודה ואישורה. המחירים אינם כוללים מע"מ. מאושר: גיא גפני 01/01/2026',
                 created: '2024-12-25T08:00:00.000Z',
                 sentDate: '2024-12-25T08:00:00.000Z',
                 acceptedDate: '2026-01-01T08:00:00.000Z'
@@ -2037,10 +2038,10 @@ Webhook: Real-time updates`,
                         ...proposals[proposalIndex],
                         clientId: clientId,
                         clientName: client ? client.company : 'Unknown',
-                        project: document.getElementById('proposalProject').value,
+                        projectName: document.getElementById('proposalProject').value,
                         amount: parseInt(document.getElementById('proposalAmount').value),
                         hours: parseInt(document.getElementById('proposalHours').value) || 0,
-                        type: document.getElementById('proposalType').value,
+                        proposalType: document.getElementById('proposalType').value,
                         description: document.getElementById('proposalDesc').value,
                         updated: new Date().toISOString()
                     };
@@ -2055,13 +2056,13 @@ Webhook: Real-time updates`,
                 // Create new proposal
                 const proposal = {
                     id: Date.now(),
-                    number: 'DRS-2026-' + String(proposals.length + 1).padStart(3, '0'),
+                    proposalNumber: 'DRS-2026-' + String(proposals.length + 1).padStart(3, '0'),
                     clientId: clientId,
                     clientName: client ? client.company : 'Unknown',
-                    project: document.getElementById('proposalProject').value,
+                    projectName: document.getElementById('proposalProject').value,
                     amount: parseInt(document.getElementById('proposalAmount').value),
                     hours: parseInt(document.getElementById('proposalHours').value) || 0,
-                    type: document.getElementById('proposalType').value,
+                    proposalType: document.getElementById('proposalType').value,
                     description: document.getElementById('proposalDesc').value,
                     status: 'draft',
                     created: new Date().toISOString()
@@ -2081,19 +2082,23 @@ Webhook: Real-time updates`,
             const tbody = document.getElementById('proposalsTable');
             tbody.innerHTML = proposals.map(p => {
                 const hasProject = projects.some(proj => proj.proposalId === p.id);
+                const number = p.proposalNumber || p.number || 'N/A';
+                const project = p.projectName || p.project || 'N/A';
+                const statusClass = p.status === 'sent' ? 'sent' : p.status === 'accepted' ? 'active' : 'pending';
                 return `
                 <tr>
-                    <td><strong>${p.number}</strong></td>
+                    <td><strong>${number}</strong></td>
                     <td>${p.clientName}</td>
-                    <td>${p.project}</td>
+                    <td>${project}</td>
                     <td>₪${p.amount.toLocaleString()}</td>
-                    <td><span class="status-badge status-${p.status === 'sent' ? 'sent' : 'pending'}">${p.status}</span></td>
+                    <td><span class="status-badge status-${statusClass}">${p.status}</span></td>
                     <td>
                         <div class="action-btns">
                             <button class="btn btn-secondary btn-sm" onclick="editProposal(${p.id})">Edit</button>
                             <button class="btn btn-success btn-sm" onclick="generateProposal(${p.id})">Generate</button>
-                            ${p.status !== 'sent' ? `<button class="btn btn-secondary btn-sm" onclick="markSent(${p.id})">Mark Sent</button>` : ''}
-                            ${p.status === 'sent' && !hasProject ? `<button class="btn btn-primary btn-sm" onclick="convertToProject(${p.id})">→ Project</button>` : ''}
+                            ${p.status === 'draft' ? `<button class="btn btn-secondary btn-sm" onclick="markSent(${p.id})">Mark Sent</button>` : ''}
+                            ${p.status === 'sent' ? `<button class="btn btn-warning btn-sm" onclick="markAccepted(${p.id})">Accept</button>` : ''}
+                            ${(p.status === 'sent' || p.status === 'accepted') && !hasProject ? `<button class="btn btn-primary btn-sm" onclick="convertToProject(${p.id})">→ Project</button>` : ''}
                             ${hasProject ? `<span style="color: var(--success); font-size: 11px;">✓ Project</span>` : ''}
                             <button class="btn btn-danger btn-sm" onclick="deleteProposal(${p.id})">Delete</button>
                         </div>
@@ -2102,12 +2107,28 @@ Webhook: Real-time updates`,
             `}).join('');
         }
 
+        function markAccepted(id) {
+            const proposal = proposals.find(p => p.id === id);
+            if (proposal) {
+                proposal.status = 'accepted';
+                proposal.acceptedDate = new Date().toISOString();
+                saveData();
+                renderProposals();
+                updateStats();
+                showToast('Proposal accepted!');
+            }
+        }
+
         function generateProposal(id) {
             const proposal = proposals.find(p => p.id === id);
             const client = clients.find(c => c.id === proposal.clientId);
 
+            // Handle both old and new field names
+            const projectName = proposal.projectName || proposal.project || '';
+            const proposalNumber = proposal.proposalNumber || proposal.number || '';
+
             // Open proposal template in new window
-            const proposalUrl = `proposal-template.html?client=${encodeURIComponent(client?.company || '')}&project=${encodeURIComponent(proposal.project)}&amount=${proposal.amount}&number=${proposal.number}`;
+            const proposalUrl = `proposal-template.html?client=${encodeURIComponent(client?.company || '')}&project=${encodeURIComponent(projectName)}&amount=${proposal.amount}&number=${proposalNumber}`;
             window.open(proposalUrl, '_blank');
 
             showToast('Generating proposal...');
@@ -2147,12 +2168,12 @@ Webhook: Real-time updates`,
             document.querySelector('#modal-newProposal .modal-title').textContent = 'Edit Proposal';
             document.querySelector('#modal-newProposal form button[type="submit"]').textContent = 'Save Changes';
 
-            // Fill form fields
+            // Fill form fields (handle both old and new field names)
             document.getElementById('proposalClient').value = proposal.clientId;
-            document.getElementById('proposalProject').value = proposal.project;
+            document.getElementById('proposalProject').value = proposal.projectName || proposal.project || '';
             document.getElementById('proposalAmount').value = proposal.amount;
             document.getElementById('proposalHours').value = proposal.hours || '';
-            document.getElementById('proposalType').value = proposal.type || 'development';
+            document.getElementById('proposalType').value = proposal.proposalType || proposal.type || 'development';
             document.getElementById('proposalDesc').value = proposal.description || '';
 
             openModal('newProposal');
@@ -3131,16 +3152,21 @@ Webhook: Real-time updates`,
 
         function convertToProject(proposalId) {
             const proposal = proposals.find(p => p.id === proposalId); if (!proposal) return;
+
+            // Handle both old and new field names
+            const projectName = proposal.projectName || proposal.project || '';
+            const proposalType = proposal.proposalType || proposal.type || '';
+
             openModal('newProject');
             setTimeout(() => {
                 document.getElementById('projectProposal').value = proposalId;
                 document.getElementById('projectClient').value = proposal.clientId;
-                document.getElementById('projectName').value = proposal.project;
+                document.getElementById('projectName').value = projectName;
                 document.getElementById('projectBudget').value = proposal.amount;
                 document.getElementById('projectHours').value = proposal.hours || '';
-                document.getElementById('projectType').value = proposal.type || '';
+                document.getElementById('projectType').value = proposalType;
                 document.getElementById('projectDescription').value = proposal.description || '';
-                if (proposal.type && proposal.type !== 'custom') loadStageTemplate();
+                if (proposalType && proposalType !== 'custom') loadStageTemplate();
             }, 100);
         }
 
