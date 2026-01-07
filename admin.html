@@ -3145,7 +3145,7 @@ Webhook: Real-time updates`,
                             <span style="font-size: 10px; color: var(--gray); width: 80px;">Local Path</span>
                         </div>
                     </div>
-                    ${project.docs?.gitRepo ? \`<a href="\${project.docs.gitRepo}" target="_blank" class="btn btn-secondary btn-sm" style="margin-top: 8px; width: 100%; text-decoration: none;">Open Git Repository →</a>\` : ''}
+                    ${project.docs?.gitRepo ? '<a href="' + project.docs.gitRepo + '" target="_blank" class="btn btn-secondary btn-sm" style="margin-top: 8px; width: 100%; text-decoration: none;">Open Git Repository →</a>' : ''}
                 </div>
                 <div style="background: rgba(16, 185, 129, 0.05); border: 1px solid rgba(16, 185, 129, 0.15); border-radius: 8px; padding: 12px; margin-bottom: 12px;">
                     <h3 style="margin-bottom: 10px; font-size: 12px; color: #10b981;">⏱️ Hour Logging</h3>
@@ -3155,7 +3155,7 @@ Webhook: Real-time updates`,
                         <button onclick="logProjectHours(${project.id})" class="btn btn-success btn-sm">Log</button>
                     </div>
                     <div style="max-height: 100px; overflow-y: auto; font-size: 10px;">
-                        ${(project.hourLogs || []).slice(-5).reverse().map(log => \`<div style="padding: 4px 0; border-bottom: 1px solid rgba(255,255,255,0.05); display: flex; justify-content: space-between;"><span>\${log.note}</span><span style="color: var(--primary);">\${log.hours}h - \${new Date(log.date).toLocaleDateString('he-IL')}</span></div>\`).join('') || '<div style="color: var(--gray);">No hours logged yet</div>'}
+                        ${(project.hourLogs || []).slice(-5).reverse().map(log => '<div style="padding: 4px 0; border-bottom: 1px solid rgba(255,255,255,0.05); display: flex; justify-content: space-between;"><span>' + log.note + '</span><span style="color: var(--primary);">' + log.hours + 'h - ' + new Date(log.date).toLocaleDateString('he-IL') + '</span></div>').join('') || '<div style="color: var(--gray);">No hours logged yet</div>'}
                     </div>
                     <div style="margin-top: 8px; font-size: 11px; color: var(--success);">Total logged: ${(project.hourLogs || []).reduce((sum, l) => sum + l.hours, 0)} hours</div>
                 </div>
