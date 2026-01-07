@@ -1177,7 +1177,9 @@
 
     <script>
         // Simple password (you should change this!)
-        const ADMIN_PASSWORD = localStorage.getItem('adminPassword') || 'drishti2026';
+        // Reset password to default on load (clear any old stored password)
+        localStorage.removeItem('adminPassword');
+        const ADMIN_PASSWORD = 'drishti2026';
 
         // Data storage (localStorage for demo, Airtable for production)
         const sampleClients = [
