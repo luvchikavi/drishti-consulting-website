@@ -575,7 +575,7 @@
             .progress-value { font-size: 36px; }
             .progress-label { font-size: 12px; }
             .dates { font-size: 12px; }
-            .stats-grid { grid-template-columns: 1fr; gap: 10px; margin: 20px 0; }
+            .stats-grid { grid-template-columns: repeat(2, 1fr) !important; gap: 10px; margin: 20px 0; }
             .stat-card { padding: 14px; }
             .stat-value { font-size: 22px; }
             .stat-label { font-size: 10px; }
@@ -701,7 +701,10 @@
                 onTrack: 'On Track',
                 overBudget: 'Over Budget',
                 daysRemaining: 'days remaining',
-                daysElapsed: 'days elapsed'
+                daysElapsed: 'days elapsed',
+                paidSoFar: 'Paid So Far',
+                balanceDue: 'Balance Due',
+                totalBudget: 'Total Budget'
             },
             he: {
                 subtitle: 'לוח מעקב התקדמות פרויקט',
@@ -756,7 +759,10 @@
                 onTrack: 'בזמן',
                 overBudget: 'חריגה',
                 daysRemaining: 'ימים נותרו',
-                daysElapsed: 'ימים חלפו'
+                daysElapsed: 'ימים חלפו',
+                paidSoFar: 'שולם עד כה',
+                balanceDue: 'יתרה לתשלום',
+                totalBudget: 'תקציב כולל'
             }
         };
 
@@ -798,6 +804,8 @@
             const textarea = document.getElementById('feedbackText');
             const message = textarea ? textarea.value : '';
             const project = projectData;
+            const urlParams = new URLSearchParams(window.location.search);
+            const projectId = urlParams.get('p') || 'unknown';
 
             if (type === 'feedback' && !message.trim()) {
                 alert(currentLang === 'he' ? 'אנא כתבו משוב לפני השליחה' : 'Please write your feedback before sending');
@@ -805,23 +813,26 @@
             }
 
             const subject = type === 'approval'
-                ? `Progress Approved: ${project.n}`
-                : `Client Feedback: ${project.n}`;
+                ? `[${projectId}] Progress Approved: ${project.n}`
+                : `[${projectId}] Client Feedback: ${project.n}`;
 
-            const body = type === 'approval'
+            // Format message as potential task items
+            const formattedMessage = type === 'approval'
                 ? `Client has approved the current progress (${project.p}%) for project: ${project.n}`
-                : `Feedback from client for project: ${project.n}\n\nMessage:\n${message}`;
+                : `PROJECT: ${project.n}\nCLIENT: ${project.c}\nPROJECT_ID: ${projectId}\nPROGRESS: ${project.p}%\n\n--- CLIENT FEEDBACK ---\n${message}\n\n--- SUGGESTED TASKS ---\nPlease review and create tasks from the above feedback.`;
 
             // Using Formspree for form submission
             fetch('https://formspree.io/f/xnnqbqkk', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
-                    project: project.n,
+                    project_id: projectId,
+                    project_name: project.n,
                     client: project.c,
                     type: type,
                     progress: project.p + '%',
-                    message: message || 'Progress Approved',
+                    feedback: message || 'Progress Approved',
+                    timestamp: new Date().toISOString(),
                     _subject: subject
                 })
             }).then(response => {
@@ -831,7 +842,7 @@
                 }
             }).catch(() => {
                 // Fallback to mailto
-                const mailtoLink = `mailto:avi@drishticonsulting.com?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+                const mailtoLink = `mailto:avi@drishticonsulting.com?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(formattedMessage)}`;
                 window.open(mailtoLink, '_blank');
                 showToast(type === 'approval' ? t('approvalSent') : t('feedbackSent'));
                 if (textarea) textarea.value = '';
@@ -1226,18 +1237,22 @@
                     </div>
                 </div>
 
-                <div class="stats-grid">
+                <div class="stats-grid" style="grid-template-columns: repeat(4, 1fr);">
                     <div class="stat-card">
                         <div class="stat-value">${project.hs} ${t('hours')}</div>
                         <div class="stat-label">${t('of')} ${project.h} ${t('hours')}</div>
                     </div>
                     <div class="stat-card">
-                        <div class="stat-value">₪${budgetUsed.toLocaleString()}</div>
-                        <div class="stat-label">${t('of')} ₪${project.b.toLocaleString()}</div>
+                        <div class="stat-value">₪${project.b.toLocaleString()}</div>
+                        <div class="stat-label">${t('totalBudget')}</div>
                     </div>
-                    <div class="stat-card">
-                        <div class="stat-value">${completedCount}/${project.s.length}</div>
-                        <div class="stat-label">${t('stagesComplete')}</div>
+                    <div class="stat-card" style="background: rgba(34, 197, 94, 0.1); border-color: rgba(34, 197, 94, 0.3);">
+                        <div class="stat-value" style="color: #22c55e;">₪${(project.paid || 0).toLocaleString()}</div>
+                        <div class="stat-label">${t('paidSoFar')}</div>
+                    </div>
+                    <div class="stat-card" style="background: rgba(249, 115, 22, 0.1); border-color: rgba(249, 115, 22, 0.3);">
+                        <div class="stat-value" style="color: #f97316;">₪${(project.b - (project.paid || 0)).toLocaleString()}</div>
+                        <div class="stat-label">${t('balanceDue')}</div>
                     </div>
                 </div>
 
