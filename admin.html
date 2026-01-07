@@ -1314,6 +1314,15 @@
             if (name === 'addClient') {
                 resetClientForm();
             }
+            if (name === 'newProposal') {
+                resetProposalForm();
+            }
+            if (name === 'newInvoice') {
+                resetInvoiceForm();
+            }
+            if (name === 'newExpense') {
+                resetExpenseForm();
+            }
         }
 
         // Contact management
@@ -1558,27 +1567,52 @@
             const clientId = parseInt(document.getElementById('proposalClient').value);
             const client = clients.find(c => c.id === clientId);
 
-            const proposal = {
-                id: Date.now(),
-                number: 'DRS-2026-' + String(proposals.length + 1).padStart(3, '0'),
-                clientId: clientId,
-                clientName: client ? client.company : 'Unknown',
-                project: document.getElementById('proposalProject').value,
-                amount: parseInt(document.getElementById('proposalAmount').value),
-                hours: parseInt(document.getElementById('proposalHours').value) || 0,
-                type: document.getElementById('proposalType').value,
-                description: document.getElementById('proposalDesc').value,
-                status: 'draft',
-                created: new Date().toISOString()
-            };
+            if (editingProposalId) {
+                // Update existing proposal
+                const proposalIndex = proposals.findIndex(p => p.id === editingProposalId);
+                if (proposalIndex !== -1) {
+                    proposals[proposalIndex] = {
+                        ...proposals[proposalIndex],
+                        clientId: clientId,
+                        clientName: client ? client.company : 'Unknown',
+                        project: document.getElementById('proposalProject').value,
+                        amount: parseInt(document.getElementById('proposalAmount').value),
+                        hours: parseInt(document.getElementById('proposalHours').value) || 0,
+                        type: document.getElementById('proposalType').value,
+                        description: document.getElementById('proposalDesc').value,
+                        updated: new Date().toISOString()
+                    };
+                }
+                saveData();
+                renderProposals();
+                updateStats();
+                closeModal('newProposal');
+                resetProposalForm();
+                showToast('Proposal updated!');
+            } else {
+                // Create new proposal
+                const proposal = {
+                    id: Date.now(),
+                    number: 'DRS-2026-' + String(proposals.length + 1).padStart(3, '0'),
+                    clientId: clientId,
+                    clientName: client ? client.company : 'Unknown',
+                    project: document.getElementById('proposalProject').value,
+                    amount: parseInt(document.getElementById('proposalAmount').value),
+                    hours: parseInt(document.getElementById('proposalHours').value) || 0,
+                    type: document.getElementById('proposalType').value,
+                    description: document.getElementById('proposalDesc').value,
+                    status: 'draft',
+                    created: new Date().toISOString()
+                };
 
-            proposals.push(proposal);
-            saveData();
-            renderProposals();
-            updateStats();
-            closeModal('newProposal');
-            this.reset();
-            showToast('Proposal created!');
+                proposals.push(proposal);
+                saveData();
+                renderProposals();
+                updateStats();
+                closeModal('newProposal');
+                this.reset();
+                showToast('Proposal created!');
+            }
         });
 
         function renderProposals() {
@@ -1592,6 +1626,7 @@
                     <td><span class="status-badge status-${p.status === 'sent' ? 'sent' : 'pending'}">${p.status}</span></td>
                     <td>
                         <div class="action-btns">
+                            <button class="btn btn-secondary btn-sm" onclick="editProposal(${p.id})">Edit</button>
                             <button class="btn btn-success btn-sm" onclick="generateProposal(${p.id})">Generate</button>
                             <button class="btn btn-secondary btn-sm" onclick="markSent(${p.id})">Mark Sent</button>
                             <button class="btn btn-danger btn-sm" onclick="deleteProposal(${p.id})">Delete</button>
@@ -1631,6 +1666,37 @@
                 updateStats();
                 showToast('Proposal deleted');
             }
+        }
+
+        // Edit proposal
+        let editingProposalId = null;
+
+        function editProposal(id) {
+            const proposal = proposals.find(p => p.id === id);
+            if (!proposal) return;
+
+            editingProposalId = id;
+
+            // Update modal title
+            document.querySelector('#modal-newProposal .modal-title').textContent = 'Edit Proposal';
+            document.querySelector('#modal-newProposal form button[type="submit"]').textContent = 'Save Changes';
+
+            // Fill form fields
+            document.getElementById('proposalClient').value = proposal.clientId;
+            document.getElementById('proposalProject').value = proposal.project;
+            document.getElementById('proposalAmount').value = proposal.amount;
+            document.getElementById('proposalHours').value = proposal.hours || '';
+            document.getElementById('proposalType').value = proposal.type || 'development';
+            document.getElementById('proposalDesc').value = proposal.description || '';
+
+            openModal('newProposal');
+        }
+
+        function resetProposalForm() {
+            editingProposalId = null;
+            document.querySelector('#modal-newProposal .modal-title').textContent = 'Create New Proposal';
+            document.querySelector('#modal-newProposal form button[type="submit"]').textContent = 'Create Proposal';
+            document.getElementById('newProposalForm').reset();
         }
 
         function updateProposalClientSelect() {
@@ -1744,33 +1810,89 @@
         }
 
         // Invoice management
+        let editingInvoiceId = null;
+
         document.getElementById('newInvoiceForm').addEventListener('submit', function(e) {
             e.preventDefault();
 
             const clientId = parseInt(document.getElementById('invoiceClient').value);
             const client = clients.find(c => c.id === clientId);
 
-            const invoice = {
-                id: Date.now(),
-                number: document.getElementById('invoiceNumber').value,
-                clientId: clientId,
-                clientName: client ? client.company : 'Unknown',
-                amount: parseFloat(document.getElementById('invoiceAmount').value),
-                date: document.getElementById('invoiceDate').value,
-                dueDate: document.getElementById('invoiceDueDate').value,
-                description: document.getElementById('invoiceDesc').value,
-                status: 'pending',
-                created: new Date().toISOString()
-            };
+            if (editingInvoiceId) {
+                // Update existing invoice
+                const invoiceIndex = invoices.findIndex(inv => inv.id === editingInvoiceId);
+                if (invoiceIndex !== -1) {
+                    invoices[invoiceIndex] = {
+                        ...invoices[invoiceIndex],
+                        number: document.getElementById('invoiceNumber').value,
+                        clientId: clientId,
+                        clientName: client ? client.company : 'Unknown',
+                        amount: parseFloat(document.getElementById('invoiceAmount').value),
+                        date: document.getElementById('invoiceDate').value,
+                        dueDate: document.getElementById('invoiceDueDate').value,
+                        description: document.getElementById('invoiceDesc').value,
+                        updated: new Date().toISOString()
+                    };
+                }
+                saveData();
+                renderInvoices();
+                updateInvoiceStats();
+                closeModal('newInvoice');
+                resetInvoiceForm();
+                showToast('Invoice updated!');
+            } else {
+                // Create new invoice
+                const invoice = {
+                    id: Date.now(),
+                    number: document.getElementById('invoiceNumber').value,
+                    clientId: clientId,
+                    clientName: client ? client.company : 'Unknown',
+                    amount: parseFloat(document.getElementById('invoiceAmount').value),
+                    date: document.getElementById('invoiceDate').value,
+                    dueDate: document.getElementById('invoiceDueDate').value,
+                    description: document.getElementById('invoiceDesc').value,
+                    status: 'pending',
+                    created: new Date().toISOString()
+                };
 
-            invoices.push(invoice);
-            saveData();
-            renderInvoices();
-            updateInvoiceStats();
-            closeModal('newInvoice');
-            this.reset();
-            showToast('Invoice created!');
+                invoices.push(invoice);
+                saveData();
+                renderInvoices();
+                updateInvoiceStats();
+                closeModal('newInvoice');
+                this.reset();
+                showToast('Invoice created!');
+            }
         });
+
+        function editInvoice(id) {
+            const invoice = invoices.find(inv => inv.id === id);
+            if (!invoice) return;
+
+            editingInvoiceId = id;
+
+            // Update modal title
+            document.querySelector('#modal-newInvoice .modal-title').textContent = 'Edit Invoice';
+            document.querySelector('#modal-newInvoice form button[type="submit"]').textContent = 'Save Changes';
+
+            // Fill form fields
+            updateInvoiceClientSelect();
+            document.getElementById('invoiceClient').value = invoice.clientId;
+            document.getElementById('invoiceNumber').value = invoice.number;
+            document.getElementById('invoiceAmount').value = invoice.amount;
+            document.getElementById('invoiceDate').value = invoice.date;
+            document.getElementById('invoiceDueDate').value = invoice.dueDate;
+            document.getElementById('invoiceDesc').value = invoice.description || '';
+
+            openModal('newInvoice');
+        }
+
+        function resetInvoiceForm() {
+            editingInvoiceId = null;
+            document.querySelector('#modal-newInvoice .modal-title').textContent = 'Create Invoice';
+            document.querySelector('#modal-newInvoice form button[type="submit"]').textContent = 'Create Invoice';
+            document.getElementById('newInvoiceForm').reset();
+        }
 
         function renderInvoices() {
             const tbody = document.getElementById('invoicesTable');
@@ -1796,6 +1918,7 @@
                     <td><span class="status-badge ${statusClass}" style="${statusStyle}">${statusText}</span></td>
                     <td>
                         <div class="action-btns">
+                            <button class="btn btn-secondary btn-sm" onclick="editInvoice(${inv.id})">Edit</button>
                             ${inv.status !== 'paid' ? `<button class="btn btn-success btn-sm" onclick="markInvoicePaid(${inv.id})">Mark Paid</button>` : ''}
                             <button class="btn btn-danger btn-sm" onclick="deleteInvoice(${inv.id})">Delete</button>
                         </div>
@@ -1859,27 +1982,79 @@
         }
 
         // Expense management
+        let editingExpenseId = null;
+
         document.getElementById('newExpenseForm').addEventListener('submit', function(e) {
             e.preventDefault();
 
-            const expense = {
-                id: Date.now(),
-                description: document.getElementById('expenseDesc').value,
-                amount: parseFloat(document.getElementById('expenseAmount').value),
-                date: document.getElementById('expenseDate').value,
-                category: document.getElementById('expenseCategory').value,
-                notes: document.getElementById('expenseNotes').value,
-                created: new Date().toISOString()
-            };
+            if (editingExpenseId) {
+                // Update existing expense
+                const expenseIndex = expenses.findIndex(exp => exp.id === editingExpenseId);
+                if (expenseIndex !== -1) {
+                    expenses[expenseIndex] = {
+                        ...expenses[expenseIndex],
+                        description: document.getElementById('expenseDesc').value,
+                        amount: parseFloat(document.getElementById('expenseAmount').value),
+                        date: document.getElementById('expenseDate').value,
+                        category: document.getElementById('expenseCategory').value,
+                        notes: document.getElementById('expenseNotes').value,
+                        updated: new Date().toISOString()
+                    };
+                }
+                saveData();
+                renderExpenses();
+                updateExpenseStats();
+                closeModal('newExpense');
+                resetExpenseForm();
+                showToast('Expense updated!');
+            } else {
+                // Create new expense
+                const expense = {
+                    id: Date.now(),
+                    description: document.getElementById('expenseDesc').value,
+                    amount: parseFloat(document.getElementById('expenseAmount').value),
+                    date: document.getElementById('expenseDate').value,
+                    category: document.getElementById('expenseCategory').value,
+                    notes: document.getElementById('expenseNotes').value,
+                    created: new Date().toISOString()
+                };
 
-            expenses.push(expense);
-            saveData();
-            renderExpenses();
-            updateExpenseStats();
-            closeModal('newExpense');
-            this.reset();
-            showToast('Expense added!');
+                expenses.push(expense);
+                saveData();
+                renderExpenses();
+                updateExpenseStats();
+                closeModal('newExpense');
+                this.reset();
+                showToast('Expense added!');
+            }
         });
+
+        function editExpense(id) {
+            const expense = expenses.find(exp => exp.id === id);
+            if (!expense) return;
+
+            editingExpenseId = id;
+
+            // Update modal title
+            document.querySelector('#modal-newExpense .modal-title').textContent = 'Edit Expense';
+            document.querySelector('#modal-newExpense form button[type="submit"]').textContent = 'Save Changes';
+
+            // Fill form fields
+            document.getElementById('expenseDesc').value = expense.description;
+            document.getElementById('expenseAmount').value = expense.amount;
+            document.getElementById('expenseDate').value = expense.date;
+            document.getElementById('expenseCategory').value = expense.category;
+            document.getElementById('expenseNotes').value = expense.notes || '';
+
+            openModal('newExpense');
+        }
+
+        function resetExpenseForm() {
+            editingExpenseId = null;
+            document.querySelector('#modal-newExpense .modal-title').textContent = 'Add Expense';
+            document.querySelector('#modal-newExpense form button[type="submit"]').textContent = 'Add Expense';
+            document.getElementById('newExpenseForm').reset();
+        }
 
         function renderExpenses() {
             const tbody = document.getElementById('expensesTable');
@@ -1899,6 +2074,7 @@
                     <td>₪${exp.amount.toLocaleString()}</td>
                     <td>
                         <div class="action-btns">
+                            <button class="btn btn-secondary btn-sm" onclick="editExpense(${exp.id})">Edit</button>
                             <button class="btn btn-danger btn-sm" onclick="deleteExpense(${exp.id})">Delete</button>
                         </div>
                     </td>
