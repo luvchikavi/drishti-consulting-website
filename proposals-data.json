@@ -5,6 +5,7 @@
     "client": "LHD Insurance Consulting",
     "sector": "ייעוץ ביטוח",
     "project": "מודול השוואת אישורי ביטוח - Insurance Certificate Comparison Module",
+    "projectName": "Riskcovery",
     "date": "2026-01-07",
     "valid": 30,
     "status": "sent",
@@ -26,9 +27,17 @@
     ],
     "payment": [
       { "pct": 40, "desc": "עם חתימת ההסכם" },
-      { "pct": 40, "desc": "באמצע הפרויקט" },
+      { "pct": 40, "desc": "לאחר השלמת מודול ה-OCR" },
       { "pct": 20, "desc": "מסירת הפרויקט" }
     ],
+    "bankDetails": {
+      "bank": "בנק דיסקונט",
+      "bankCode": "11",
+      "branch": "מרום נווה",
+      "branchCode": "096",
+      "account": "178380913",
+      "name": "אבי לובצ'יק"
+    },
     "included": [
       "פיתוח מלא של המודול",
       "מנוע OCR / AI",
