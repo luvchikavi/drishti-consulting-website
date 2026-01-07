@@ -1311,6 +1311,9 @@
 
         function closeModal(name) {
             document.getElementById('modal-' + name).classList.remove('active');
+            if (name === 'addClient') {
+                resetClientForm();
+            }
         }
 
         // Contact management
@@ -1392,29 +1395,54 @@
                 return;
             }
 
-            const client = {
-                id: Date.now(),
-                company: document.getElementById('clientCompany').value,
-                contacts: contacts,
-                // Keep backward compatibility
-                contact: contacts[0].name,
-                position: contacts[0].position,
-                email: contacts[0].email,
-                phone: contacts[0].phone,
-                industry: document.getElementById('clientIndustry').value,
-                notes: document.getElementById('clientNotes').value,
-                status: 'active',
-                created: new Date().toISOString()
-            };
+            if (editingClientId) {
+                // Update existing client
+                const clientIndex = clients.findIndex(c => c.id === editingClientId);
+                if (clientIndex !== -1) {
+                    clients[clientIndex] = {
+                        ...clients[clientIndex],
+                        company: document.getElementById('clientCompany').value,
+                        contacts: contacts,
+                        contact: contacts[0].name,
+                        position: contacts[0].position,
+                        email: contacts[0].email,
+                        phone: contacts[0].phone,
+                        industry: document.getElementById('clientIndustry').value,
+                        notes: document.getElementById('clientNotes').value,
+                        updated: new Date().toISOString()
+                    };
+                }
+                saveData();
+                renderClients();
+                updateStats();
+                closeModal('addClient');
+                resetClientForm();
+                showToast('Client updated successfully!');
+            } else {
+                // Add new client
+                const client = {
+                    id: Date.now(),
+                    company: document.getElementById('clientCompany').value,
+                    contacts: contacts,
+                    contact: contacts[0].name,
+                    position: contacts[0].position,
+                    email: contacts[0].email,
+                    phone: contacts[0].phone,
+                    industry: document.getElementById('clientIndustry').value,
+                    notes: document.getElementById('clientNotes').value,
+                    status: 'active',
+                    created: new Date().toISOString()
+                };
 
-            clients.push(client);
-            saveData();
-            renderClients();
-            updateStats();
-            closeModal('addClient');
-            this.reset();
-            resetContactFields();
-            showToast('Client added successfully!');
+                clients.push(client);
+                saveData();
+                renderClients();
+                updateStats();
+                closeModal('addClient');
+                this.reset();
+                resetContactFields();
+                showToast('Client added successfully!');
+            }
         });
 
         function renderClients() {
@@ -1433,6 +1461,7 @@
                     <td><span class="status-badge status-active">Active</span></td>
                     <td>
                         <div class="action-btns">
+                            <button class="btn btn-secondary btn-sm" onclick="editClient(${client.id})">Edit</button>
                             <button class="btn btn-secondary btn-sm" onclick="createProposalFor(${client.id})">Proposal</button>
                             <button class="btn btn-danger btn-sm" onclick="deleteClient(${client.id})">Delete</button>
                         </div>
@@ -1449,6 +1478,67 @@
                 updateStats();
                 showToast('Client deleted');
             }
+        }
+
+        // Edit client
+        let editingClientId = null;
+
+        function editClient(id) {
+            const client = clients.find(c => c.id === id);
+            if (!client) return;
+
+            editingClientId = id;
+
+            // Update modal title
+            document.querySelector('#modal-addClient .modal-title').textContent = 'Edit Client';
+            document.querySelector('#modal-addClient form button[type="submit"]').textContent = 'Save Changes';
+
+            // Fill form fields
+            document.getElementById('clientCompany').value = client.company;
+            document.getElementById('clientIndustry').value = client.industry || '';
+            document.getElementById('clientNotes').value = client.notes || '';
+
+            // Fill contacts
+            const contacts = client.contacts || [{
+                name: client.contact,
+                position: client.position,
+                email: client.email,
+                phone: client.phone
+            }];
+
+            const contactsList = document.getElementById('contactsList');
+            contactsList.innerHTML = '';
+            contactIndex = 0;
+
+            contacts.forEach((contact, idx) => {
+                const isFirst = idx === 0;
+                const contactDiv = document.createElement('div');
+                contactDiv.className = 'contact-entry';
+                contactDiv.dataset.index = idx;
+                contactDiv.innerHTML = `
+                    ${!isFirst ? '<button type="button" class="btn-remove-contact" onclick="removeContact(this)">&times;</button>' : ''}
+                    <div class="contact-row">
+                        <input type="text" name="contact_name_${idx}" placeholder="Name *" value="${contact.name || ''}" required>
+                        <input type="text" name="contact_position_${idx}" placeholder="Position" value="${contact.position || ''}">
+                    </div>
+                    <div class="contact-row">
+                        <input type="email" name="contact_email_${idx}" placeholder="Email *" value="${contact.email || ''}" required>
+                        <input type="tel" name="contact_phone_${idx}" placeholder="Phone" value="${contact.phone || ''}">
+                    </div>
+                `;
+                contactsList.appendChild(contactDiv);
+                contactIndex = idx + 1;
+            });
+
+            openModal('addClient');
+        }
+
+        function resetClientForm() {
+            editingClientId = null;
+            document.querySelector('#modal-addClient .modal-title').textContent = 'Add New Client';
+            document.querySelector('#modal-addClient form button[type="submit"]').textContent = 'Add Client';
+            document.getElementById('addClientForm').reset();
+            resetContactFields();
         }
 
         function createProposalFor(clientId) {
