@@ -34,16 +34,17 @@
     "n": "Monday.com to Excel - Data Sync Interface",
     "c": "Tag Urbanic Investment Management",
     "p": 100,
-    "b": 7500,
-    "h": 50,
-    "hs": 48,
+    "b": 8775,
+    "h": 20,
+    "hs": 20,
     "sd": "2024-12-25",
     "ed": "2026-01-01",
+    "paid": 3835,
     "s": [
-      { "n": "Data Structure Analysis", "p": 100, "st": "completed", "eh": 10, "ah": 10, "nt": "Monday.com board structure mapped, fields identified" },
-      { "n": "API Integration Development", "p": 100, "st": "completed", "eh": 20, "ah": 18, "nt": "Monday.com API connected, Excel output configured" },
-      { "n": "Testing & Validation", "p": 100, "st": "completed", "eh": 10, "ah": 12, "nt": "Data sync verified, 4-hour refresh cycle tested" },
-      { "n": "Deployment & Handover", "p": 100, "st": "completed", "eh": 10, "ah": 8, "nt": "System live, client trained on usage" }
+      { "n": "Data Structure Analysis", "p": 100, "st": "completed", "eh": 4, "ah": 4, "nt": "Monday.com board structure mapped, fields identified" },
+      { "n": "API Integration Development", "p": 100, "st": "completed", "eh": 8, "ah": 8, "nt": "Monday.com API connected, Excel output configured" },
+      { "n": "Testing & Validation", "p": 100, "st": "completed", "eh": 4, "ah": 4, "nt": "Data sync verified, 4-hour refresh cycle tested" },
+      { "n": "Deployment & Handover", "p": 100, "st": "completed", "eh": 4, "ah": 4, "nt": "System live, client trained on usage" }
     ],
     "u": "2026-01-01",
     "tech": {
