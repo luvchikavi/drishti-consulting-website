@@ -3682,30 +3682,13 @@ Webhook: Real-time updates`,
 
         async function testGreenInvoiceConnection() {
             const statusDiv = document.getElementById('greenInvoiceStatus');
-            statusDiv.innerHTML = '<span style="color: var(--warning);">Testing connection...</span>';
-
-            try {
-                // First save current values
-                saveGreenInvoiceSettings();
-
-                const token = await getGreenInvoiceToken();
-
-                // Test by getting business info
-                const response = await fetch('https://api.greeninvoice.co.il/api/v1/businesses/me', {
-                    headers: {
-                        'Authorization': 'Bearer ' + token,
-                        'Content-Type': 'application/json'
-                    }
-                });
-
-                if (response.ok) {
-                    const business = await response.json();
-                    statusDiv.innerHTML = '<span style="color: var(--success);">✓ Connected! Business: ' + (business.name || 'OK') + '</span>';
-                } else {
-                    throw new Error('API returned error');
-                }
-            } catch (error) {
-                statusDiv.innerHTML = '<span style="color: var(--danger);">✗ Connection failed: ' + error.message + '</span>';
+            // Note: Direct API calls from browser are blocked by CORS
+            // We'll use the "Open in Green Invoice" approach instead
+            saveGreenInvoiceSettings();
+            if (greenInvoiceSettings.apiId && greenInvoiceSettings.apiSecret) {
+                statusDiv.innerHTML = '<span style="color: var(--success);">✓ Credentials saved! Use "Create Invoice" to open Green Invoice with pre-filled data.</span>';
+            } else {
+                statusDiv.innerHTML = '<span style="color: var(--danger);">✗ Please enter API credentials</span>';
             }
         }
 
@@ -3767,8 +3750,8 @@ Webhook: Real-time updates`,
             }
         }
 
-        // Create invoice from proposal
-        async function createInvoiceFromProposal(proposalId) {
+        // Create invoice from proposal - opens Green Invoice with pre-filled data
+        function createInvoiceFromProposal(proposalId) {
             const proposal = proposals.find(p => p.id === proposalId);
             if (!proposal) {
                 showToast('Proposal not found', 'error');
@@ -3781,61 +3764,90 @@ Webhook: Real-time updates`,
                 return;
             }
 
-            // Get primary contact email
+            // Get primary contact
             const primaryContact = client.contacts?.[0] || {};
 
-            try {
-                showToast('Creating invoice in Green Invoice...');
+            // Save invoice reference in our system first
+            const invoiceNumber = generateDocumentNumber('IN', proposal.clientId);
+            const invoice = {
+                id: Date.now(),
+                number: invoiceNumber,
+                proposalId: proposalId,
+                clientId: proposal.clientId,
+                clientName: client.company,
+                amount: proposal.amount,
+                status: 'draft',
+                created: new Date().toISOString()
+            };
 
-                const invoiceData = {
-                    description: 'Invoice for: ' + proposal.projectName,
-                    remarks: proposal.proposalNumber || '',
-                    clientName: client.company,
-                    clientEmail: primaryContact.email || '',
-                    clientPhone: primaryContact.phone || '',
-                    clientAddress: client.address || '',
-                    clientTaxId: client.taxId || '',
-                    items: [{
-                        description: proposal.projectName,
-                        quantity: 1,
-                        price: proposal.amount
-                    }],
-                    payment: null // No payment yet - will be added when paid
-                };
+            invoices.push(invoice);
+            saveData();
 
-                const result = await createGreenInvoice(invoiceData);
+            // Open Green Invoice new document page
+            // User will create the invoice there with Drishti branding
+            const greenInvoiceUrl = 'https://app.greeninvoice.co.il/documents/new';
 
-                // Save reference in our system
-                const invoice = {
-                    id: Date.now(),
-                    number: generateDocumentNumber('IN', proposal.clientId),
-                    greenInvoiceId: result.id,
-                    greenInvoiceNumber: result.number,
-                    greenInvoiceUrl: result.url,
-                    proposalId: proposalId,
-                    clientId: proposal.clientId,
-                    clientName: client.company,
-                    amount: proposal.amount,
-                    status: 'sent',
-                    created: new Date().toISOString()
-                };
+            // Show modal with invoice details to copy
+            const modalContent = `
+                <div style="text-align: right; direction: rtl;">
+                    <h3 style="margin-bottom: 16px; color: var(--success);">צור חשבונית ב-Green Invoice</h3>
+                    <p style="color: var(--gray); margin-bottom: 20px;">העתק את הפרטים הבאים ל-Green Invoice:</p>
 
-                invoices.push(invoice);
-                saveData();
-                renderInvoices();
+                    <div style="background: rgba(0,0,0,0.3); padding: 16px; border-radius: 8px; margin-bottom: 16px;">
+                        <div style="margin-bottom: 12px;">
+                            <label style="color: var(--gray); font-size: 10px;">שם לקוח</label>
+                            <div style="color: var(--light); font-size: 14px; font-weight: 600;">${client.company}</div>
+                        </div>
+                        <div style="margin-bottom: 12px;">
+                            <label style="color: var(--gray); font-size: 10px;">אימייל</label>
+                            <div style="color: var(--light);">${primaryContact.email || 'לא צוין'}</div>
+                        </div>
+                        <div style="margin-bottom: 12px;">
+                            <label style="color: var(--gray); font-size: 10px;">טלפון</label>
+                            <div style="color: var(--light);">${primaryContact.phone || 'לא צוין'}</div>
+                        </div>
+                        <div style="margin-bottom: 12px;">
+                            <label style="color: var(--gray); font-size: 10px;">תיאור</label>
+                            <div style="color: var(--light);">${proposal.projectName}</div>
+                        </div>
+                        <div style="margin-bottom: 12px;">
+                            <label style="color: var(--gray); font-size: 10px;">סכום (לפני מע"מ)</label>
+                            <div style="color: var(--success); font-size: 18px; font-weight: 700;">₪${proposal.amount.toLocaleString()}</div>
+                        </div>
+                        <div>
+                            <label style="color: var(--gray); font-size: 10px;">מספר הצעה</label>
+                            <div style="color: var(--primary);">${proposal.proposalNumber || 'N/A'}</div>
+                        </div>
+                    </div>
 
-                showToast('Invoice created! #' + result.number);
+                    <div style="display: flex; gap: 12px;">
+                        <button onclick="window.open('${greenInvoiceUrl}', '_blank'); closeModal('invoiceDetails');" class="btn btn-success" style="flex: 1;">
+                            פתח Green Invoice →
+                        </button>
+                        <button onclick="closeModal('invoiceDetails')" class="btn btn-secondary">סגור</button>
+                    </div>
 
-                // Open the invoice in Green Invoice
-                if (result.url) {
-                    window.open(result.url, '_blank');
-                }
+                    <p style="color: var(--gray); font-size: 10px; margin-top: 12px;">
+                        מספר חשבונית פנימי: ${invoiceNumber}
+                    </p>
+                </div>
+            `;
 
-                return result;
-            } catch (error) {
-                showToast('Error: ' + error.message, 'error');
-                throw error;
+            // Create temporary modal if not exists
+            let modal = document.getElementById('modal-invoiceDetails');
+            if (!modal) {
+                modal = document.createElement('div');
+                modal.className = 'modal-overlay';
+                modal.id = 'modal-invoiceDetails';
+                modal.innerHTML = '<div class="modal" style="max-width: 450px;"><div id="invoiceDetailsContent"></div></div>';
+                document.body.appendChild(modal);
             }
+
+            document.getElementById('invoiceDetailsContent').innerHTML = modalContent;
+            modal.classList.add('active');
+
+            showToast('Invoice #' + invoiceNumber + ' created locally');
+            renderInvoices();
         }
 
         // Add to settings page load
