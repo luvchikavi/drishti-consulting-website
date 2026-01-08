@@ -2327,7 +2327,7 @@ Webhook: Real-time updates`,
                             <button class="btn btn-secondary btn-sm" onclick="copyProposalLink(${p.id})">Copy Link</button>
                             ${!hasProject ? `<button class="btn btn-secondary btn-sm" onclick="convertToProject(${p.id})">→ Project</button>` : ''}
                             ${hasProject ? `<span style="color: var(--success); font-size: 11px;">✓ Project</span>` : ''}
-                            ${['accepted', 'active', 'working', 'completed'].includes(p.status) ? `<button class="btn btn-success btn-sm" onclick="createInvoiceFromProposal(${p.id})" title="Create Invoice in Green Invoice">₪ Invoice</button>` : ''}
+                            <button class="btn btn-success btn-sm" onclick="openDocumentTypeModal(${p.id})" title="Create Document in Green Invoice">₪ Document</button>
                             <button class="btn btn-danger btn-sm" onclick="deleteProposal(${p.id})">×</button>
                         </div>
                     </td>
@@ -3750,8 +3750,92 @@ Webhook: Real-time updates`,
             }
         }
 
+        // Document type selection modal
+        function openDocumentTypeModal(proposalId) {
+            const proposal = proposals.find(p => p.id === proposalId);
+            if (!proposal) return;
+
+            const modalContent = `
+                <div style="text-align: center;">
+                    <h3 style="margin-bottom: 20px; color: var(--light);">בחר סוג מסמך</h3>
+                    <p style="color: var(--gray); margin-bottom: 20px; font-size: 12px;">Select document type to create in Green Invoice</p>
+
+                    <div style="display: grid; gap: 12px;">
+                        <button onclick="createDocumentFromProposal(${proposalId}, 300)" class="btn" style="padding: 16px; background: rgba(99, 102, 241, 0.1); border: 1px solid var(--primary); display: flex; align-items: center; gap: 12px;">
+                            <span style="font-size: 24px;">📋</span>
+                            <div style="text-align: right; flex: 1;">
+                                <div style="font-weight: 600; color: var(--primary);">הצעת מחיר</div>
+                                <div style="font-size: 11px; color: var(--gray);">Quote / Proposal (300)</div>
+                            </div>
+                        </button>
+
+                        <button onclick="createDocumentFromProposal(${proposalId}, 100)" class="btn" style="padding: 16px; background: rgba(245, 158, 11, 0.1); border: 1px solid var(--warning); display: flex; align-items: center; gap: 12px;">
+                            <span style="font-size: 24px;">📄</span>
+                            <div style="text-align: right; flex: 1;">
+                                <div style="font-weight: 600; color: var(--warning);">חשבון עסקה / דרישת תשלום</div>
+                                <div style="font-size: 11px; color: var(--gray);">Payment Request / Proforma (100)</div>
+                            </div>
+                        </button>
+
+                        <button onclick="createDocumentFromProposal(${proposalId}, 305)" class="btn" style="padding: 16px; background: rgba(16, 185, 129, 0.1); border: 1px solid var(--success); display: flex; align-items: center; gap: 12px;">
+                            <span style="font-size: 24px;">🧾</span>
+                            <div style="text-align: right; flex: 1;">
+                                <div style="font-weight: 600; color: var(--success);">חשבונית מס</div>
+                                <div style="font-size: 11px; color: var(--gray);">Tax Invoice (305)</div>
+                            </div>
+                        </button>
+
+                        <button onclick="createDocumentFromProposal(${proposalId}, 320)" class="btn" style="padding: 16px; background: rgba(16, 185, 129, 0.15); border: 1px solid var(--success); display: flex; align-items: center; gap: 12px;">
+                            <span style="font-size: 24px;">🧾</span>
+                            <div style="text-align: right; flex: 1;">
+                                <div style="font-weight: 600; color: var(--success);">חשבונית מס / קבלה</div>
+                                <div style="font-size: 11px; color: var(--gray);">Invoice + Receipt (320)</div>
+                            </div>
+                        </button>
+
+                        <button onclick="createDocumentFromProposal(${proposalId}, 400)" class="btn" style="padding: 16px; background: rgba(14, 165, 233, 0.1); border: 1px solid var(--secondary); display: flex; align-items: center; gap: 12px;">
+                            <span style="font-size: 24px;">🧾</span>
+                            <div style="text-align: right; flex: 1;">
+                                <div style="font-weight: 600; color: var(--secondary);">קבלה</div>
+                                <div style="font-size: 11px; color: var(--gray);">Receipt (400)</div>
+                            </div>
+                        </button>
+                    </div>
+
+                    <button onclick="closeModal('documentType')" class="btn btn-secondary" style="margin-top: 16px; width: 100%;">ביטול</button>
+                </div>
+            `;
+
+            let modal = document.getElementById('modal-documentType');
+            if (!modal) {
+                modal = document.createElement('div');
+                modal.className = 'modal-overlay';
+                modal.id = 'modal-documentType';
+                modal.innerHTML = '<div class="modal" style="max-width: 400px;"><div id="documentTypeContent"></div></div>';
+                document.body.appendChild(modal);
+            }
+
+            document.getElementById('documentTypeContent').innerHTML = modalContent;
+            modal.classList.add('active');
+        }
+
+        // Document type names in Hebrew
+        const documentTypeNames = {
+            100: 'חשבון עסקה',
+            300: 'הצעת מחיר',
+            305: 'חשבונית מס',
+            320: 'חשבונית מס / קבלה',
+            400: 'קבלה'
+        };
+
+        // Create document from proposal - opens Green Invoice with pre-filled data
+        function createDocumentFromProposal(proposalId, docType = 320) {
+            closeModal('documentType');
+            createInvoiceFromProposal(proposalId, docType);
+        }
+
         // Create invoice from proposal - opens Green Invoice with pre-filled data
-        function createInvoiceFromProposal(proposalId) {
+        function createInvoiceFromProposal(proposalId, docType = 320) {
             const proposal = proposals.find(p => p.id === proposalId);
             if (!proposal) {
                 showToast('Proposal not found', 'error');
@@ -3767,11 +3851,17 @@ Webhook: Real-time updates`,
             // Get primary contact
             const primaryContact = client.contacts?.[0] || {};
 
-            // Save invoice reference in our system first
-            const invoiceNumber = generateDocumentNumber('IN', proposal.clientId);
+            // Determine document prefix based on type
+            const docPrefix = docType === 300 ? 'QT' : docType === 100 ? 'PR' : 'IN';
+            const docTypeName = documentTypeNames[docType] || 'מסמך';
+
+            // Save document reference in our system first
+            const docNumber = generateDocumentNumber(docPrefix, proposal.clientId);
             const invoice = {
                 id: Date.now(),
-                number: invoiceNumber,
+                number: docNumber,
+                docType: docType,
+                docTypeName: docTypeName,
                 proposalId: proposalId,
                 clientId: proposal.clientId,
                 clientName: client.company,
@@ -3783,14 +3873,16 @@ Webhook: Real-time updates`,
             invoices.push(invoice);
             saveData();
 
-            // Open Green Invoice new document page
-            // User will create the invoice there with Drishti branding
-            const greenInvoiceUrl = 'https://app.greeninvoice.co.il/documents/new';
+            // Open Green Invoice new document page with type parameter
+            const greenInvoiceUrl = 'https://app.greeninvoice.co.il/documents/new?type=' + docType;
 
-            // Show modal with invoice details to copy
+            // Show modal with document details to copy
             const modalContent = `
                 <div style="text-align: right; direction: rtl;">
-                    <h3 style="margin-bottom: 16px; color: var(--success);">צור חשבונית ב-Green Invoice</h3>
+                    <div style="background: rgba(99, 102, 241, 0.1); padding: 8px 12px; border-radius: 6px; margin-bottom: 16px; display: inline-block;">
+                        <span style="color: var(--primary); font-weight: 600;">${docTypeName}</span>
+                    </div>
+                    <h3 style="margin-bottom: 16px; color: var(--success);">צור ${docTypeName} ב-Green Invoice</h3>
                     <p style="color: var(--gray); margin-bottom: 20px;">העתק את הפרטים הבאים ל-Green Invoice:</p>
 
                     <div style="background: rgba(0,0,0,0.3); padding: 16px; border-radius: 8px; margin-bottom: 16px;">
@@ -3828,7 +3920,7 @@ Webhook: Real-time updates`,
                     </div>
 
                     <p style="color: var(--gray); font-size: 10px; margin-top: 12px;">
-                        מספר חשבונית פנימי: ${invoiceNumber}
+                        מספר מסמך פנימי: ${docNumber}
                     </p>
                 </div>
             `;
