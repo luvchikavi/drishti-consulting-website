@@ -650,6 +650,14 @@
                     </svg>
                     Analytics
                 </div>
+                <div class="nav-item" data-page="templates">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <rect x="3" y="3" width="18" height="18" rx="2" ry="2"/>
+                        <line x1="3" y1="9" x2="21" y2="9"/>
+                        <line x1="9" y1="21" x2="9" y2="9"/>
+                    </svg>
+                    Templates
+                </div>
                 <div class="nav-item" data-page="settings">
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                         <circle cx="12" cy="12" r="3"/>
@@ -1051,6 +1059,108 @@
                             <span style="font-size: 20px;">📅</span>
                             <span>Calendly</span>
                         </a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Templates Page -->
+            <div class="page hidden" id="page-templates">
+                <div class="page-header">
+                    <h1 class="page-title">Document Templates</h1>
+                </div>
+
+                <div class="setup-notice">
+                    <h4>Proposal & Invoice Templates</h4>
+                    <p>Manage your document templates and numbering system. Templates are used when creating new proposals and invoices.</p>
+                </div>
+
+                <!-- Document Numbering System -->
+                <div style="background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.08); border-radius: 16px; padding: 24px; margin-bottom: 20px;">
+                    <h3 style="margin-bottom: 16px; display: flex; align-items: center; gap: 8px;">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--primary)" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/><path d="M16 13H8"/><path d="M16 17H8"/></svg>
+                        Document Numbering System
+                    </h3>
+                    <p style="color: var(--gray); font-size: 12px; margin-bottom: 16px;">Format: <code style="background: rgba(255,255,255,0.1); padding: 2px 6px; border-radius: 4px;">[TYPE]-[CLIENT]-[SEQ]-[YY]</code></p>
+
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 12px; margin-bottom: 20px;">
+                        <div style="background: rgba(99, 102, 241, 0.1); border: 1px solid rgba(99, 102, 241, 0.3); border-radius: 8px; padding: 12px;">
+                            <div style="font-weight: 600; color: var(--primary);">PP</div>
+                            <div style="font-size: 11px; color: var(--gray);">Proposal Pending</div>
+                            <div style="font-size: 10px; color: var(--light); margin-top: 4px;">Example: PP-LHD-001-26</div>
+                        </div>
+                        <div style="background: rgba(14, 165, 233, 0.1); border: 1px solid rgba(14, 165, 233, 0.3); border-radius: 8px; padding: 12px;">
+                            <div style="font-weight: 600; color: var(--secondary);">PA</div>
+                            <div style="font-size: 11px; color: var(--gray);">Proposal Accepted</div>
+                            <div style="font-size: 10px; color: var(--light); margin-top: 4px;">Example: PA-LHD-001-26</div>
+                        </div>
+                        <div style="background: rgba(139, 92, 246, 0.1); border: 1px solid rgba(139, 92, 246, 0.3); border-radius: 8px; padding: 12px;">
+                            <div style="font-weight: 600; color: var(--accent);">PJ</div>
+                            <div style="font-size: 11px; color: var(--gray);">Project Active</div>
+                            <div style="font-size: 10px; color: var(--light); margin-top: 4px;">Example: PJ-LHD-001-26</div>
+                        </div>
+                        <div style="background: rgba(16, 185, 129, 0.1); border: 1px solid rgba(16, 185, 129, 0.3); border-radius: 8px; padding: 12px;">
+                            <div style="font-weight: 600; color: var(--success);">PC</div>
+                            <div style="font-size: 11px; color: var(--gray);">Project Completed</div>
+                            <div style="font-size: 10px; color: var(--light); margin-top: 4px;">Example: PC-LHD-001-26</div>
+                        </div>
+                        <div style="background: rgba(245, 158, 11, 0.1); border: 1px solid rgba(245, 158, 11, 0.3); border-radius: 8px; padding: 12px;">
+                            <div style="font-weight: 600; color: var(--warning);">IN</div>
+                            <div style="font-size: 11px; color: var(--gray);">Invoice</div>
+                            <div style="font-size: 10px; color: var(--light); margin-top: 4px;">Example: IN-LHD-001-26</div>
+                        </div>
+                    </div>
+
+                    <h4 style="margin-bottom: 12px; font-size: 13px;">Client Codes</h4>
+                    <div id="clientCodesTable" style="background: rgba(0,0,0,0.2); border-radius: 8px; padding: 12px;">
+                        <!-- Dynamic client codes -->
+                    </div>
+                </div>
+
+                <!-- Proposal Templates -->
+                <div style="background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.08); border-radius: 16px; padding: 24px; margin-bottom: 20px;">
+                    <h3 style="margin-bottom: 16px; display: flex; align-items: center; gap: 8px;">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--secondary)" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><line x1="3" y1="9" x2="21" y2="9"/><line x1="9" y1="21" x2="9" y2="9"/></svg>
+                        Proposal Templates
+                    </h3>
+
+                    <div id="proposalTemplatesGrid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 16px;">
+                        <!-- Dynamic templates -->
+                    </div>
+
+                    <button class="btn btn-primary" onclick="openModal('newTemplate')" style="margin-top: 16px;">+ Create Template</button>
+                </div>
+
+                <!-- Bank Details Template -->
+                <div style="background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.08); border-radius: 16px; padding: 24px;">
+                    <h3 style="margin-bottom: 16px; display: flex; align-items: center; gap: 8px;">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--success)" stroke-width="2"><rect x="1" y="4" width="22" height="16" rx="2" ry="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>
+                        Bank Details (for Invoices & Proposals)
+                    </h3>
+                    <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px;">
+                        <div class="form-group">
+                            <label>Bank Name</label>
+                            <input type="text" id="bankName" value="בנק דיסקונט" onchange="saveBankDetails()">
+                        </div>
+                        <div class="form-group">
+                            <label>Bank Code</label>
+                            <input type="text" id="bankCode" value="11" onchange="saveBankDetails()">
+                        </div>
+                        <div class="form-group">
+                            <label>Branch Name</label>
+                            <input type="text" id="branchName" value="מרום נווה" onchange="saveBankDetails()">
+                        </div>
+                        <div class="form-group">
+                            <label>Branch Code</label>
+                            <input type="text" id="branchCode" value="096" onchange="saveBankDetails()">
+                        </div>
+                        <div class="form-group">
+                            <label>Account Number</label>
+                            <input type="text" id="accountNumber" value="178380913" onchange="saveBankDetails()">
+                        </div>
+                        <div class="form-group">
+                            <label>Account Name</label>
+                            <input type="text" id="accountName" value="אבי לובצ'יק" onchange="saveBankDetails()">
+                        </div>
                     </div>
                 </div>
             </div>
@@ -1469,6 +1579,12 @@
         let invoices = JSON.parse(localStorage.getItem('invoices')) || [];
         let expenses = JSON.parse(localStorage.getItem('expenses')) || [];
         let projects = JSON.parse(localStorage.getItem('projects')) || [];
+        let clientCodes = JSON.parse(localStorage.getItem('clientCodes')) || {};
+        let proposalTemplates = JSON.parse(localStorage.getItem('proposalTemplates')) || [];
+        let bankDetails = JSON.parse(localStorage.getItem('bankDetails')) || {
+            bank: 'בנק דיסקונט', bankCode: '11', branch: 'מרום נווה', branchCode: '096', account: '178380913', name: 'אבי לובצ\'יק'
+        };
+        let documentCounters = JSON.parse(localStorage.getItem('documentCounters')) || {};
 
         // Force update LHD Insurance to v2.0 (always replace to ensure latest data)
         const LHD_DATA_VERSION = 'v2.0-20260107';
@@ -1746,6 +1862,9 @@ Webhook: Real-time updates`,
                 }
                 if (page === 'analytics') {
                     updateAnalytics();
+                }
+                if (page === 'templates') {
+                    renderTemplatesPage();
                 }
             });
         });
@@ -2092,10 +2211,10 @@ Webhook: Real-time updates`,
                 resetProposalForm();
                 showToast('Proposal updated!');
             } else {
-                // Create new proposal
+                // Create new proposal with new numbering system
                 const proposal = {
                     id: Date.now(),
-                    proposalNumber: 'DRS-2026-' + String(proposals.length + 1).padStart(3, '0'),
+                    proposalNumber: generateDocumentNumber('PP', clientId),
                     clientId: clientId,
                     clientName: client ? client.company : 'Unknown',
                     projectName: document.getElementById('proposalProject').value,
@@ -2175,10 +2294,15 @@ Webhook: Real-time updates`,
             const proposal = proposals.find(p => p.id === id);
             if (proposal) {
                 proposal.status = newStatus;
+                // Update document number prefix based on status
+                if (proposal.proposalNumber && proposal.proposalNumber.match(/^(PP|PA|PJ|PC)-/)) {
+                    proposal.proposalNumber = updateDocumentNumberForStatus(proposal.proposalNumber, newStatus);
+                }
                 if (newStatus === 'accepted') proposal.acceptedDate = new Date().toISOString();
                 if (newStatus === 'active' || newStatus === 'working') proposal.activatedDate = new Date().toISOString();
                 proposal.updated = new Date().toISOString();
                 saveData();
+                renderProposals();
                 updateStats();
                 showToast(`Status changed to ${newStatus}`);
             }
@@ -2396,6 +2520,10 @@ Webhook: Real-time updates`,
             localStorage.setItem('invoices', JSON.stringify(invoices));
             localStorage.setItem('expenses', JSON.stringify(expenses));
             localStorage.setItem('projects', JSON.stringify(projects));
+            localStorage.setItem('clientCodes', JSON.stringify(clientCodes));
+            localStorage.setItem('proposalTemplates', JSON.stringify(proposalTemplates));
+            localStorage.setItem('bankDetails', JSON.stringify(bankDetails));
+            localStorage.setItem('documentCounters', JSON.stringify(documentCounters));
         }
 
         // Invoice management
@@ -3441,6 +3569,275 @@ Webhook: Real-time updates`,
                 document.getElementById('projectDescription').value = proposal.description || '';
                 if (proposalType && proposalType !== 'custom') loadStageTemplate();
             }, 100);
+        }
+
+        // ========== DOCUMENT NUMBERING SYSTEM ==========
+
+        // Generate client code from company name (3-4 uppercase letters)
+        function generateClientCode(companyName) {
+            if (!companyName) return 'UNK';
+            // Remove common words and extract initials
+            const cleanName = companyName.replace(/consulting|ltd|בע"מ|חברה|company|inc|corp/gi, '').trim();
+            const words = cleanName.split(/\s+/).filter(w => w.length > 0);
+            if (words.length === 1) {
+                return words[0].substring(0, 3).toUpperCase();
+            }
+            return words.slice(0, 3).map(w => w[0]).join('').toUpperCase();
+        }
+
+        // Get or create client code
+        function getClientCode(clientId) {
+            const client = clients.find(c => c.id === clientId);
+            if (!client) return 'UNK';
+
+            if (clientCodes[clientId]) return clientCodes[clientId];
+
+            // Generate new code
+            let code = generateClientCode(client.company);
+            // Check for duplicates and make unique
+            const existingCodes = Object.values(clientCodes);
+            let counter = 1;
+            let originalCode = code;
+            while (existingCodes.includes(code)) {
+                code = originalCode + counter;
+                counter++;
+            }
+            clientCodes[clientId] = code;
+            saveData();
+            return code;
+        }
+
+        // Update client code manually
+        function updateClientCode(clientId, newCode) {
+            newCode = newCode.toUpperCase().substring(0, 4);
+            clientCodes[clientId] = newCode;
+            saveData();
+            renderTemplatesPage();
+        }
+
+        // Generate document number: TYPE-CLIENT-SEQ-YY
+        function generateDocumentNumber(type, clientId) {
+            const clientCode = getClientCode(clientId);
+            const year = new Date().getFullYear().toString().slice(-2);
+            const counterKey = clientCode + '-' + year;
+
+            if (!documentCounters[counterKey]) {
+                documentCounters[counterKey] = 0;
+            }
+            documentCounters[counterKey]++;
+
+            const seq = String(documentCounters[counterKey]).padStart(3, '0');
+            saveData();
+
+            return type + '-' + clientCode + '-' + seq + '-' + year;
+        }
+
+        // Update document number when status changes
+        function updateDocumentNumberForStatus(docNumber, newStatus) {
+            const parts = docNumber.split('-');
+            if (parts.length !== 4) return docNumber;
+
+            let newType = parts[0];
+            if (newStatus === 'draft' || newStatus === 'sent') newType = 'PP';
+            else if (newStatus === 'accepted') newType = 'PA';
+            else if (newStatus === 'active' || newStatus === 'working') newType = 'PJ';
+            else if (newStatus === 'completed') newType = 'PC';
+
+            return newType + '-' + parts[1] + '-' + parts[2] + '-' + parts[3];
+        }
+
+        // ========== TEMPLATES PAGE ==========
+
+        function renderTemplatesPage() {
+            renderClientCodes();
+            renderProposalTemplates();
+            loadBankDetails();
+        }
+
+        function renderClientCodes() {
+            const container = document.getElementById('clientCodesTable');
+            if (!container) return;
+
+            const html = clients.map(c => {
+                const code = clientCodes[c.id] || generateClientCode(c.company);
+                return '<div style="display: flex; justify-content: space-between; align-items: center; padding: 8px 0; border-bottom: 1px solid rgba(255,255,255,0.05);">' +
+                    '<span style="color: var(--light);">' + c.company + '</span>' +
+                    '<input type="text" value="' + code + '" maxlength="4" style="width: 60px; text-align: center; padding: 4px; background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); border-radius: 4px; color: var(--primary); font-weight: 600; text-transform: uppercase;" onchange="updateClientCode(' + c.id + ', this.value)">' +
+                    '</div>';
+            }).join('');
+
+            container.innerHTML = html || '<div style="color: var(--gray);">No clients yet. Add clients to generate codes.</div>';
+        }
+
+        function renderProposalTemplates() {
+            const container = document.getElementById('proposalTemplatesGrid');
+            if (!container) return;
+
+            // Initialize default template if none exist
+            if (proposalTemplates.length === 0) {
+                initializeDefaultTemplate();
+            }
+
+            const html = proposalTemplates.map((t, idx) => {
+                return '<div style="background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.1); border-radius: 12px; padding: 16px;">' +
+                    '<div style="display: flex; justify-content: space-between; align-items: start; margin-bottom: 12px;">' +
+                    '<div>' +
+                    '<h4 style="margin: 0; color: var(--light);">' + t.name + '</h4>' +
+                    '<span style="font-size: 10px; color: var(--gray);">' + t.type + '</span>' +
+                    '</div>' +
+                    (t.isDefault ? '<span style="background: var(--primary); color: white; font-size: 9px; padding: 2px 6px; border-radius: 4px;">DEFAULT</span>' : '') +
+                    '</div>' +
+                    '<p style="font-size: 11px; color: var(--gray); margin-bottom: 12px;">' + (t.description || 'No description') + '</p>' +
+                    '<div style="font-size: 10px; color: var(--gray-light); margin-bottom: 12px;">' +
+                    '<div>Sections: ' + (t.sections?.length || 0) + '</div>' +
+                    '<div>Items: ' + (t.defaultItems?.length || 0) + '</div>' +
+                    '</div>' +
+                    '<div style="display: flex; gap: 8px;">' +
+                    '<button class="btn btn-secondary btn-sm" onclick="editTemplate(' + idx + ')">Edit</button>' +
+                    '<button class="btn btn-primary btn-sm" onclick="useTemplate(' + idx + ')">Use</button>' +
+                    (!t.isDefault ? '<button class="btn btn-danger btn-sm" onclick="deleteTemplate(' + idx + ')">×</button>' : '') +
+                    '</div>' +
+                    '</div>';
+            }).join('');
+
+            container.innerHTML = html;
+        }
+
+        function initializeDefaultTemplate() {
+            proposalTemplates = [{
+                id: 1,
+                name: 'System Development (LHD Style)',
+                type: 'development',
+                isDefault: true,
+                description: 'Full system development proposal based on LHD Insurance project template',
+                sections: [
+                    { name: 'executiveSummary', label: 'תקציר מנהלים', required: true },
+                    { name: 'objectives', label: 'יעדי המערכת', required: true },
+                    { name: 'scope', label: 'היקף הפרויקט', required: true },
+                    { name: 'timeline', label: 'לוח זמנים', required: true },
+                    { name: 'pricing', label: 'פירוט תמחיר', required: true },
+                    { name: 'payment', label: 'תנאי תשלום', required: true },
+                    { name: 'included', label: 'כלול בהצעה', required: false },
+                    { name: 'excluded', label: 'לא כלול בהצעה', required: false },
+                    { name: 'bankDetails', label: 'פרטי בנק', required: true }
+                ],
+                defaultItems: [
+                    { desc: 'אפיון מפורט ותכנון', pct: 10 },
+                    { desc: 'הקמת תשתית וארכיטקטורה', pct: 15 },
+                    { desc: 'פיתוח שלב 1 - Core', pct: 25 },
+                    { desc: 'פיתוח שלב 2 - Features', pct: 25 },
+                    { desc: 'ממשק משתמש (UI/UX)', pct: 10 },
+                    { desc: 'בדיקות והטמעה', pct: 15 }
+                ],
+                defaultPayment: [
+                    { pct: 40, desc: 'עם חתימת ההסכם' },
+                    { pct: 40, desc: 'לאחר השלמת פיתוח שלב 1' },
+                    { pct: 20, desc: 'מסירת הפרויקט' }
+                ],
+                defaultIncluded: [
+                    'פיתוח מלא של המערכת',
+                    'הקמת תשתית ענן',
+                    'תיעוד טכני ומדריך למשתמש',
+                    '3 חודשי תמיכה טכנית'
+                ],
+                defaultExcluded: [
+                    'עלויות ענן שוטפות',
+                    'הזנת נתונים ראשונית'
+                ]
+            }, {
+                id: 2,
+                name: 'Consulting Project',
+                type: 'consulting',
+                isDefault: false,
+                description: 'Standard consulting engagement proposal',
+                sections: [
+                    { name: 'executiveSummary', label: 'תקציר מנהלים', required: true },
+                    { name: 'objectives', label: 'יעדי הפרויקט', required: true },
+                    { name: 'methodology', label: 'מתודולוגיה', required: true },
+                    { name: 'deliverables', label: 'תוצרים', required: true },
+                    { name: 'pricing', label: 'תמחיר', required: true },
+                    { name: 'payment', label: 'תנאי תשלום', required: true }
+                ],
+                defaultItems: [
+                    { desc: 'פגישת היכרות וגילוי', pct: 15 },
+                    { desc: 'ניתוח ומחקר', pct: 35 },
+                    { desc: 'פיתוח אסטרטגיה', pct: 30 },
+                    { desc: 'דוח והמלצות', pct: 20 }
+                ],
+                defaultPayment: [
+                    { pct: 50, desc: 'עם חתימת ההסכם' },
+                    { pct: 50, desc: 'מסירת הדוח הסופי' }
+                ]
+            }, {
+                id: 3,
+                name: 'Characterization Phase',
+                type: 'characterization',
+                isDefault: false,
+                description: 'Requirements gathering and system characterization',
+                sections: [
+                    { name: 'executiveSummary', label: 'תקציר', required: true },
+                    { name: 'scope', label: 'היקף האפיון', required: true },
+                    { name: 'methodology', label: 'מתודולוגיה', required: true },
+                    { name: 'deliverables', label: 'תוצרים', required: true },
+                    { name: 'pricing', label: 'תמחיר', required: true }
+                ],
+                defaultItems: [
+                    { desc: 'ראיונות בעלי עניין', pct: 25 },
+                    { desc: 'ניתוח תהליכים קיימים', pct: 25 },
+                    { desc: 'הגדרת דרישות', pct: 30 },
+                    { desc: 'מסמך אפיון', pct: 20 }
+                ],
+                defaultPayment: [
+                    { pct: 50, desc: 'עם חתימת ההסכם' },
+                    { pct: 50, desc: 'מסירת מסמך האפיון' }
+                ]
+            }];
+            saveData();
+        }
+
+        function editTemplate(idx) {
+            const template = proposalTemplates[idx];
+            showToast('Template editing will be available soon');
+        }
+
+        function useTemplate(idx) {
+            const template = proposalTemplates[idx];
+            // Open new proposal modal with template pre-filled
+            document.getElementById('proposalType').value = template.type;
+            openModal('newProposal');
+            showToast('Template "' + template.name + '" selected');
+        }
+
+        function deleteTemplate(idx) {
+            if (confirm('Delete this template?')) {
+                proposalTemplates.splice(idx, 1);
+                saveData();
+                renderProposalTemplates();
+            }
+        }
+
+        // ========== BANK DETAILS ==========
+
+        function loadBankDetails() {
+            document.getElementById('bankName').value = bankDetails.bank || '';
+            document.getElementById('bankCode').value = bankDetails.bankCode || '';
+            document.getElementById('branchName').value = bankDetails.branch || '';
+            document.getElementById('branchCode').value = bankDetails.branchCode || '';
+            document.getElementById('accountNumber').value = bankDetails.account || '';
+            document.getElementById('accountName').value = bankDetails.name || '';
+        }
+
+        function saveBankDetails() {
+            bankDetails = {
+                bank: document.getElementById('bankName').value,
+                bankCode: document.getElementById('bankCode').value,
+                branch: document.getElementById('branchName').value,
+                branchCode: document.getElementById('branchCode').value,
+                account: document.getElementById('accountNumber').value,
+                name: document.getElementById('accountName').value
+            };
+            saveData();
+            showToast('Bank details saved');
         }
 
         // Initialize
