@@ -1732,6 +1732,38 @@
                     <button class="btn btn-primary" onclick="openModal('newTemplate')" style="margin-top: 16px;">+ Create Template</button>
                 </div>
 
+                <!-- Audit Trail Section -->
+                <div style="background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.08); border-radius: 16px; padding: 24px; margin-bottom: 20px;">
+                    <h3 style="margin-bottom: 16px; display: flex; align-items: center; gap: 8px;">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--warning)" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
+                        Document Audit Trail
+                    </h3>
+                    <p style="color: var(--gray); font-size: 12px; margin-bottom: 16px;">Track all document changes, views, and actions across the system.</p>
+
+                    <div style="display: flex; gap: 12px; margin-bottom: 16px;">
+                        <select id="auditFilterType" onchange="filterAuditLog()" style="padding: 8px 12px; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-radius: 8px; color: var(--light); font-size: 12px;">
+                            <option value="">All Types</option>
+                            <option value="proposal">Proposals</option>
+                            <option value="project">Projects</option>
+                            <option value="invoice">Invoices</option>
+                            <option value="client">Clients</option>
+                        </select>
+                        <select id="auditFilterAction" onchange="filterAuditLog()" style="padding: 8px 12px; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-radius: 8px; color: var(--light); font-size: 12px;">
+                            <option value="">All Actions</option>
+                            <option value="created">Created</option>
+                            <option value="updated">Updated</option>
+                            <option value="deleted">Deleted</option>
+                            <option value="converted">Converted</option>
+                            <option value="sent">Sent</option>
+                        </select>
+                        <button class="btn btn-secondary btn-sm" onclick="clearAuditLog()">Clear Log</button>
+                    </div>
+
+                    <div id="auditLogContainer" style="max-height: 400px; overflow-y: auto; background: rgba(0,0,0,0.2); border-radius: 8px;">
+                        <!-- Audit entries rendered here -->
+                    </div>
+                </div>
+
                 <!-- Bank Details Template -->
                 <div style="background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.08); border-radius: 16px; padding: 24px;">
                     <h3 style="margin-bottom: 16px; display: flex; align-items: center; gap: 8px;">
@@ -2344,12 +2376,33 @@
                 <button class="modal-close" onclick="closeModal('clientDetail')">&times;</button>
             </div>
             <div id="clientDetailContent">
+                <!-- Client 360 Financial Summary Bar -->
+                <div id="client360Summary" style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin-bottom: 20px; padding: 16px; background: linear-gradient(135deg, rgba(99,102,241,0.1) 0%, rgba(139,92,246,0.1) 100%); border-radius: 12px; border: 1px solid rgba(99,102,241,0.2);">
+                    <div style="text-align: center;">
+                        <div style="font-size: 10px; color: var(--gray); text-transform: uppercase; margin-bottom: 4px;">Total Revenue</div>
+                        <div id="client360Revenue" style="font-size: 18px; font-weight: 700; color: var(--success);">₪0</div>
+                    </div>
+                    <div style="text-align: center;">
+                        <div style="font-size: 10px; color: var(--gray); text-transform: uppercase; margin-bottom: 4px;">Outstanding</div>
+                        <div id="client360Outstanding" style="font-size: 18px; font-weight: 700; color: var(--warning);">₪0</div>
+                    </div>
+                    <div style="text-align: center;">
+                        <div style="font-size: 10px; color: var(--gray); text-transform: uppercase; margin-bottom: 4px;">Active Projects</div>
+                        <div id="client360Projects" style="font-size: 18px; font-weight: 700; color: var(--primary);">0</div>
+                    </div>
+                    <div style="text-align: center;">
+                        <div style="font-size: 10px; color: var(--gray); text-transform: uppercase; margin-bottom: 4px;">Proposals</div>
+                        <div id="client360Proposals" style="font-size: 18px; font-weight: 700; color: var(--accent);">0</div>
+                    </div>
+                </div>
+
                 <!-- Tab Navigation -->
                 <div style="display: flex; gap: 4px; margin-bottom: 24px; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 0;">
                     <button class="client-tab active" data-tab="overview" onclick="switchClientTab('overview')">Overview</button>
                     <button class="client-tab" data-tab="contacts" onclick="switchClientTab('contacts')">Contacts</button>
                     <button class="client-tab" data-tab="communications" onclick="switchClientTab('communications')">Communications</button>
                     <button class="client-tab" data-tab="proposals" onclick="switchClientTab('proposals')">Proposals</button>
+                    <button class="client-tab" data-tab="projects" onclick="switchClientTab('projects')">Projects</button>
                     <button class="client-tab" data-tab="invoices" onclick="switchClientTab('invoices')">Invoices</button>
                 </div>
 
@@ -2387,7 +2440,20 @@
 
                 <!-- Proposals Tab -->
                 <div class="client-tab-content hidden" id="tabProposals">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
+                        <h4 style="margin: 0;">Client Proposals</h4>
+                        <button class="btn btn-primary btn-sm" onclick="closeModal('clientDetail'); createProposalFor(viewingClientId);">+ New Proposal</button>
+                    </div>
                     <div id="clientProposalsList"></div>
+                </div>
+
+                <!-- Projects Tab -->
+                <div class="client-tab-content hidden" id="tabProjects">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
+                        <h4 style="margin: 0;">Active Projects</h4>
+                        <button class="btn btn-primary btn-sm" onclick="closeModal('clientDetail'); createProjectFor(viewingClientId);">+ New Project</button>
+                    </div>
+                    <div id="clientProjectsList"></div>
                 </div>
 
                 <!-- Invoices Tab -->
@@ -2461,9 +2527,26 @@
             <form id="newInvoiceForm">
                 <div class="form-group">
                     <label>Client</label>
-                    <select id="invoiceClient" required>
+                    <select id="invoiceClient" required onchange="updateInvoiceProposalSelect()">
                         <option value="">Select client...</option>
                     </select>
+                </div>
+                <!-- Proposal Selection - Required for invoice creation -->
+                <div class="form-group">
+                    <label>Based on Proposal <span style="color: var(--danger);">*</span></label>
+                    <select id="invoiceProposal" required onchange="updateInvoiceFromProposal()">
+                        <option value="">Select approved proposal...</option>
+                    </select>
+                    <small style="color: var(--gray); font-size: 10px;">Only accepted proposals can be invoiced</small>
+                </div>
+                <!-- Proposal Summary Box -->
+                <div id="invoiceProposalSummary" style="display: none; background: rgba(99,102,241,0.1); border: 1px solid rgba(99,102,241,0.2); border-radius: 8px; padding: 12px; margin-bottom: 12px;">
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px; font-size: 12px;">
+                        <div><span style="color: var(--gray);">Proposal Amount:</span> <strong id="invoiceProposalTotal">₪0</strong></div>
+                        <div><span style="color: var(--gray);">Already Invoiced:</span> <strong id="invoiceProposalInvoiced" style="color: var(--warning);">₪0</strong></div>
+                        <div><span style="color: var(--gray);">Remaining:</span> <strong id="invoiceProposalRemaining" style="color: var(--success);">₪0</strong></div>
+                        <div><span style="color: var(--gray);">Milestone:</span> <span id="invoiceProposalMilestone">-</span></div>
+                    </div>
                 </div>
                 <div class="form-row">
                     <div class="form-group">
@@ -2471,8 +2554,8 @@
                         <input type="text" id="invoiceNumber" required placeholder="INV-001">
                     </div>
                     <div class="form-group">
-                        <label>Total Amount (₪)</label>
-                        <input type="number" id="invoiceAmount" required placeholder="10000">
+                        <label>Amount (₪) <span id="invoiceMaxAmount" style="color: var(--gray); font-size: 10px;"></span></label>
+                        <input type="number" id="invoiceAmount" required placeholder="10000" oninput="validateInvoiceAmount()">
                     </div>
                 </div>
                 <div class="form-row">
@@ -3208,6 +3291,24 @@
         // Data storage (localStorage for demo, Airtable for production)
         const sampleClients = [
             {
+                id: 1007,
+                company: 'GreenTech Solutions Ltd',
+                companyHe: 'גרינטק פתרונות בע"מ',
+                sector: 'technology',
+                companyId: '516789012',
+                industry: 'Technology',
+                pipelineStage: 'customer',
+                estimatedValue: 120000,
+                leadSource: 'referral',
+                contacts: [
+                    { name: 'Dana Cohen', nameHe: 'דנה כהן', position: 'CEO', email: 'dana@greentech.co.il', phone: '054-1234567' },
+                    { name: 'Amit Levy', nameHe: 'עמית לוי', position: 'CTO', email: 'amit@greentech.co.il', phone: '052-9876543' }
+                ],
+                notes: 'ESG-focused tech company. Interested in sustainability reporting platform and carbon tracking system. High potential for long-term partnership.',
+                status: 'active',
+                created: '2025-10-15T10:00:00.000Z'
+            },
+            {
                 id: 1001,
                 company: 'LHD Insurance Consulting',
                 sector: 'finance',
@@ -3273,6 +3374,159 @@
             // First time - load sample data
             clients = sampleClients;
             localStorage.setItem('clients', JSON.stringify(clients));
+
+            // Sample proposal for GreenTech (demo client)
+            const sampleProposals = [
+                {
+                    id: 2001,
+                    proposalNumber: 'PP-GTS-001-26',
+                    clientId: 1007,
+                    clientName: 'GreenTech Solutions Ltd',
+                    projectName: 'ESG Reporting Platform',
+                    project: 'ESG Reporting Platform',
+                    proposalType: 'development',
+                    type: 'development',
+                    amount: 85000,
+                    hours: 450,
+                    status: 'accepted',
+                    description: 'Development of a comprehensive ESG reporting platform including carbon tracking, sustainability metrics dashboard, and automated report generation for CSRD compliance.',
+                    created: '2025-11-01T10:00:00.000Z',
+                    projectId: 3001,
+                    convertedToProjectDate: '2025-11-15T10:00:00.000Z'
+                },
+                {
+                    id: 2002,
+                    proposalNumber: 'PP-GTS-002-26',
+                    clientId: 1007,
+                    clientName: 'GreenTech Solutions Ltd',
+                    projectName: 'Carbon Footprint Calculator API',
+                    project: 'Carbon Footprint Calculator API',
+                    proposalType: 'integration',
+                    type: 'integration',
+                    amount: 35000,
+                    hours: 180,
+                    status: 'accepted',
+                    description: 'API integration for carbon footprint calculations with third-party data sources and emission factor databases.',
+                    created: '2025-12-01T10:00:00.000Z',
+                    projectId: null
+                }
+            ];
+            localStorage.setItem('proposals', JSON.stringify(sampleProposals));
+
+            // Sample project for GreenTech
+            const sampleProjects = [
+                {
+                    id: 3001,
+                    projectNumber: 'PRJ-2026-001',
+                    proposalId: 2001,
+                    proposalNumber: 'PP-GTS-001-26',
+                    proposalAmount: 85000,
+                    clientId: 1007,
+                    clientName: 'GreenTech Solutions Ltd',
+                    name: 'ESG Reporting Platform',
+                    description: 'Comprehensive ESG reporting platform for CSRD compliance',
+                    type: 'development',
+                    totalBudget: 85000,
+                    totalHours: 450,
+                    totalHoursSpent: 120,
+                    overallProgress: 35,
+                    status: 'active',
+                    startDate: '2025-11-20',
+                    expectedEndDate: '2026-04-30',
+                    totalInvoiced: 34000,
+                    stages: [
+                        { id: 0, name: 'Discovery & Planning', description: 'Requirements and architecture', estimatedHours: 60, actualHours: 55, status: 'completed', completionPercent: 100, startDate: '2025-11-20', completedDate: '2025-12-10' },
+                        { id: 1, name: 'Backend Development', description: 'API and database', estimatedHours: 120, actualHours: 65, status: 'in_progress', completionPercent: 55, startDate: '2025-12-11', completedDate: null, notes: 'Carbon calculation engine 80% complete', blockers: '' },
+                        { id: 2, name: 'Frontend Development', description: 'Dashboard UI', estimatedHours: 100, actualHours: 0, status: 'not_started', completionPercent: 0 },
+                        { id: 3, name: 'Integration & Testing', description: 'Third-party integrations', estimatedHours: 80, actualHours: 0, status: 'not_started', completionPercent: 0 },
+                        { id: 4, name: 'Deployment & Training', description: 'Go-live', estimatedHours: 90, actualHours: 0, status: 'not_started', completionPercent: 0 }
+                    ],
+                    created: '2025-11-15T10:00:00.000Z'
+                }
+            ];
+            localStorage.setItem('projects', JSON.stringify(sampleProjects));
+
+            // Sample invoices for GreenTech
+            const sampleInvoices = [
+                {
+                    id: 4001,
+                    number: 'IN-GTS-001-26',
+                    proposalId: 2001,
+                    proposalNumber: 'PP-GTS-001-26',
+                    projectName: 'ESG Reporting Platform',
+                    milestoneNumber: 1,
+                    clientId: 1007,
+                    clientName: 'GreenTech Solutions Ltd',
+                    amount: 34000,
+                    amountPaid: 34000,
+                    balance: 0,
+                    date: '2025-11-20',
+                    dueDate: '2025-12-20',
+                    description: 'ESG Reporting Platform - Milestone 1 (40% deposit)',
+                    status: 'paid',
+                    greenInvoiceId: 'GI-123456',
+                    created: '2025-11-20T10:00:00.000Z'
+                }
+            ];
+            localStorage.setItem('invoices', JSON.stringify(sampleInvoices));
+
+            // Sample communication logs for GreenTech
+            const sampleCommunicationLogs = [
+                {
+                    id: 5001,
+                    clientId: 1007,
+                    type: 'meeting',
+                    date: '2025-10-20T14:00:00.000Z',
+                    contactName: 'Dana Cohen',
+                    subject: 'Initial Discovery Meeting',
+                    notes: 'Discussed ESG reporting requirements. Client needs CSRD compliance by Q2 2026. Interested in carbon tracking and sustainability dashboard.',
+                    followUp: false
+                },
+                {
+                    id: 5002,
+                    clientId: 1007,
+                    type: 'email',
+                    date: '2025-11-01T10:00:00.000Z',
+                    contactName: 'Dana Cohen',
+                    subject: 'Proposal Sent - ESG Platform',
+                    notes: 'Sent detailed proposal for ESG Reporting Platform. ₪85,000 total.',
+                    followUp: false
+                },
+                {
+                    id: 5003,
+                    clientId: 1007,
+                    type: 'call',
+                    date: '2025-11-10T11:00:00.000Z',
+                    contactName: 'Amit Levy',
+                    subject: 'Technical Discussion',
+                    notes: 'Reviewed technical architecture with CTO. Discussed API integrations with their existing systems.',
+                    followUp: false
+                },
+                {
+                    id: 5004,
+                    clientId: 1007,
+                    type: 'meeting',
+                    date: '2026-01-05T10:00:00.000Z',
+                    contactName: 'Dana Cohen',
+                    subject: 'Progress Review Meeting',
+                    notes: 'Reviewed Phase 1 completion. Client satisfied with progress. Discussed Phase 2 timeline.',
+                    followUp: true,
+                    followUpDate: '2026-01-20'
+                }
+            ];
+            localStorage.setItem('communicationLogs', JSON.stringify(sampleCommunicationLogs));
+
+            // Sample audit log entries
+            const sampleAuditLog = [
+                { id: 6001, entityType: 'client', entityId: 1007, action: 'created', details: 'Client created: GreenTech Solutions Ltd', userId: 'admin', timestamp: '2025-10-15T10:00:00.000Z' },
+                { id: 6002, entityType: 'proposal', entityId: 2001, action: 'created', details: 'Proposal created: PP-GTS-001-26 - ESG Reporting Platform', userId: 'admin', timestamp: '2025-11-01T10:00:00.000Z' },
+                { id: 6003, entityType: 'proposal', entityId: 2001, action: 'converted_to_project', details: 'Converted to project: PRJ-2026-001', userId: 'admin', timestamp: '2025-11-15T10:00:00.000Z' },
+                { id: 6004, entityType: 'client', entityId: 1007, action: 'stage_changed', details: 'Stage changed to Customer (project created)', userId: 'admin', timestamp: '2025-11-15T10:00:00.000Z' },
+                { id: 6005, entityType: 'invoice', entityId: 4001, action: 'created', details: 'Invoice created: IN-GTS-001-26 (Milestone 1 for PP-GTS-001-26)', userId: 'admin', timestamp: '2025-11-20T10:00:00.000Z' },
+                { id: 6006, entityType: 'invoice', entityId: 4001, action: 'linked_to_green_invoice', details: 'Linked to Green Invoice: GI-123456', userId: 'admin', timestamp: '2025-11-20T11:00:00.000Z' }
+            ];
+            localStorage.setItem('auditLog', JSON.stringify(sampleAuditLog));
+
             localStorage.setItem('dataInitialized', 'true');
         }
         let proposals = JSON.parse(localStorage.getItem('proposals')) || [];
@@ -3297,6 +3551,36 @@
         let budgets = JSON.parse(localStorage.getItem('budgets')) || {};
         let recurringExpenses = JSON.parse(localStorage.getItem('recurringExpenses')) || [];
         let communicationLogs = JSON.parse(localStorage.getItem('communicationLogs')) || [];
+
+        // Audit Log for document tracking
+        let auditLog = JSON.parse(localStorage.getItem('auditLog')) || [];
+
+        // Log audit events for document tracking
+        function logAuditEvent(entityType, entityId, action, details, userId = 'admin') {
+            const event = {
+                id: Date.now(),
+                entityType,  // 'proposal', 'invoice', 'project', 'client', 'document'
+                entityId,
+                action,      // 'created', 'updated', 'deleted', 'viewed', 'sent', 'converted_to_project', etc.
+                details,
+                userId,
+                timestamp: new Date().toISOString(),
+                ipAddress: 'local'  // Would be actual IP in production
+            };
+            auditLog.push(event);
+            // Keep only last 1000 entries to prevent localStorage overflow
+            if (auditLog.length > 1000) {
+                auditLog = auditLog.slice(-1000);
+            }
+            localStorage.setItem('auditLog', JSON.stringify(auditLog));
+            return event;
+        }
+
+        // Get audit history for an entity
+        function getAuditHistory(entityType, entityId) {
+            return auditLog.filter(e => e.entityType === entityType && e.entityId === entityId)
+                          .sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
+        }
 
         // Client view state
         let currentClientView = 'table';
@@ -4354,7 +4638,7 @@ Webhook: Real-time updates`,
             return date.toLocaleDateString('en-GB');
         }
 
-        // Client Detail View
+        // Client Detail View - Client 360
         function viewClient(id) {
             const client = clients.find(c => c.id === id);
             if (!client) return;
@@ -4372,13 +4656,88 @@ Webhook: Real-time updates`,
             document.querySelectorAll('.client-tab-content').forEach(c => c.classList.add('hidden'));
             document.getElementById('tabOverview').classList.remove('hidden');
 
+            // Render Client 360 Summary
+            renderClient360Summary(client);
             renderClientOverview(client);
             renderClientContacts(client);
             renderClientCommunications(client);
             renderClientProposals(client);
+            renderClientProjects(client);
             renderClientInvoices(client);
 
             openModal('clientDetail');
+        }
+
+        // Client 360 Financial Summary
+        function renderClient360Summary(client) {
+            const clientInvoices = invoices.filter(i => i.clientId === client.id);
+            const clientProposals = proposals.filter(p => p.clientId === client.id);
+            const clientProjects = projects.filter(p => p.clientId === client.id);
+
+            // Calculate totals
+            const totalRevenue = clientInvoices.filter(i => i.status === 'paid').reduce((sum, i) => sum + (i.amount || 0), 0);
+            const outstanding = clientInvoices.filter(i => i.status !== 'paid').reduce((sum, i) => sum + (i.amount || 0), 0);
+            const activeProjects = clientProjects.filter(p => p.status === 'active' || p.status === 'in-progress').length;
+            const pendingProposals = clientProposals.filter(p => p.status === 'sent' || p.status === 'draft').length;
+
+            document.getElementById('client360Revenue').textContent = '₪' + totalRevenue.toLocaleString();
+            document.getElementById('client360Outstanding').textContent = '₪' + outstanding.toLocaleString();
+            document.getElementById('client360Projects').textContent = activeProjects;
+            document.getElementById('client360Proposals').textContent = clientProposals.length + (pendingProposals > 0 ? ` (${pendingProposals} pending)` : '');
+        }
+
+        // Render client projects in Client 360 view
+        function renderClientProjects(client) {
+            const clientProjects = projects.filter(p => p.clientId === client.id);
+            const container = document.getElementById('clientProjectsList');
+
+            if (clientProjects.length === 0) {
+                container.innerHTML = '<p style="color: var(--gray); text-align: center;">No projects for this client</p>';
+                return;
+            }
+
+            container.innerHTML = clientProjects.map(p => {
+                const progress = p.overallProgress || 0;
+                const statusColors = { active: 'var(--success)', 'in-progress': 'var(--primary)', completed: 'var(--gray)', 'on-hold': 'var(--warning)' };
+                const statusColor = statusColors[p.status] || 'var(--gray)';
+
+                return `
+                    <div style="background: rgba(255,255,255,0.02); border-radius: 8px; padding: 16px; margin-bottom: 12px; border: 1px solid rgba(255,255,255,0.05);">
+                        <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 12px;">
+                            <div>
+                                <h4 style="margin: 0 0 4px 0;">${p.name}</h4>
+                                <p style="margin: 0; color: var(--gray); font-size: 12px;">${p.description || 'No description'}</p>
+                            </div>
+                            <span style="background: ${statusColor}22; color: ${statusColor}; padding: 4px 12px; border-radius: 12px; font-size: 11px; font-weight: 600; text-transform: uppercase;">${p.status || 'active'}</span>
+                        </div>
+                        <div style="margin-bottom: 8px;">
+                            <div style="display: flex; justify-content: space-between; font-size: 11px; color: var(--gray); margin-bottom: 4px;">
+                                <span>Progress</span>
+                                <span>${progress}%</span>
+                            </div>
+                            <div style="height: 6px; background: rgba(255,255,255,0.1); border-radius: 3px; overflow: hidden;">
+                                <div style="height: 100%; width: ${progress}%; background: var(--gradient); border-radius: 3px;"></div>
+                            </div>
+                        </div>
+                        <div style="display: flex; justify-content: space-between; font-size: 12px; color: var(--gray);">
+                            <span>Budget: ₪${(p.totalBudget || 0).toLocaleString()}</span>
+                            <span>Hours: ${p.totalHoursSpent || 0}/${p.totalHours || 0}</span>
+                        </div>
+                        <div style="margin-top: 12px; display: flex; gap: 8px;">
+                            <button class="btn btn-secondary btn-sm" onclick="closeModal('clientDetail'); openProjectManagement(${p.id});">Manage</button>
+                            <button class="btn btn-sm" style="background: rgba(99,102,241,0.2); color: var(--primary);" onclick="closeModal('clientDetail'); showPage('projects');">View All</button>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        // Create project for specific client
+        function createProjectFor(clientId) {
+            openModal('newProject');
+            setTimeout(() => {
+                document.getElementById('projectClient').value = clientId;
+            }, 100);
         }
 
         function switchClientTab(tab) {
@@ -4989,9 +5348,22 @@ Webhook: Real-time updates`,
 
             const clientId = parseInt(document.getElementById('invoiceClient').value);
             const client = clients.find(c => c.id === clientId);
+            const proposalId = parseInt(document.getElementById('invoiceProposal').value) || null;
+            const proposal = proposalId ? proposals.find(p => p.id === proposalId) : null;
             const amount = parseFloat(document.getElementById('invoiceAmount').value);
             const amountPaid = parseFloat(document.getElementById('invoiceAmountPaid').value) || 0;
             const isRecurring = document.getElementById('invoiceRecurring').checked;
+
+            // Validate proposal is selected and amount doesn't exceed remaining
+            if (!proposalId) {
+                alert('Please select an approved proposal to invoice against.');
+                return;
+            }
+
+            if (!validateInvoiceAmount()) {
+                alert('Invoice amount exceeds remaining proposal balance.');
+                return;
+            }
 
             if (editingInvoiceId) {
                 // Update existing invoice
@@ -5002,6 +5374,8 @@ Webhook: Real-time updates`,
                         number: document.getElementById('invoiceNumber').value,
                         clientId: clientId,
                         clientName: client ? client.company : 'Unknown',
+                        proposalId: proposalId,
+                        proposalNumber: proposal ? (proposal.proposalNumber || proposal.number) : null,
                         amount: amount,
                         amountPaid: amountPaid,
                         balance: amount - amountPaid,
@@ -5011,6 +5385,7 @@ Webhook: Real-time updates`,
                         status: amountPaid >= amount ? 'paid' : (amountPaid > 0 ? 'partial' : 'pending'),
                         updated: new Date().toISOString()
                     };
+                    logAuditEvent('invoice', editingInvoiceId, 'updated', `Invoice updated: ${invoices[invoiceIndex].number}`);
                 }
                 saveData();
                 renderInvoices();
@@ -5019,12 +5394,19 @@ Webhook: Real-time updates`,
                 resetInvoiceForm();
                 showToast('Invoice updated!');
             } else {
+                // Calculate milestone number
+                const milestoneNum = invoices.filter(inv => inv.proposalId === proposalId).length + 1;
+
                 // Create new invoice
                 const invoice = {
                     id: Date.now(),
                     number: document.getElementById('invoiceNumber').value,
                     clientId: clientId,
                     clientName: client ? client.company : 'Unknown',
+                    proposalId: proposalId,
+                    proposalNumber: proposal ? (proposal.proposalNumber || proposal.number) : null,
+                    projectName: proposal ? (proposal.projectName || proposal.project) : '',
+                    milestoneNumber: milestoneNum,
                     amount: amount,
                     amountPaid: amountPaid,
                     balance: amount - amountPaid,
@@ -5041,12 +5423,25 @@ Webhook: Real-time updates`,
 
                 invoices.push(invoice);
 
+                // Log audit event
+                logAuditEvent('invoice', invoice.id, 'created', `Invoice created: ${invoice.number} (Milestone ${milestoneNum} for ${proposal.proposalNumber || proposal.number})`);
+
+                // Update project totalInvoiced if linked
+                if (proposal && proposal.projectId) {
+                    const project = projects.find(p => p.id === proposal.projectId);
+                    if (project) {
+                        project.totalInvoiced = (project.totalInvoiced || 0) + amount;
+                        logAuditEvent('project', project.id, 'updated', `Invoice ${invoice.number} created, total invoiced: ₪${project.totalInvoiced.toLocaleString()}`);
+                    }
+                }
+
                 // Add to recurring templates if recurring
                 if (isRecurring) {
                     recurringInvoiceTemplates.push({
                         id: Date.now(),
                         clientId: clientId,
                         clientName: client ? client.company : 'Unknown',
+                        proposalId: proposalId,
                         amount: amount,
                         description: document.getElementById('invoiceDesc').value,
                         frequency: document.getElementById('invoiceRecurringFreq').value,
@@ -5063,7 +5458,8 @@ Webhook: Real-time updates`,
                 updateInvoiceStats();
                 closeModal('newInvoice');
                 this.reset();
-                showToast('Invoice created!');
+                document.getElementById('invoiceProposalSummary').style.display = 'none';
+                showToast(`Invoice created! (Milestone ${milestoneNum})`);
             }
         });
 
@@ -5086,6 +5482,102 @@ Webhook: Real-time updates`,
             const amount = parseFloat(document.getElementById('invoiceAmount').value) || 0;
             const paid = parseFloat(document.getElementById('invoiceAmountPaid').value) || 0;
             document.getElementById('invoiceBalance').value = amount - paid;
+        }
+
+        // Update proposal select based on selected client
+        function updateInvoiceProposalSelect() {
+            const clientId = parseInt(document.getElementById('invoiceClient').value);
+            const select = document.getElementById('invoiceProposal');
+            select.innerHTML = '<option value="">Select approved proposal...</option>';
+
+            if (!clientId) {
+                document.getElementById('invoiceProposalSummary').style.display = 'none';
+                return;
+            }
+
+            // Get only accepted proposals for this client
+            const clientProposals = proposals.filter(p => p.clientId === clientId && p.status === 'accepted');
+
+            if (clientProposals.length === 0) {
+                select.innerHTML = '<option value="">No accepted proposals for this client</option>';
+                return;
+            }
+
+            clientProposals.forEach(p => {
+                const invoiced = getProposalInvoicedAmount(p.id);
+                const remaining = p.amount - invoiced;
+                const option = document.createElement('option');
+                option.value = p.id;
+                option.textContent = `${p.proposalNumber || p.number} - ${p.projectName || p.project} (₪${p.amount.toLocaleString()}, ₪${remaining.toLocaleString()} remaining)`;
+                option.disabled = remaining <= 0;
+                select.appendChild(option);
+            });
+        }
+
+        // Calculate total invoiced amount for a proposal
+        function getProposalInvoicedAmount(proposalId) {
+            return invoices
+                .filter(inv => inv.proposalId === proposalId && inv.status !== 'cancelled')
+                .reduce((sum, inv) => sum + (inv.amount || 0), 0);
+        }
+
+        // Update form when proposal is selected
+        function updateInvoiceFromProposal() {
+            const proposalId = parseInt(document.getElementById('invoiceProposal').value);
+            const summaryBox = document.getElementById('invoiceProposalSummary');
+
+            if (!proposalId) {
+                summaryBox.style.display = 'none';
+                document.getElementById('invoiceMaxAmount').textContent = '';
+                return;
+            }
+
+            const proposal = proposals.find(p => p.id === proposalId);
+            if (!proposal) return;
+
+            const invoiced = getProposalInvoicedAmount(proposalId);
+            const remaining = proposal.amount - invoiced;
+
+            // Show summary box
+            summaryBox.style.display = 'block';
+            document.getElementById('invoiceProposalTotal').textContent = '₪' + proposal.amount.toLocaleString();
+            document.getElementById('invoiceProposalInvoiced').textContent = '₪' + invoiced.toLocaleString();
+            document.getElementById('invoiceProposalRemaining').textContent = '₪' + remaining.toLocaleString();
+
+            // Calculate milestone info
+            const invoiceCount = invoices.filter(inv => inv.proposalId === proposalId).length;
+            document.getElementById('invoiceProposalMilestone').textContent = `Invoice #${invoiceCount + 1}`;
+
+            // Update max amount indicator
+            document.getElementById('invoiceMaxAmount').textContent = `(max: ₪${remaining.toLocaleString()})`;
+
+            // Pre-fill description
+            document.getElementById('invoiceDesc').value = `${proposal.projectName || proposal.project} - Milestone ${invoiceCount + 1}`;
+        }
+
+        // Validate invoice amount doesn't exceed remaining
+        function validateInvoiceAmount() {
+            const proposalId = parseInt(document.getElementById('invoiceProposal').value);
+            const amount = parseFloat(document.getElementById('invoiceAmount').value) || 0;
+            const amountField = document.getElementById('invoiceAmount');
+
+            if (!proposalId) return true;
+
+            const proposal = proposals.find(p => p.id === proposalId);
+            if (!proposal) return true;
+
+            const invoiced = getProposalInvoicedAmount(proposalId);
+            const remaining = proposal.amount - invoiced;
+
+            if (amount > remaining) {
+                amountField.style.borderColor = 'var(--danger)';
+                amountField.setCustomValidity(`Amount exceeds remaining proposal balance (₪${remaining.toLocaleString()})`);
+                return false;
+            } else {
+                amountField.style.borderColor = '';
+                amountField.setCustomValidity('');
+                return true;
+            }
         }
 
         function editInvoice(id) {
@@ -5122,6 +5614,9 @@ Webhook: Real-time updates`,
             document.getElementById('invoiceAmountPaid').value = '0';
             document.getElementById('invoiceBalance').value = '';
             document.getElementById('invoiceRecurring').checked = false;
+            document.getElementById('invoiceProposalSummary').style.display = 'none';
+            document.getElementById('invoiceMaxAmount').textContent = '';
+            document.getElementById('invoiceProposal').innerHTML = '<option value="">Select approved proposal...</option>';
             toggleRecurringOptions();
         }
 
@@ -5690,7 +6185,8 @@ Drishti Consulting`;
             const project = {
                 id: Date.now(),
                 projectNumber: 'PRJ-2026-' + String(projects.length + 1).padStart(3, '0'),
-                proposalId, proposalNumber: proposal ? proposal.number : null,
+                proposalId, proposalNumber: proposal ? (proposal.proposalNumber || proposal.number) : null,
+                proposalAmount: proposal ? proposal.amount : null,  // Track original proposal amount
                 clientId, clientName: client ? client.company : 'Unknown',
                 clientEmail: client && client.contacts ? client.contacts[0].email : '',
                 name: document.getElementById('projectName').value,
@@ -5703,17 +6199,38 @@ Drishti Consulting`;
                 actualEndDate: null, status: 'active', overallProgress: 0,
                 stages: currentStages.map((s, idx) => ({ ...s, id: idx })),
                 totalHoursSpent: 0, shareToken: generateShareToken(),
+                totalInvoiced: 0,  // Track how much has been invoiced
                 lastClientView: null, created: new Date().toISOString(), updated: new Date().toISOString()
             };
 
             projects.push(project);
+
+            // Auto-update proposal status to 'accepted' when converted to project
+            if (proposal) {
+                proposal.status = 'accepted';
+                proposal.projectId = project.id;
+                proposal.convertedToProjectDate = new Date().toISOString();
+                logAuditEvent('proposal', proposal.id, 'converted_to_project', `Converted to project: ${project.projectNumber}`);
+            }
+
+            // Auto-update client pipeline stage to 'customer' if not already
+            if (client && client.pipelineStage !== 'customer') {
+                client.pipelineStage = 'customer';
+                logAuditEvent('client', client.id, 'stage_changed', 'Stage changed to Customer (project created)');
+            }
+
+            // Log project creation
+            logAuditEvent('project', project.id, 'created', `Project created: ${project.name}`);
+
             saveData();
             renderProjects();
             updateProjectStats();
+            renderProposals();  // Refresh proposals to show updated status
+            renderClients();    // Refresh clients to show updated stage
             closeModal('newProject');
             this.reset();
             currentStages = [];
-            showToast('Project created!');
+            showToast('Project created!' + (proposal ? ' Proposal marked as accepted.' : ''));
         });
 
         function resetProjectForm() {
@@ -6488,7 +7005,7 @@ Drishti Consulting`;
             createInvoiceFromProposal(proposalId, docType);
         }
 
-        // Create invoice from proposal - opens Green Invoice with pre-filled data
+        // Create invoice from proposal - enhanced Green Invoice integration
         function createInvoiceFromProposal(proposalId, docType = 320) {
             const proposal = proposals.find(p => p.id === proposalId);
             if (!proposal) {
@@ -6509,41 +7026,86 @@ Drishti Consulting`;
             const docPrefix = docType === 300 ? 'QT' : docType === 100 ? 'PR' : 'IN';
             const docTypeName = documentTypeNames[docType] || 'מסמך';
 
+            // Calculate invoiced amount and milestone number
+            const alreadyInvoiced = getProposalInvoicedAmount(proposalId);
+            const remainingAmount = proposal.amount - alreadyInvoiced;
+            const milestoneNum = invoices.filter(inv => inv.proposalId === proposalId).length + 1;
+
             // Save document reference in our system first
             const docNumber = generateDocumentNumber(docPrefix, proposal.clientId);
+            const invoiceId = Date.now();
             const invoice = {
-                id: Date.now(),
+                id: invoiceId,
                 number: docNumber,
                 docType: docType,
                 docTypeName: docTypeName,
                 proposalId: proposalId,
+                proposalNumber: proposal.proposalNumber || proposal.number,
+                projectName: proposal.projectName || proposal.project,
+                milestoneNumber: milestoneNum,
                 clientId: proposal.clientId,
                 clientName: client.company,
                 amount: proposal.amount,
                 status: 'draft',
+                greenInvoiceId: null,  // Will be filled when created in Green Invoice
+                greenInvoiceUrl: null,
                 created: new Date().toISOString()
             };
 
             invoices.push(invoice);
             saveData();
+            logAuditEvent('invoice', invoiceId, 'created', `Draft invoice ${docNumber} created for ${docTypeName}`);
 
             // Open Green Invoice new document page with type parameter
             const greenInvoiceUrl = 'https://app.greeninvoice.co.il/documents/new?type=' + docType;
 
+            // Check if API credentials are configured
+            const hasApiCredentials = greenInvoiceSettings.apiId && greenInvoiceSettings.apiSecret;
+
             // Show modal with document details to copy
             const modalContent = `
                 <div style="text-align: right; direction: rtl;">
-                    <div style="background: rgba(99, 102, 241, 0.1); padding: 8px 12px; border-radius: 6px; margin-bottom: 16px; display: inline-block;">
-                        <span style="color: var(--primary); font-weight: 600;">${docTypeName}</span>
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
+                        <div style="background: rgba(99, 102, 241, 0.1); padding: 8px 12px; border-radius: 6px; display: inline-block;">
+                            <span style="color: var(--primary); font-weight: 600;">${docTypeName}</span>
+                        </div>
+                        <span style="color: var(--gray); font-size: 11px;">Milestone ${milestoneNum}</span>
                     </div>
                     <h3 style="margin-bottom: 16px; color: var(--success);">צור ${docTypeName} ב-Green Invoice</h3>
-                    <p style="color: var(--gray); margin-bottom: 20px;">העתק את הפרטים הבאים ל-Green Invoice:</p>
+
+                    <!-- Proposal Balance Summary -->
+                    <div style="background: linear-gradient(135deg, rgba(16,185,129,0.1) 0%, rgba(99,102,241,0.1) 100%); border: 1px solid rgba(16,185,129,0.2); border-radius: 8px; padding: 12px; margin-bottom: 16px;">
+                        <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; text-align: center; font-size: 11px;">
+                            <div>
+                                <div style="color: var(--gray);">סה"כ הצעה</div>
+                                <div style="color: var(--light); font-weight: 600;">₪${proposal.amount.toLocaleString()}</div>
+                            </div>
+                            <div>
+                                <div style="color: var(--gray);">כבר חויב</div>
+                                <div style="color: var(--warning); font-weight: 600;">₪${alreadyInvoiced.toLocaleString()}</div>
+                            </div>
+                            <div>
+                                <div style="color: var(--gray);">יתרה</div>
+                                <div style="color: var(--success); font-weight: 600;">₪${remainingAmount.toLocaleString()}</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <p style="color: var(--gray); margin-bottom: 12px; font-size: 12px;">העתק את הפרטים הבאים ל-Green Invoice:</p>
 
                     <div style="background: rgba(0,0,0,0.3); padding: 16px; border-radius: 8px; margin-bottom: 16px;">
-                        <div style="margin-bottom: 12px;">
-                            <label style="color: var(--gray); font-size: 10px;">שם לקוח</label>
-                            <div style="color: var(--light); font-size: 14px; font-weight: 600;">${client.company}</div>
+                        <div style="margin-bottom: 12px; display: flex; justify-content: space-between; align-items: center;">
+                            <div>
+                                <label style="color: var(--gray); font-size: 10px;">שם לקוח</label>
+                                <div style="color: var(--light); font-size: 14px; font-weight: 600;">${client.company}</div>
+                            </div>
+                            <button onclick="copyToClipboard('${escapeForHtml(client.company)}')" class="btn btn-sm" style="background: rgba(255,255,255,0.1); padding: 4px 8px;">📋</button>
                         </div>
+                        ${client.companyId ? `
+                        <div style="margin-bottom: 12px;">
+                            <label style="color: var(--gray); font-size: 10px;">ח.פ / עוסק מורשה</label>
+                            <div style="color: var(--light);">${client.companyId}</div>
+                        </div>` : ''}
                         <div style="margin-bottom: 12px;">
                             <label style="color: var(--gray); font-size: 10px;">אימייל</label>
                             <div style="color: var(--light);">${primaryContact.email || 'לא צוין'}</div>
@@ -6552,22 +7114,35 @@ Drishti Consulting`;
                             <label style="color: var(--gray); font-size: 10px;">טלפון</label>
                             <div style="color: var(--light);">${primaryContact.phone || 'לא צוין'}</div>
                         </div>
-                        <div style="margin-bottom: 12px;">
-                            <label style="color: var(--gray); font-size: 10px;">תיאור</label>
-                            <div style="color: var(--light);">${proposal.projectName}</div>
+                        <div style="margin-bottom: 12px; display: flex; justify-content: space-between; align-items: center;">
+                            <div>
+                                <label style="color: var(--gray); font-size: 10px;">תיאור פריט</label>
+                                <div style="color: var(--light);">${proposal.projectName || proposal.project} - Milestone ${milestoneNum}</div>
+                            </div>
+                            <button onclick="copyToClipboard('${escapeForHtml(proposal.projectName || proposal.project)} - Milestone ${milestoneNum}')" class="btn btn-sm" style="background: rgba(255,255,255,0.1); padding: 4px 8px;">📋</button>
                         </div>
                         <div style="margin-bottom: 12px;">
-                            <label style="color: var(--gray); font-size: 10px;">סכום (לפני מע"מ)</label>
-                            <div style="color: var(--success); font-size: 18px; font-weight: 700;">₪${proposal.amount.toLocaleString()}</div>
+                            <label style="color: var(--gray); font-size: 10px;">סכום מומלץ (לפני מע"מ)</label>
+                            <div style="color: var(--success); font-size: 18px; font-weight: 700;">₪${remainingAmount.toLocaleString()}</div>
+                            <small style="color: var(--gray); font-size: 10px;">או סכום חלקי לפי שלב</small>
                         </div>
                         <div>
-                            <label style="color: var(--gray); font-size: 10px;">מספר הצעה</label>
+                            <label style="color: var(--gray); font-size: 10px;">מספר הצעה / הערות</label>
                             <div style="color: var(--primary);">${proposal.proposalNumber || 'N/A'}</div>
                         </div>
                     </div>
 
+                    <!-- Link Green Invoice Document -->
+                    <div style="background: rgba(245,158,11,0.1); border: 1px solid rgba(245,158,11,0.3); border-radius: 8px; padding: 12px; margin-bottom: 16px;">
+                        <label style="color: var(--warning); font-size: 11px; display: block; margin-bottom: 8px;">לאחר יצירת המסמך ב-Green Invoice, הזן את מספר המסמך:</label>
+                        <div style="display: flex; gap: 8px;">
+                            <input type="text" id="greenInvoiceDocId_${invoiceId}" placeholder="מספר מסמך Green Invoice" style="flex: 1; padding: 8px; background: rgba(0,0,0,0.3); border: 1px solid rgba(255,255,255,0.1); border-radius: 6px; color: var(--light); font-size: 12px;">
+                            <button onclick="linkGreenInvoiceDoc(${invoiceId})" class="btn btn-warning btn-sm">קשר</button>
+                        </div>
+                    </div>
+
                     <div style="display: flex; gap: 12px;">
-                        <button onclick="window.open('${greenInvoiceUrl}', '_blank'); closeModal('invoiceDetails');" class="btn btn-success" style="flex: 1;">
+                        <button onclick="window.open('${greenInvoiceUrl}', '_blank');" class="btn btn-success" style="flex: 1;">
                             פתח Green Invoice →
                         </button>
                         <button onclick="closeModal('invoiceDetails')" class="btn btn-secondary">סגור</button>
@@ -6575,6 +7150,7 @@ Drishti Consulting`;
 
                     <p style="color: var(--gray); font-size: 10px; margin-top: 12px;">
                         מספר מסמך פנימי: ${docNumber}
+                        ${hasApiCredentials ? ' | API מוגדר ✓' : ' | API לא מוגדר'}
                     </p>
                 </div>
             `;
@@ -6585,15 +7161,54 @@ Drishti Consulting`;
                 modal = document.createElement('div');
                 modal.className = 'modal-overlay';
                 modal.id = 'modal-invoiceDetails';
-                modal.innerHTML = '<div class="modal" style="max-width: 450px;"><div id="invoiceDetailsContent"></div></div>';
+                modal.innerHTML = '<div class="modal" style="max-width: 500px;"><div id="invoiceDetailsContent"></div></div>';
                 document.body.appendChild(modal);
             }
 
             document.getElementById('invoiceDetailsContent').innerHTML = modalContent;
             modal.classList.add('active');
 
-            showToast('Invoice #' + invoiceNumber + ' created locally');
+            showToast('Draft invoice #' + docNumber + ' created');
             renderInvoices();
+        }
+
+        // Copy text to clipboard helper
+        function copyToClipboard(text) {
+            navigator.clipboard.writeText(text).then(() => {
+                showToast('Copied to clipboard!');
+            }).catch(err => {
+                console.error('Failed to copy:', err);
+            });
+        }
+
+        // Escape string for use in HTML attributes
+        function escapeForHtml(str) {
+            if (!str) return '';
+            return str.replace(/'/g, "\\'").replace(/"/g, '&quot;');
+        }
+
+        // Link Green Invoice document ID to local invoice
+        function linkGreenInvoiceDoc(invoiceId) {
+            const input = document.getElementById('greenInvoiceDocId_' + invoiceId);
+            const greenInvoiceDocId = input.value.trim();
+
+            if (!greenInvoiceDocId) {
+                showToast('Please enter the Green Invoice document number');
+                return;
+            }
+
+            const invoice = invoices.find(inv => inv.id === invoiceId);
+            if (invoice) {
+                invoice.greenInvoiceId = greenInvoiceDocId;
+                invoice.greenInvoiceUrl = `https://app.greeninvoice.co.il/documents/${greenInvoiceDocId}`;
+                invoice.status = 'sent';
+                invoice.sentDate = new Date().toISOString();
+                saveData();
+                logAuditEvent('invoice', invoiceId, 'linked_to_green_invoice', `Linked to Green Invoice: ${greenInvoiceDocId}`);
+                showToast('Invoice linked to Green Invoice #' + greenInvoiceDocId);
+                renderInvoices();
+                closeModal('invoiceDetails');
+            }
         }
 
         // Add to settings page load
@@ -6679,7 +7294,86 @@ Drishti Consulting`;
         function renderTemplatesPage() {
             renderClientCodes();
             renderProposalTemplates();
+            renderAuditLog();
             loadBankDetails();
+        }
+
+        // Render audit log entries
+        function renderAuditLog(filteredLog = null) {
+            const container = document.getElementById('auditLogContainer');
+            if (!container) return;
+
+            const logToRender = filteredLog || auditLog.slice().reverse().slice(0, 100);
+
+            if (logToRender.length === 0) {
+                container.innerHTML = '<div style="padding: 20px; text-align: center; color: var(--gray);">No audit entries yet. Actions will be logged here.</div>';
+                return;
+            }
+
+            const typeIcons = {
+                proposal: '📋',
+                project: '📁',
+                invoice: '💰',
+                client: '👤',
+                document: '📄'
+            };
+
+            const actionColors = {
+                created: 'var(--success)',
+                updated: 'var(--primary)',
+                deleted: 'var(--danger)',
+                converted_to_project: 'var(--accent)',
+                stage_changed: 'var(--warning)',
+                sent: 'var(--secondary)',
+                linked_to_green_invoice: 'var(--success)'
+            };
+
+            container.innerHTML = logToRender.map(entry => {
+                const icon = typeIcons[entry.entityType] || '📝';
+                const actionColor = actionColors[entry.action] || 'var(--gray)';
+                const timeAgo = formatRelativeDate(entry.timestamp);
+
+                return `
+                    <div style="padding: 12px 16px; border-bottom: 1px solid rgba(255,255,255,0.05); display: flex; align-items: flex-start; gap: 12px;">
+                        <span style="font-size: 16px;">${icon}</span>
+                        <div style="flex: 1;">
+                            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px;">
+                                <span style="font-size: 12px; font-weight: 600; color: var(--light);">${entry.entityType.toUpperCase()}</span>
+                                <span style="font-size: 10px; color: var(--gray);">${timeAgo}</span>
+                            </div>
+                            <div style="font-size: 11px; color: ${actionColor}; margin-bottom: 2px;">${entry.action.replace(/_/g, ' ')}</div>
+                            <div style="font-size: 11px; color: var(--gray);">${entry.details}</div>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        // Filter audit log
+        function filterAuditLog() {
+            const typeFilter = document.getElementById('auditFilterType').value;
+            const actionFilter = document.getElementById('auditFilterAction').value;
+
+            let filtered = auditLog.slice().reverse();
+
+            if (typeFilter) {
+                filtered = filtered.filter(e => e.entityType === typeFilter);
+            }
+            if (actionFilter) {
+                filtered = filtered.filter(e => e.action.includes(actionFilter));
+            }
+
+            renderAuditLog(filtered.slice(0, 100));
+        }
+
+        // Clear audit log
+        function clearAuditLog() {
+            if (confirm('Clear all audit log entries? This cannot be undone.')) {
+                auditLog = [];
+                localStorage.setItem('auditLog', JSON.stringify(auditLog));
+                renderAuditLog();
+                showToast('Audit log cleared');
+            }
         }
 
         function renderClientCodes() {
@@ -6818,6 +7512,141 @@ Drishti Consulting`;
                 defaultPayment: [
                     { pct: 50, desc: 'עם חתימת ההסכם' },
                     { pct: 50, desc: 'מסירת מסמך האפיון' }
+                ]
+            }, {
+                id: 4,
+                name: 'ESG & Sustainability',
+                type: 'esg',
+                isDefault: false,
+                description: 'ESG assessment, sustainability reporting and compliance',
+                sections: [
+                    { name: 'executiveSummary', label: 'תקציר מנהלים', required: true },
+                    { name: 'background', label: 'רקע ודרישות רגולציה', required: true },
+                    { name: 'scope', label: 'היקף הפרויקט', required: true },
+                    { name: 'methodology', label: 'מתודולוגיה', required: true },
+                    { name: 'deliverables', label: 'תוצרים', required: true },
+                    { name: 'timeline', label: 'לוח זמנים', required: true },
+                    { name: 'pricing', label: 'תמחיר', required: true }
+                ],
+                defaultItems: [
+                    { desc: 'מיפוי מצב קיים (Baseline Assessment)', pct: 20 },
+                    { desc: 'ניתוח מהותיות (Materiality Analysis)', pct: 15 },
+                    { desc: 'איסוף וניתוח נתונים סביבתיים', pct: 25 },
+                    { desc: 'הכנת דוח ESG/קיימות', pct: 25 },
+                    { desc: 'הדרכה ובקרה', pct: 15 }
+                ],
+                defaultPayment: [
+                    { pct: 40, desc: 'עם חתימת ההסכם' },
+                    { pct: 30, desc: 'סיום שלב איסוף נתונים' },
+                    { pct: 30, desc: 'מסירת הדוח הסופי' }
+                ],
+                defaultIncluded: [
+                    'מיפוי דרישות רגולציה רלוונטיות (CSRD, GRI)',
+                    'איסוף נתוני פליטות Scope 1, 2, 3',
+                    'ניתוח מהותיות עם בעלי עניין',
+                    'הכנת דוח מלא לפי תקן',
+                    'פגישות ליווי והדרכה'
+                ],
+                defaultExcluded: [
+                    'אימות צד שלישי (Verification)',
+                    'פרויקטי צמצום פליטות',
+                    'מערכת ניהול ESG שוטפת'
+                ]
+            }, {
+                id: 5,
+                name: 'System Integration',
+                type: 'integration',
+                isDefault: false,
+                description: 'API integration and system connectivity projects',
+                sections: [
+                    { name: 'executiveSummary', label: 'תקציר', required: true },
+                    { name: 'currentState', label: 'מצב קיים', required: true },
+                    { name: 'targetState', label: 'יעד', required: true },
+                    { name: 'integrations', label: 'פירוט אינטגרציות', required: true },
+                    { name: 'timeline', label: 'לוח זמנים', required: true },
+                    { name: 'pricing', label: 'תמחיר', required: true }
+                ],
+                defaultItems: [
+                    { desc: 'מיפוי מערכות ו-APIs קיימים', pct: 15 },
+                    { desc: 'תכנון ארכיטקטורה', pct: 15 },
+                    { desc: 'פיתוח Connectors', pct: 35 },
+                    { desc: 'בדיקות אינטגרציה', pct: 20 },
+                    { desc: 'תיעוד והדרכה', pct: 15 }
+                ],
+                defaultPayment: [
+                    { pct: 30, desc: 'עם חתימת ההסכם' },
+                    { pct: 40, desc: 'סיום פיתוח' },
+                    { pct: 30, desc: 'מסירה ואישור' }
+                ],
+                defaultIncluded: [
+                    'פיתוח כל ה-Connectors המפורטים',
+                    'תיעוד טכני מלא',
+                    'בדיקות E2E',
+                    'תמיכה 30 יום לאחר מסירה'
+                ],
+                defaultExcluded: [
+                    'שינויים במערכות מקור',
+                    'רישיונות צד שלישי',
+                    'תמיכה שוטפת מעבר לתקופת האחריות'
+                ]
+            }, {
+                id: 6,
+                name: 'Retainer Agreement',
+                type: 'retainer',
+                isDefault: false,
+                description: 'Monthly retainer for ongoing support and development',
+                sections: [
+                    { name: 'executiveSummary', label: 'תקציר', required: true },
+                    { name: 'servicesIncluded', label: 'שירותים כלולים', required: true },
+                    { name: 'availability', label: 'זמינות ו-SLA', required: true },
+                    { name: 'pricing', label: 'תמחיר חודשי', required: true },
+                    { name: 'terms', label: 'תנאים', required: true }
+                ],
+                defaultItems: [
+                    { desc: 'תמיכה טכנית שוטפת', pct: 30 },
+                    { desc: 'פיתוחים ושיפורים', pct: 40 },
+                    { desc: 'ניהול ופגישות', pct: 15 },
+                    { desc: 'תחזוקה מונעת', pct: 15 }
+                ],
+                defaultPayment: [
+                    { pct: 100, desc: 'תשלום חודשי מראש, ב-1 לכל חודש' }
+                ],
+                defaultIncluded: [
+                    'X שעות פיתוח/תמיכה בחודש',
+                    'זמן תגובה עד 24 שעות',
+                    'גישה לצוות פיתוח',
+                    'דוח חודשי'
+                ],
+                defaultExcluded: [
+                    'שעות מעבר למכסה (יחויבו בנפרד)',
+                    'פרויקטים חדשים מעבר לתחזוקה',
+                    'עבודות בשעות לא סטנדרטיות'
+                ]
+            }, {
+                id: 7,
+                name: 'BI & Dashboard',
+                type: 'bi',
+                isDefault: false,
+                description: 'Business Intelligence and Dashboard development',
+                sections: [
+                    { name: 'executiveSummary', label: 'תקציר', required: true },
+                    { name: 'dataRequirements', label: 'מקורות נתונים', required: true },
+                    { name: 'dashboards', label: 'דשבורדים נדרשים', required: true },
+                    { name: 'kpis', label: 'מדדים ו-KPIs', required: true },
+                    { name: 'timeline', label: 'לוח זמנים', required: true },
+                    { name: 'pricing', label: 'תמחיר', required: true }
+                ],
+                defaultItems: [
+                    { desc: 'הגדרת דרישות ו-KPIs', pct: 15 },
+                    { desc: 'חיבור מקורות נתונים', pct: 20 },
+                    { desc: 'פיתוח מודל נתונים', pct: 20 },
+                    { desc: 'עיצוב ופיתוח דשבורדים', pct: 30 },
+                    { desc: 'הדרכה ומסירה', pct: 15 }
+                ],
+                defaultPayment: [
+                    { pct: 40, desc: 'עם חתימת ההסכם' },
+                    { pct: 40, desc: 'אישור עיצוב דשבורדים' },
+                    { pct: 20, desc: 'מסירה סופית' }
                 ]
             }];
             saveData();

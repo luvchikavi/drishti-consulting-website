@@ -16,6 +16,8 @@
             --darker: #020617;
             --light: #f8fafc;
             --gray: #64748b;
+            --text-body: #94a3b8;  /* Improved body text - better contrast */
+            --text-muted: #cbd5e1; /* For emphasized body text */
             --success: #10b981;
             --gradient-1: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             --gradient-2: linear-gradient(135deg, #6366f1 0%, #8b5cf6 50%, #d946ef 100%);
@@ -38,8 +40,11 @@
             font-family: 'Open Sans', -apple-system, BlinkMacSystemFont, sans-serif;
             background: var(--darker);
             color: var(--light);
-            line-height: 1.6;
+            line-height: 1.7;
             overflow-x: hidden;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+            text-rendering: optimizeLegibility;
         }
 
         /* Animated Background */
@@ -240,11 +245,13 @@
         }
 
         .hero-subtitle {
-            font-size: clamp(14px, 2vw, 17px);
-            color: var(--gray);
-            max-width: 600px;
+            font-size: clamp(16px, 2.2vw, 19px);
+            color: var(--text-body);
+            max-width: 650px;
             margin: 0 auto 40px;
-            line-height: 1.6;
+            line-height: 1.8;
+            font-weight: 400;
+            letter-spacing: 0.01em;
         }
 
         .hero-ctas {
@@ -348,14 +355,17 @@
         }
 
         .meaning-text {
-            font-size: 14px;
-            color: var(--gray);
-            line-height: 1.7;
+            font-size: 16px;
+            color: var(--text-body);
+            line-height: 1.85;
             max-width: 800px;
+            font-weight: 400;
+            letter-spacing: 0.01em;
         }
 
         .meaning-text strong {
-            color: var(--light);
+            color: var(--text-muted);
+            font-weight: 600;
         }
 
         .meaning-features {
@@ -390,8 +400,10 @@
         }
 
         .meaning-feature p {
-            font-size: 14px;
-            color: var(--gray);
+            font-size: 15px;
+            color: var(--text-body);
+            line-height: 1.7;
+            font-weight: 400;
         }
 
         /* Services Section */
@@ -425,8 +437,10 @@
         }
 
         .section-header p {
-            font-size: 14px;
-            color: var(--gray);
+            font-size: 16px;
+            color: var(--text-body);
+            line-height: 1.7;
+            font-weight: 400;
         }
 
         .services-grid {
@@ -493,9 +507,10 @@
         }
 
         .service-card p {
-            color: var(--gray);
-            font-size: 13px;
-            line-height: 1.6;
+            color: var(--text-body);
+            font-size: 15px;
+            line-height: 1.75;
+            font-weight: 400;
         }
 
         /* Projects Section */
@@ -597,10 +612,16 @@
         }
 
         .project-content p {
-            color: var(--gray);
-            font-size: 13px;
-            line-height: 1.6;
+            color: var(--text-body);
+            font-size: 15px;
+            line-height: 1.75;
             margin-bottom: 20px;
+            font-weight: 400;
+        }
+
+        .project-content p strong {
+            color: var(--text-muted);
+            font-weight: 600;
         }
 
         .project-tech {
@@ -611,12 +632,12 @@
         }
 
         .tech-tag {
-            font-size: 12px;
+            font-size: 13px;
             padding: 6px 14px;
             background: rgba(255, 255, 255, 0.05);
             border: 1px solid var(--glass-border);
             border-radius: 20px;
-            color: var(--gray);
+            color: var(--text-body);
         }
 
         .project-preview {
@@ -761,12 +782,12 @@
         }
 
         .founder-badge {
-            font-size: 12px;
+            font-size: 13px;
             padding: 8px 16px;
             background: var(--glass);
             border: 1px solid var(--glass-border);
             border-radius: 20px;
-            color: var(--gray);
+            color: var(--text-body);
         }
 
         .founder-info h2 {
@@ -790,10 +811,16 @@
         }
 
         .founder-bio {
-            color: var(--gray);
-            font-size: 13px;
-            line-height: 1.7;
+            color: var(--text-body);
+            font-size: 15px;
+            line-height: 1.8;
             margin-bottom: 24px;
+            font-weight: 400;
+        }
+
+        .founder-bio strong {
+            color: var(--text-muted);
+            font-weight: 600;
         }
 
         .founder-stats {
@@ -819,8 +846,8 @@
         }
 
         .stat-label {
-            font-size: 12px;
-            color: var(--gray);
+            font-size: 13px;
+            color: var(--text-body);
             margin-top: 4px;
         }
 
@@ -868,9 +895,11 @@
         }
 
         .contact p {
-            font-size: 14px;
-            color: var(--gray);
+            font-size: 16px;
+            color: var(--text-body);
             margin-bottom: 40px;
+            line-height: 1.7;
+            font-weight: 400;
         }
 
         .contact-card {
@@ -924,8 +953,8 @@
         }
 
         .contact-method-label {
-            font-size: 13px;
-            color: var(--gray);
+            font-size: 14px;
+            color: var(--text-body);
             margin-bottom: 5px;
         }
 
@@ -959,14 +988,14 @@
         }
 
         .footer-tagline {
-            color: var(--gray);
-            font-size: 14px;
+            color: var(--text-body);
+            font-size: 15px;
             margin-bottom: 30px;
         }
 
         .footer-copyright {
-            font-size: 13px;
-            color: var(--gray);
+            font-size: 14px;
+            color: var(--text-body);
         }
 
         /* Responsive */

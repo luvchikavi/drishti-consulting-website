@@ -736,6 +736,20 @@
                     </div>
                 </div>
 
+                <!-- IP Ownership Section -->
+                <div class="section" id="ipOwnershipSection" style="display: none;">
+                    <h2 style="font-size: 18px; margin-bottom: 16px; color: var(--secondary); border-bottom: 2px solid var(--secondary); padding-bottom: 8px;">8. זכויות קניין רוחני (IP)</h2>
+                    <div style="background: rgba(139, 92, 246, 0.05); border: 1px solid rgba(139, 92, 246, 0.2); border-radius: 12px; padding: 20px;">
+                        <div contenteditable="true" class="editable editable-multiline" id="ipOwnership" style="font-size: 13px; line-height: 2; white-space: pre-line;">1. קוד המקור, הלוגיקה העסקית, והמודלים יישארו בבעלות מלאה של המפתח.
+
+2. הלקוח מקבל רישיון שימוש בלעדי במערכת לצרכיו העסקיים.
+
+3. המפתח שומר לעצמו את הזכות לשימוש חוזר בקוד ובארכיטקטורה.
+
+4. נתוני הלקוח יישארו בבעלות מלאה של הלקוח.</div>
+                    </div>
+                </div>
+
                 <!-- Footer -->
                 <div style="margin-top: 40px; padding-top: 20px; border-top: 1px solid rgba(255,255,255,0.1); text-align: center;">
                     <p style="color: var(--gray); font-size: 12px;">Drishti Consulting | ד"ר אבי לובצ'יק | avi@drishticonsulting.com</p>
@@ -845,6 +859,10 @@
             }
             if (currentProposal.excluded) {
                 document.getElementById('excluded').textContent = currentProposal.excluded;
+            }
+            if (currentProposal.ipOwnership) {
+                document.getElementById('ipOwnership').textContent = currentProposal.ipOwnership;
+                document.getElementById('ipOwnershipSection').style.display = 'block';
             }
             if (currentProposal.projectDuration) {
                 document.getElementById('projectDuration').textContent = currentProposal.projectDuration;
@@ -1083,6 +1101,7 @@
                 projectDuration: document.getElementById('projectDuration').textContent,
                 included: document.getElementById('included').textContent,
                 excluded: document.getElementById('excluded').textContent,
+                ipOwnership: document.getElementById('ipOwnership').textContent,
                 versions: versions,
                 amount: lineItems.reduce((sum, item) => sum + (item.hours * (parseInt(document.getElementById('hourlyRate').value) || 375)), 0),
                 hours: lineItems.reduce((sum, item) => sum + item.hours, 0),
