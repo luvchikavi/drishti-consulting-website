@@ -651,10 +651,26 @@
                     </div>
                 </div>
 
+                <!-- IP Ownership -->
+                ${p.ipOwnership ? `
+                <div class="section">
+                    <h2 class="section-title">8. זכויות קניין רוחני (IP)</h2>
+                    <div class="section-content">
+                        <div style="background: rgba(139, 92, 246, 0.05); border: 1px solid rgba(139, 92, 246, 0.2); border-radius: 12px; padding: 20px;">
+                            <div style="font-size: 13px; color: var(--light); line-height: 2;">
+                                ${Array.isArray(p.ipOwnership)
+                                    ? p.ipOwnership.map((item, i) => `<p style="margin-bottom: 12px;">${i+1}. ${item}</p>`).join('')
+                                    : `<div style="white-space: pre-line;">${p.ipOwnership}</div>`}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                ` : ''}
+
                 <!-- Comments / Notes -->
                 ${p.comments ? `
                 <div class="section">
-                    <h2 class="section-title">8. הערות</h2>
+                    <h2 class="section-title">${p.ipOwnership ? '9' : '8'}. הערות</h2>
                     <div class="section-content">
                         <div style="font-size: 13px; color: var(--gray); line-height: 2;">
                             ${p.comments.map(c => `<p>${c}</p>`).join('')}
