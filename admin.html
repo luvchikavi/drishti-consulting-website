@@ -330,6 +330,11 @@
             color: var(--secondary);
         }
 
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+
         .action-btns {
             display: flex;
             gap: 6px;
@@ -745,6 +750,10 @@
 
     <!-- Dashboard -->
     <div class="dashboard" id="dashboard">
+        <!-- Active Timer Bar -->
+        <div id="activeTimerBar" style="display: none; position: fixed; top: 0; left: 0; right: 0; z-index: 1000; background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%); border-bottom: 2px solid var(--danger); padding: 8px 24px; justify-content: space-between; align-items: center;">
+        </div>
+
         <!-- Sidebar -->
         <div class="sidebar">
             <a href="https://drishticonsulting.com" target="_blank" class="sidebar-logo" style="text-decoration: none; color: inherit;">
@@ -1096,6 +1105,7 @@
                                 <th>Project Name</th>
                                 <th>Progress</th>
                                 <th>Status</th>
+                                <th style="text-align: center;">Timer</th>
                                 <th>Actions</th>
                             </tr>
                         </thead>
@@ -1962,6 +1972,42 @@
                             <strong>Logo Setup:</strong> Upload your Drishti logo in Green Invoice: Settings → Business Details → Logo
                         </p>
                         <a href="https://app.greeninvoice.co.il/settings/business" target="_blank" class="btn btn-secondary btn-sm">Open Green Invoice Settings →</a>
+                    </div>
+                </div>
+
+                <!-- Data Management -->
+                <div style="margin-top: 30px; background: rgba(59, 130, 246, 0.05); border: 1px solid rgba(59, 130, 246, 0.2); border-radius: 16px; padding: 24px;">
+                    <h3 style="margin-bottom: 8px; display: flex; align-items: center; gap: 8px;">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#3b82f6" stroke-width="2"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/><path d="M3.27 6.96L12 12.01l8.73-5.05"/><line x1="12" y1="22.08" x2="12" y2="12"/></svg>
+                        Data Management
+                    </h3>
+                    <p style="color: var(--gray); font-size: 11px; margin-bottom: 16px;">Manage your portal data. Load demo data to test features or clear all data to start fresh.</p>
+
+                    <div style="display: flex; gap: 12px; flex-wrap: wrap;">
+                        <button class="btn btn-primary" onclick="loadDemoData()" style="width: auto;">
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="margin-right: 6px;"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7,10 12,15 17,10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+                            Load Demo Data
+                        </button>
+                        <button class="btn btn-danger" onclick="clearAllData()" style="width: auto; background: rgba(239, 68, 68, 0.1); border: 1px solid var(--danger); color: var(--danger);">
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="margin-right: 6px;"><polyline points="3,6 5,6 21,6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>
+                            Clear All Data
+                        </button>
+                        <button class="btn btn-secondary" onclick="exportAllData()" style="width: auto;">
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="margin-right: 6px;"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17,8 12,3 7,8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+                            Export Data (JSON)
+                        </button>
+                    </div>
+
+                    <div id="dataManagementStatus" style="margin-top: 12px; font-size: 11px;"></div>
+
+                    <div style="margin-top: 16px; padding: 12px; background: rgba(255,255,255,0.03); border-radius: 8px;">
+                        <div style="font-size: 11px; color: var(--gray); margin-bottom: 8px;">Current Data Summary:</div>
+                        <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; font-size: 12px;">
+                            <div><span style="color: var(--gray);">Clients:</span> <strong id="dataCountClients">0</strong></div>
+                            <div><span style="color: var(--gray);">Proposals:</span> <strong id="dataCountProposals">0</strong></div>
+                            <div><span style="color: var(--gray);">Projects:</span> <strong id="dataCountProjects">0</strong></div>
+                            <div><span style="color: var(--gray);">Invoices:</span> <strong id="dataCountInvoices">0</strong></div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -3368,167 +3414,8 @@
             }
         ];
 
+        // Load data from localStorage (no automatic sample data - user controls this)
         let clients = JSON.parse(localStorage.getItem('clients')) || [];
-        const dataInitialized = localStorage.getItem('dataInitialized');
-        if (!dataInitialized) {
-            // First time - load sample data
-            clients = sampleClients;
-            localStorage.setItem('clients', JSON.stringify(clients));
-
-            // Sample proposal for GreenTech (demo client)
-            const sampleProposals = [
-                {
-                    id: 2001,
-                    proposalNumber: 'PP-GTS-001-26',
-                    clientId: 1007,
-                    clientName: 'GreenTech Solutions Ltd',
-                    projectName: 'ESG Reporting Platform',
-                    project: 'ESG Reporting Platform',
-                    proposalType: 'development',
-                    type: 'development',
-                    amount: 85000,
-                    hours: 450,
-                    status: 'accepted',
-                    description: 'Development of a comprehensive ESG reporting platform including carbon tracking, sustainability metrics dashboard, and automated report generation for CSRD compliance.',
-                    created: '2025-11-01T10:00:00.000Z',
-                    projectId: 3001,
-                    convertedToProjectDate: '2025-11-15T10:00:00.000Z'
-                },
-                {
-                    id: 2002,
-                    proposalNumber: 'PP-GTS-002-26',
-                    clientId: 1007,
-                    clientName: 'GreenTech Solutions Ltd',
-                    projectName: 'Carbon Footprint Calculator API',
-                    project: 'Carbon Footprint Calculator API',
-                    proposalType: 'integration',
-                    type: 'integration',
-                    amount: 35000,
-                    hours: 180,
-                    status: 'accepted',
-                    description: 'API integration for carbon footprint calculations with third-party data sources and emission factor databases.',
-                    created: '2025-12-01T10:00:00.000Z',
-                    projectId: null
-                }
-            ];
-            localStorage.setItem('proposals', JSON.stringify(sampleProposals));
-
-            // Sample project for GreenTech
-            const sampleProjects = [
-                {
-                    id: 3001,
-                    projectNumber: 'PRJ-2026-001',
-                    proposalId: 2001,
-                    proposalNumber: 'PP-GTS-001-26',
-                    proposalAmount: 85000,
-                    clientId: 1007,
-                    clientName: 'GreenTech Solutions Ltd',
-                    name: 'ESG Reporting Platform',
-                    description: 'Comprehensive ESG reporting platform for CSRD compliance',
-                    type: 'development',
-                    totalBudget: 85000,
-                    totalHours: 450,
-                    totalHoursSpent: 120,
-                    overallProgress: 35,
-                    status: 'active',
-                    startDate: '2025-11-20',
-                    expectedEndDate: '2026-04-30',
-                    totalInvoiced: 34000,
-                    stages: [
-                        { id: 0, name: 'Discovery & Planning', description: 'Requirements and architecture', estimatedHours: 60, actualHours: 55, status: 'completed', completionPercent: 100, startDate: '2025-11-20', completedDate: '2025-12-10' },
-                        { id: 1, name: 'Backend Development', description: 'API and database', estimatedHours: 120, actualHours: 65, status: 'in_progress', completionPercent: 55, startDate: '2025-12-11', completedDate: null, notes: 'Carbon calculation engine 80% complete', blockers: '' },
-                        { id: 2, name: 'Frontend Development', description: 'Dashboard UI', estimatedHours: 100, actualHours: 0, status: 'not_started', completionPercent: 0 },
-                        { id: 3, name: 'Integration & Testing', description: 'Third-party integrations', estimatedHours: 80, actualHours: 0, status: 'not_started', completionPercent: 0 },
-                        { id: 4, name: 'Deployment & Training', description: 'Go-live', estimatedHours: 90, actualHours: 0, status: 'not_started', completionPercent: 0 }
-                    ],
-                    created: '2025-11-15T10:00:00.000Z'
-                }
-            ];
-            localStorage.setItem('projects', JSON.stringify(sampleProjects));
-
-            // Sample invoices for GreenTech
-            const sampleInvoices = [
-                {
-                    id: 4001,
-                    number: 'IN-GTS-001-26',
-                    proposalId: 2001,
-                    proposalNumber: 'PP-GTS-001-26',
-                    projectName: 'ESG Reporting Platform',
-                    milestoneNumber: 1,
-                    clientId: 1007,
-                    clientName: 'GreenTech Solutions Ltd',
-                    amount: 34000,
-                    amountPaid: 34000,
-                    balance: 0,
-                    date: '2025-11-20',
-                    dueDate: '2025-12-20',
-                    description: 'ESG Reporting Platform - Milestone 1 (40% deposit)',
-                    status: 'paid',
-                    greenInvoiceId: 'GI-123456',
-                    created: '2025-11-20T10:00:00.000Z'
-                }
-            ];
-            localStorage.setItem('invoices', JSON.stringify(sampleInvoices));
-
-            // Sample communication logs for GreenTech
-            const sampleCommunicationLogs = [
-                {
-                    id: 5001,
-                    clientId: 1007,
-                    type: 'meeting',
-                    date: '2025-10-20T14:00:00.000Z',
-                    contactName: 'Dana Cohen',
-                    subject: 'Initial Discovery Meeting',
-                    notes: 'Discussed ESG reporting requirements. Client needs CSRD compliance by Q2 2026. Interested in carbon tracking and sustainability dashboard.',
-                    followUp: false
-                },
-                {
-                    id: 5002,
-                    clientId: 1007,
-                    type: 'email',
-                    date: '2025-11-01T10:00:00.000Z',
-                    contactName: 'Dana Cohen',
-                    subject: 'Proposal Sent - ESG Platform',
-                    notes: 'Sent detailed proposal for ESG Reporting Platform. ₪85,000 total.',
-                    followUp: false
-                },
-                {
-                    id: 5003,
-                    clientId: 1007,
-                    type: 'call',
-                    date: '2025-11-10T11:00:00.000Z',
-                    contactName: 'Amit Levy',
-                    subject: 'Technical Discussion',
-                    notes: 'Reviewed technical architecture with CTO. Discussed API integrations with their existing systems.',
-                    followUp: false
-                },
-                {
-                    id: 5004,
-                    clientId: 1007,
-                    type: 'meeting',
-                    date: '2026-01-05T10:00:00.000Z',
-                    contactName: 'Dana Cohen',
-                    subject: 'Progress Review Meeting',
-                    notes: 'Reviewed Phase 1 completion. Client satisfied with progress. Discussed Phase 2 timeline.',
-                    followUp: true,
-                    followUpDate: '2026-01-20'
-                }
-            ];
-            localStorage.setItem('communicationLogs', JSON.stringify(sampleCommunicationLogs));
-
-            // Sample audit log entries
-            const sampleAuditLog = [
-                { id: 6001, entityType: 'client', entityId: 1007, action: 'created', details: 'Client created: GreenTech Solutions Ltd', userId: 'admin', timestamp: '2025-10-15T10:00:00.000Z' },
-                { id: 6002, entityType: 'proposal', entityId: 2001, action: 'created', details: 'Proposal created: PP-GTS-001-26 - ESG Reporting Platform', userId: 'admin', timestamp: '2025-11-01T10:00:00.000Z' },
-                { id: 6003, entityType: 'proposal', entityId: 2001, action: 'converted_to_project', details: 'Converted to project: PRJ-2026-001', userId: 'admin', timestamp: '2025-11-15T10:00:00.000Z' },
-                { id: 6004, entityType: 'client', entityId: 1007, action: 'stage_changed', details: 'Stage changed to Customer (project created)', userId: 'admin', timestamp: '2025-11-15T10:00:00.000Z' },
-                { id: 6005, entityType: 'invoice', entityId: 4001, action: 'created', details: 'Invoice created: IN-GTS-001-26 (Milestone 1 for PP-GTS-001-26)', userId: 'admin', timestamp: '2025-11-20T10:00:00.000Z' },
-                { id: 6006, entityType: 'invoice', entityId: 4001, action: 'linked_to_green_invoice', details: 'Linked to Green Invoice: GI-123456', userId: 'admin', timestamp: '2025-11-20T11:00:00.000Z' }
-            ];
-            localStorage.setItem('auditLog', JSON.stringify(sampleAuditLog));
-
-            localStorage.setItem('dataInitialized', 'true');
-        }
         let proposals = JSON.parse(localStorage.getItem('proposals')) || [];
         let invoices = JSON.parse(localStorage.getItem('invoices')) || [];
         let expenses = JSON.parse(localStorage.getItem('expenses')) || [];
@@ -4151,6 +4038,14 @@ Webhook: Real-time updates`,
                 }
                 if (page === 'templates') {
                     renderTemplatesPage();
+                }
+                if (page === 'settings') {
+                    updateDataCounts();
+                }
+                if (page === 'dashboard') {
+                    updateDashboard();
+                    updateDashboardAlerts();
+                    updateUpcomingDeadlines();
                 }
             });
         });
@@ -5328,6 +5223,311 @@ Webhook: Real-time updates`,
             }
         }
 
+        // Data Management Functions
+        function loadDemoData() {
+            if (!confirm('This will add demo data (GreenTech Solutions client with proposals, projects, and invoices). Continue?')) return;
+
+            // Add demo client if not exists
+            const existingClient = clients.find(c => c.id === 1007);
+            if (!existingClient) {
+                clients.push({
+                    id: 1007,
+                    company: 'GreenTech Solutions Ltd',
+                    companyHe: 'גרינטק פתרונות בע"מ',
+                    sector: 'technology',
+                    companyId: '516789012',
+                    industry: 'Technology',
+                    pipelineStage: 'customer',
+                    estimatedValue: 120000,
+                    leadSource: 'referral',
+                    contacts: [
+                        { name: 'Dana Cohen', nameHe: 'דנה כהן', position: 'CEO', email: 'dana@greentech.co.il', phone: '054-1234567' },
+                        { name: 'Amit Levy', nameHe: 'עמית לוי', position: 'CTO', email: 'amit@greentech.co.il', phone: '052-9876543' }
+                    ],
+                    notes: 'ESG-focused tech company. Interested in sustainability reporting platform and carbon tracking system.',
+                    status: 'active',
+                    created: '2025-10-15T10:00:00.000Z'
+                });
+            }
+
+            // Add demo proposals
+            const existingProposal = proposals.find(p => p.id === 2001);
+            if (!existingProposal) {
+                proposals.push({
+                    id: 2001,
+                    proposalNumber: 'PP-GTS-001-26',
+                    clientId: 1007,
+                    clientName: 'GreenTech Solutions Ltd',
+                    projectName: 'ESG Reporting Platform',
+                    project: 'ESG Reporting Platform',
+                    proposalType: 'development',
+                    type: 'development',
+                    amount: 85000,
+                    hours: 450,
+                    status: 'accepted',
+                    description: 'Development of a comprehensive ESG reporting platform.',
+                    created: '2025-11-01T10:00:00.000Z',
+                    projectId: 3001
+                });
+                proposals.push({
+                    id: 2002,
+                    proposalNumber: 'PP-GTS-002-26',
+                    clientId: 1007,
+                    clientName: 'GreenTech Solutions Ltd',
+                    projectName: 'Carbon Footprint Calculator API',
+                    project: 'Carbon Footprint Calculator API',
+                    proposalType: 'integration',
+                    type: 'integration',
+                    amount: 35000,
+                    hours: 180,
+                    status: 'accepted',
+                    description: 'API integration for carbon footprint calculations.',
+                    created: '2025-12-01T10:00:00.000Z'
+                });
+            }
+
+            // Add demo project
+            const existingProject = projects.find(p => p.id === 3001);
+            if (!existingProject) {
+                projects.push({
+                    id: 3001,
+                    projectNumber: 'PRJ-2026-001',
+                    proposalId: 2001,
+                    proposalNumber: 'PP-GTS-001-26',
+                    proposalAmount: 85000,
+                    clientId: 1007,
+                    clientName: 'GreenTech Solutions Ltd',
+                    name: 'ESG Reporting Platform',
+                    description: 'Comprehensive ESG reporting platform',
+                    type: 'development',
+                    totalBudget: 85000,
+                    totalHours: 450,
+                    totalHoursSpent: 120,
+                    overallProgress: 35,
+                    status: 'active',
+                    startDate: '2025-11-20',
+                    expectedEndDate: '2026-04-30',
+                    totalInvoiced: 34000,
+                    stages: [
+                        { id: 0, name: 'Discovery & Planning', estimatedHours: 60, actualHours: 55, status: 'completed', completionPercent: 100 },
+                        { id: 1, name: 'Backend Development', estimatedHours: 120, actualHours: 65, status: 'in_progress', completionPercent: 55 },
+                        { id: 2, name: 'Frontend Development', estimatedHours: 100, actualHours: 0, status: 'not_started', completionPercent: 0 },
+                        { id: 3, name: 'Integration & Testing', estimatedHours: 80, actualHours: 0, status: 'not_started', completionPercent: 0 },
+                        { id: 4, name: 'Deployment', estimatedHours: 90, actualHours: 0, status: 'not_started', completionPercent: 0 }
+                    ],
+                    created: '2025-11-15T10:00:00.000Z'
+                });
+            }
+
+            // Add demo invoice
+            const existingInvoice = invoices.find(i => i.id === 4001);
+            if (!existingInvoice) {
+                invoices.push({
+                    id: 4001,
+                    number: 'IN-GTS-001-26',
+                    proposalId: 2001,
+                    proposalNumber: 'PP-GTS-001-26',
+                    projectName: 'ESG Reporting Platform',
+                    milestoneNumber: 1,
+                    clientId: 1007,
+                    clientName: 'GreenTech Solutions Ltd',
+                    amount: 34000,
+                    amountPaid: 34000,
+                    balance: 0,
+                    date: '2025-11-20',
+                    dueDate: '2025-12-20',
+                    description: 'Milestone 1 (40% deposit)',
+                    status: 'paid',
+                    created: '2025-11-20T10:00:00.000Z'
+                });
+            }
+
+            saveData();
+            renderClients();
+            renderProposals();
+            renderProjects();
+            renderInvoices();
+            updateStats();
+            updateDataCounts();
+            showToast('Demo data loaded successfully!', 'success');
+            document.getElementById('dataManagementStatus').innerHTML = '<span style="color: var(--success);">✓ Demo data loaded</span>';
+        }
+
+        function clearAllData() {
+            if (!confirm('⚠️ WARNING: This will permanently delete ALL data (clients, proposals, projects, invoices, etc.). This cannot be undone. Are you sure?')) return;
+            if (!confirm('Please confirm again: Delete all data?')) return;
+
+            clients = [];
+            proposals = [];
+            projects = [];
+            invoices = [];
+            expenses = [];
+            timeEntries = [];
+            tasks = [];
+            communicationLogs = [];
+            auditLog = [];
+
+            saveData();
+            localStorage.removeItem('auditLog');
+
+            renderClients();
+            renderProposals();
+            renderProjects();
+            renderInvoices();
+            updateStats();
+            updateDataCounts();
+            showToast('All data cleared', 'warning');
+            document.getElementById('dataManagementStatus').innerHTML = '<span style="color: var(--warning);">⚠ All data cleared</span>';
+        }
+
+        function exportAllData() {
+            const exportData = {
+                exportDate: new Date().toISOString(),
+                clients,
+                proposals,
+                projects,
+                invoices,
+                expenses,
+                timeEntries,
+                tasks,
+                communicationLogs,
+                auditLog
+            };
+
+            const blob = new Blob([JSON.stringify(exportData, null, 2)], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `drishti-backup-${new Date().toISOString().split('T')[0]}.json`;
+            a.click();
+            URL.revokeObjectURL(url);
+            showToast('Data exported successfully!', 'success');
+        }
+
+        function updateDataCounts() {
+            const countsClients = document.getElementById('dataCountClients');
+            const countsProposals = document.getElementById('dataCountProposals');
+            const countsProjects = document.getElementById('dataCountProjects');
+            const countsInvoices = document.getElementById('dataCountInvoices');
+            if (countsClients) countsClients.textContent = clients.length;
+            if (countsProposals) countsProposals.textContent = proposals.length;
+            if (countsProjects) countsProjects.textContent = projects.length;
+            if (countsInvoices) countsInvoices.textContent = invoices.length;
+        }
+
+        // Time Logger for Projects
+        let activeTimer = JSON.parse(localStorage.getItem('activeTimer')) || null;
+        let timerInterval = null;
+
+        function startProjectTimer(projectId, stageName = '') {
+            if (activeTimer) {
+                if (!confirm('Another timer is running. Stop it and start a new one?')) return;
+                stopProjectTimer(false);
+            }
+
+            const project = projects.find(p => p.id === projectId);
+            if (!project) return;
+
+            activeTimer = {
+                projectId,
+                projectName: project.name,
+                clientName: project.clientName,
+                stageName,
+                startTime: new Date().toISOString(),
+                elapsed: 0
+            };
+            localStorage.setItem('activeTimer', JSON.stringify(activeTimer));
+
+            startTimerDisplay();
+            renderProjects();
+            showToast(`Timer started for ${project.name}`, 'success');
+        }
+
+        function stopProjectTimer(save = true) {
+            if (!activeTimer) return;
+
+            clearInterval(timerInterval);
+            const endTime = new Date();
+            const startTime = new Date(activeTimer.startTime);
+            const durationMs = endTime - startTime;
+            const durationHours = Math.round((durationMs / 1000 / 60 / 60) * 100) / 100;
+
+            if (save && durationHours > 0.01) {
+                // Create time entry (compatible with dashboard time utilization)
+                const entry = {
+                    id: Date.now(),
+                    projectId: activeTimer.projectId,
+                    projectName: activeTimer.projectName,
+                    clientName: activeTimer.clientName,
+                    stageName: activeTimer.stageName,
+                    startTime: activeTimer.startTime,
+                    endTime: endTime.toISOString(),
+                    date: endTime.toISOString().split('T')[0],  // For dashboard filtering
+                    duration: durationHours,
+                    hours: durationHours,  // For dashboard calculations
+                    billable: true,  // Assume billable by default
+                    notes: '',
+                    created: new Date().toISOString()
+                };
+                timeEntries.push(entry);
+
+                // Update project hours
+                const project = projects.find(p => p.id === activeTimer.projectId);
+                if (project) {
+                    project.totalHoursSpent = (project.totalHoursSpent || 0) + durationHours;
+                    // Update stage hours if specified
+                    if (activeTimer.stageName && project.stages) {
+                        const stage = project.stages.find(s => s.name === activeTimer.stageName);
+                        if (stage) {
+                            stage.actualHours = (stage.actualHours || 0) + durationHours;
+                        }
+                    }
+                }
+
+                saveData();
+                showToast(`Time logged: ${durationHours.toFixed(2)} hours`, 'success');
+            }
+
+            activeTimer = null;
+            localStorage.removeItem('activeTimer');
+            updateTimerDisplay();
+            renderProjects();
+        }
+
+        function startTimerDisplay() {
+            updateTimerDisplay();
+            timerInterval = setInterval(updateTimerDisplay, 1000);
+        }
+
+        function updateTimerDisplay() {
+            const timerBar = document.getElementById('activeTimerBar');
+            if (!timerBar) return;
+
+            if (activeTimer) {
+                const elapsed = Math.floor((new Date() - new Date(activeTimer.startTime)) / 1000);
+                const hours = Math.floor(elapsed / 3600);
+                const minutes = Math.floor((elapsed % 3600) / 60);
+                const seconds = elapsed % 60;
+                const timeStr = `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+
+                timerBar.style.display = 'flex';
+                timerBar.innerHTML = `
+                    <div style="display: flex; align-items: center; gap: 12px;">
+                        <div style="width: 8px; height: 8px; background: #ef4444; border-radius: 50%; animation: pulse 1s infinite;"></div>
+                        <span style="font-weight: 600;">${timeStr}</span>
+                        <span style="color: var(--gray);">|</span>
+                        <span>${activeTimer.projectName}</span>
+                        ${activeTimer.stageName ? `<span style="color: var(--gray);">- ${activeTimer.stageName}</span>` : ''}
+                    </div>
+                    <button onclick="stopProjectTimer(true)" class="btn btn-sm" style="background: var(--danger); padding: 4px 12px;">
+                        Stop & Save
+                    </button>
+                `;
+            } else {
+                timerBar.style.display = 'none';
+            }
+        }
+
         // Load saved settings
         document.getElementById('airtableKey').value = localStorage.getItem('airtableKey') || '';
         document.getElementById('airtableBase').value = localStorage.getItem('airtableBase') || '';
@@ -6261,18 +6461,23 @@ Drishti Consulting`;
             const tbody = document.getElementById('projectsTable');
             const list = filteredProjects || projects;
             if (list.length === 0) {
-                tbody.innerHTML = '<tr><td colspan="6" style="text-align: center; color: var(--gray);">No projects yet</td></tr>';
+                tbody.innerHTML = '<tr><td colspan="7" style="text-align: center; color: var(--gray);">No projects yet</td></tr>';
                 return;
             }
             tbody.innerHTML = list.map(p => {
                 const progress = p.overallProgress || 0;
                 const statusColors = { active: 'status-active', on_hold: 'status-pending', completed: 'status-sent' };
-                return `<tr>
-                    <td><strong>${p.projectNumber}</strong></td>
-                    <td>${p.clientName}</td>
+                const isTimerActive = activeTimer && activeTimer.projectId === p.id;
+                const timerBtn = isTimerActive
+                    ? `<button class="btn btn-sm" style="background: var(--danger); animation: pulse 1s infinite;" onclick="stopProjectTimer(true)" title="Stop Timer">⏹ Stop</button>`
+                    : `<button class="btn btn-sm" style="background: var(--success);" onclick="startProjectTimer(${p.id})" title="Start Timer">▶ Start</button>`;
+                return `<tr ${isTimerActive ? 'style="background: rgba(239, 68, 68, 0.1);"' : ''}>
+                    <td><strong>${p.projectNumber || 'N/A'}</strong></td>
+                    <td>${p.clientName || 'N/A'}</td>
                     <td>${p.name}</td>
                     <td style="min-width: 150px;"><div style="display: flex; align-items: center; gap: 8px;"><div style="flex: 1; background: rgba(255,255,255,0.1); border-radius: 4px; height: 8px; overflow: hidden;"><div style="background: var(--gradient); height: 100%; width: ${progress}%;"></div></div><span style="font-size: 12px;">${progress}%</span></div></td>
-                    <td><span class="status-badge ${statusColors[p.status] || 'status-pending'}">${p.status.replace('_', ' ')}</span></td>
+                    <td><span class="status-badge ${statusColors[p.status] || 'status-pending'}">${(p.status || 'active').replace('_', ' ')}</span></td>
+                    <td style="text-align: center;">${timerBtn}</td>
                     <td><div class="action-btns"><button class="btn btn-primary btn-sm" onclick="openProjectManagement(${p.id})">Manage</button><button class="btn btn-danger btn-sm" onclick="deleteProject(${p.id})">Delete</button></div></td>
                 </tr>`;
             }).join('');
@@ -9265,6 +9470,14 @@ Drishti Consulting`;
         updateStats();
         initPayslips();
         initNewModules();
+
+        // Initialize timer if one was running
+        if (activeTimer) {
+            startTimerDisplay();
+        }
+
+        // Update data counts on settings page
+        updateDataCounts();
     </script>
 </body>
 </html>
