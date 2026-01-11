@@ -3473,11 +3473,6 @@
         let currentClientView = 'table';
         let viewingClientId = null;
 
-        // Timer state
-        let timerInterval = null;
-        let timerStartTime = null;
-        let timerElapsed = 0;
-
         // Add Oporto Carbon employee and payslips for all 2025
         const PAYSLIP_DATA_VERSION = 'v3.0-oporto-2025-varied';
         if (!localStorage.getItem('payslipDataVersion') || localStorage.getItem('payslipDataVersion') !== PAYSLIP_DATA_VERSION) {
