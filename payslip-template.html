@@ -1,0 +1,622 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>תלוש שכר | Drishti Consulting</title>
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Open Sans', Arial, sans-serif;
+            font-size: 11px;
+            line-height: 1.4;
+            background: #f5f5f5;
+            color: #1a1a2e;
+        }
+
+        .payslip {
+            width: 210mm;
+            min-height: 297mm;
+            margin: 20px auto;
+            padding: 15mm;
+            background: white;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        /* Header */
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            border-bottom: 2px solid #1a1a2e;
+            padding-bottom: 10px;
+            margin-bottom: 15px;
+        }
+
+        .company-info {
+            text-align: right;
+        }
+
+        .company-name {
+            font-size: 16px;
+            font-weight: 700;
+            color: #1a1a2e;
+        }
+
+        .payslip-title {
+            font-size: 14px;
+            font-weight: 600;
+            margin-top: 5px;
+        }
+
+        .employee-info {
+            text-align: left;
+            background: #f0f0f0;
+            padding: 10px 15px;
+            border-radius: 4px;
+        }
+
+        .employee-name {
+            font-size: 14px;
+            font-weight: 700;
+        }
+
+        .employee-address {
+            font-size: 11px;
+            color: #555;
+        }
+
+        /* Main Grid Layout */
+        .main-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+        }
+
+        /* Section Styling */
+        .section {
+            border: 1px solid #ddd;
+            margin-bottom: 10px;
+        }
+
+        .section-title {
+            background: #1a1a2e;
+            color: white;
+            padding: 5px 10px;
+            font-weight: 600;
+            font-size: 11px;
+        }
+
+        .section-content {
+            padding: 8px;
+        }
+
+        /* Tables */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 10px;
+        }
+
+        th, td {
+            padding: 4px 6px;
+            text-align: right;
+            border: 1px solid #eee;
+        }
+
+        th {
+            background: #f5f5f5;
+            font-weight: 600;
+        }
+
+        .number {
+            text-align: left;
+            direction: ltr;
+        }
+
+        .total-row {
+            background: #f0f0f0;
+            font-weight: 600;
+        }
+
+        .highlight {
+            background: #e8f4e8;
+        }
+
+        /* Summary Box */
+        .summary-box {
+            background: #f8f9fa;
+            border: 2px solid #1a1a2e;
+            padding: 10px;
+            margin-bottom: 15px;
+        }
+
+        .summary-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 8px;
+        }
+
+        .summary-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 4px 8px;
+            background: white;
+            border: 1px solid #ddd;
+        }
+
+        .summary-label {
+            font-weight: 500;
+        }
+
+        .summary-value {
+            font-weight: 700;
+            direction: ltr;
+        }
+
+        .net-pay {
+            background: #1a1a2e;
+            color: white;
+            font-size: 14px;
+            padding: 10px;
+            margin-top: 10px;
+        }
+
+        /* Footer */
+        .footer {
+            margin-top: 20px;
+            padding-top: 10px;
+            border-top: 1px solid #ddd;
+            font-size: 9px;
+            color: #666;
+            text-align: center;
+        }
+
+        /* Print Styles */
+        @media print {
+            body { background: white; }
+            .payslip {
+                margin: 0;
+                padding: 10mm;
+                box-shadow: none;
+                width: 100%;
+            }
+            .no-print { display: none; }
+        }
+
+        /* Action Buttons */
+        .actions {
+            text-align: center;
+            margin: 20px;
+        }
+
+        .btn {
+            padding: 10px 20px;
+            margin: 0 5px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 13px;
+            font-weight: 600;
+        }
+
+        .btn-primary {
+            background: #6366f1;
+            color: white;
+        }
+
+        .btn-secondary {
+            background: #64748b;
+            color: white;
+        }
+
+        .btn:hover {
+            opacity: 0.9;
+        }
+
+        /* Watermark */
+        .watermark {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) rotate(-45deg);
+            font-size: 80px;
+            color: rgba(0,0,0,0.03);
+            font-weight: 700;
+            pointer-events: none;
+            z-index: 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="actions no-print">
+        <button class="btn btn-primary" onclick="window.print()">🖨️ הדפס</button>
+        <button class="btn btn-secondary" onclick="downloadPDF()">📄 הורד PDF</button>
+        <a href="admin.html" class="btn btn-secondary" style="text-decoration: none;">← חזרה לניהול</a>
+    </div>
+
+    <div class="payslip" id="payslip">
+        <div class="watermark">נאמן למקור</div>
+
+        <!-- Header -->
+        <div class="header">
+            <div class="company-info">
+                <div class="company-name" id="companyName">Drishti Consulting</div>
+                <div class="payslip-title">תלוש שכר לחודש: <span id="payMonth">פברואר 2025</span></div>
+            </div>
+            <div class="employee-info">
+                <div class="employee-name" id="employeeName">לובצ'יק אבי</div>
+                <div class="employee-address" id="employeeAddress">שניר 10 א' אורנית 4381300</div>
+                <div id="employeeId" style="font-size: 10px; color: #888; margin-top: 4px;">ת.ז: 3588645/6</div>
+            </div>
+        </div>
+
+        <!-- Summary Box -->
+        <div class="summary-box">
+            <div style="font-weight: 700; margin-bottom: 10px; font-size: 12px;">ריכוז הנתונים בתלוש שכר זה</div>
+            <div class="summary-grid">
+                <div class="summary-item">
+                    <span class="summary-label">סה"כ תשלומים</span>
+                    <span class="summary-value" id="totalPayments">35,236.00</span>
+                </div>
+                <div class="summary-item">
+                    <span class="summary-label">ניכויי חובה מיסים</span>
+                    <span class="summary-value" id="totalTaxDeductions">10,805.20</span>
+                </div>
+                <div class="summary-item">
+                    <span class="summary-label">ניכויים קופות גמל</span>
+                    <span class="summary-value" id="totalPensionDeductions">2,492.80</span>
+                </div>
+                <div class="summary-item">
+                    <span class="summary-label">ניכויים שונים</span>
+                    <span class="summary-value" id="otherDeductions">0.00</span>
+                </div>
+            </div>
+            <div class="net-pay">
+                <div style="display: flex; justify-content: space-between;">
+                    <span>נטו לתשלום</span>
+                    <span style="font-size: 18px;" id="netPay">₪ 21,938.00</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="main-grid">
+            <!-- Right Column -->
+            <div>
+                <!-- Bank Details -->
+                <div class="section">
+                    <div class="section-title">פרטי חשבון הבנק</div>
+                    <div class="section-content">
+                        <table>
+                            <tr>
+                                <th>בנק</th>
+                                <th>סניף</th>
+                                <th>מספר חשבון</th>
+                            </tr>
+                            <tr>
+                                <td id="bankCode">11</td>
+                                <td id="branchCode">96</td>
+                                <td id="accountNumber">178380913</td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- Rates -->
+                <div class="section">
+                    <div class="section-title">תעריפים</div>
+                    <div class="section-content">
+                        <table>
+                            <tr>
+                                <th>תאור</th>
+                                <th>סכום בש"ח</th>
+                            </tr>
+                            <tr>
+                                <td>תעריף יום</td>
+                                <td class="number" id="dailyRate">1,590.91</td>
+                            </tr>
+                            <tr>
+                                <td>תעריף שעה</td>
+                                <td class="number" id="hourlyRate">192.31</td>
+                            </tr>
+                            <tr>
+                                <td>שכר בסיס</td>
+                                <td class="number" id="baseSalary">35,000.00</td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- Personal Data -->
+                <div class="section">
+                    <div class="section-title">נתונים אישיים</div>
+                    <div class="section-content">
+                        <table>
+                            <tr><td>מספר עובד</td><td id="employeeNumber">3588645/6</td></tr>
+                            <tr><td>מספר זהות</td><td id="idNumber">3588645/6</td></tr>
+                            <tr><td>מצב משפחתי</td><td id="maritalStatus">גרוש</td></tr>
+                            <tr><td>תאריך לידה</td><td id="birthDate">01/11/1978</td></tr>
+                            <tr><td>ילדים עד גיל 19</td><td id="children">4</td></tr>
+                            <tr><td>קופת חולים</td><td id="healthFund">מכבי</td></tr>
+                            <tr><td>התחלת עבודה</td><td id="startDate">01/10/2022</td></tr>
+                            <tr><td>אחוז משרה</td><td id="positionPercent">100.00</td></tr>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- Cumulative Data -->
+                <div class="section">
+                    <div class="section-title">נתונים מצטברים</div>
+                    <div class="section-content">
+                        <table>
+                            <tr>
+                                <th>פרטים</th>
+                                <th>סכום בש"ח</th>
+                            </tr>
+                            <tr>
+                                <td>ברוטו למס הכנסה</td>
+                                <td class="number" id="cumGrossIncome">70,842</td>
+                            </tr>
+                            <tr>
+                                <td>ברוטו לביטוח לאומי</td>
+                                <td class="number" id="cumNationalIns">70,842</td>
+                            </tr>
+                            <tr>
+                                <td>ניכוי למס הכנסה</td>
+                                <td class="number" id="cumIncomeTax">14,178</td>
+                            </tr>
+                            <tr>
+                                <td>ניכוי לביטוח לאומי</td>
+                                <td class="number" id="cumNationalInsDeduction">4,062</td>
+                            </tr>
+                            <tr>
+                                <td>ביטוח בריאות</td>
+                                <td class="number" id="cumHealthIns">3,368</td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- Employer Details -->
+                <div class="section">
+                    <div class="section-title">פרטי מעסיק</div>
+                    <div class="section-content">
+                        <table>
+                            <tr><td>תיק ניכויים</td><td id="deductionFile">939865275</td></tr>
+                            <tr><td>חברה</td><td id="companyId">516634615</td></tr>
+                            <tr><td>כתובת מעסיק</td><td id="employerAddress">אריאל שרון 4, נבעתיים</td></tr>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Left Column -->
+            <div>
+                <!-- Payment Details -->
+                <div class="section">
+                    <div class="section-title">פרוט התשלומים</div>
+                    <div class="section-content">
+                        <table>
+                            <tr>
+                                <th>סמל</th>
+                                <th>תאור</th>
+                                <th>קוד</th>
+                                <th>כמות</th>
+                                <th>תעריף</th>
+                                <th>סכום</th>
+                            </tr>
+                            <tbody id="paymentsTable">
+                                <tr>
+                                    <td>1</td>
+                                    <td>משכורת</td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td class="number">35,000.00</td>
+                                </tr>
+                                <tr>
+                                    <td>15</td>
+                                    <td>נסיעות</td>
+                                    <td>ק</td>
+                                    <td>1.00</td>
+                                    <td>236.00</td>
+                                    <td class="number">236.00</td>
+                                </tr>
+                            </tbody>
+                            <tr class="total-row">
+                                <td colspan="5">סה"כ תשלומים</td>
+                                <td class="number" id="totalPaymentsDetail">35,236.00</td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- Deductions -->
+                <div class="section">
+                    <div class="section-title">ניכויי חובה / קופות גמל</div>
+                    <div class="section-content">
+                        <table>
+                            <tr>
+                                <th>סמל</th>
+                                <th>תאור</th>
+                                <th>מספר חשבון</th>
+                                <th>סכום</th>
+                            </tr>
+                            <tbody id="deductionsTable">
+                                <tr>
+                                    <td></td>
+                                    <td>מס הכנסה</td>
+                                    <td></td>
+                                    <td class="number">7,089.20</td>
+                                </tr>
+                                <tr>
+                                    <td></td>
+                                    <td>ביטוח לאומי</td>
+                                    <td></td>
+                                    <td class="number">2,031.00</td>
+                                </tr>
+                                <tr>
+                                    <td></td>
+                                    <td>ביטוח בריאות</td>
+                                    <td></td>
+                                    <td class="number">1,685.00</td>
+                                </tr>
+                            </tbody>
+                            <tr class="total-row">
+                                <td colspan="3">סה"כ ניכויי חובה</td>
+                                <td class="number" id="totalMandatoryDeductions">10,805.20</td>
+                            </tr>
+                        </table>
+
+                        <div style="margin-top: 10px; font-weight: 600; font-size: 10px;">ניכויים והפרשות לקופות גמל</div>
+                        <table style="margin-top: 5px;">
+                            <tbody id="pensionTable">
+                                <tr>
+                                    <td>14</td>
+                                    <td>פניקס פנסיה</td>
+                                    <td></td>
+                                    <td class="number">1,240.70</td>
+                                </tr>
+                                <tr>
+                                    <td>16</td>
+                                    <td>כלל קצבה</td>
+                                    <td></td>
+                                    <td class="number">859.30</td>
+                                </tr>
+                                <tr>
+                                    <td>32</td>
+                                    <td>מגור השתלמות</td>
+                                    <td></td>
+                                    <td class="number">392.80</td>
+                                </tr>
+                            </tbody>
+                            <tr class="total-row">
+                                <td colspan="3">סה"כ קופות גמל</td>
+                                <td class="number" id="totalPensionDetail">2,492.80</td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- Leave Balance -->
+                <div class="section">
+                    <div class="section-title">נתוני העדרויות</div>
+                    <div class="section-content">
+                        <table>
+                            <tr>
+                                <th>תאור</th>
+                                <th>מכסה שנתית</th>
+                                <th>יתרה קודמת</th>
+                                <th>ניצול חודשי</th>
+                                <th>יתרה</th>
+                            </tr>
+                            <tr>
+                                <td>חופשה</td>
+                                <td id="vacationQuota">12</td>
+                                <td id="vacationPrev">7.00</td>
+                                <td id="vacationUsed">1.00</td>
+                                <td id="vacationBalance">8.00</td>
+                            </tr>
+                            <tr>
+                                <td>מחלה</td>
+                                <td id="sickQuota">18</td>
+                                <td id="sickPrev">38.00</td>
+                                <td id="sickUsed">1.50</td>
+                                <td id="sickBalance">39.50</td>
+                            </tr>
+                            <tr>
+                                <td>הבראה</td>
+                                <td id="recuperationQuota">6</td>
+                                <td id="recuperationPrev">2.50</td>
+                                <td id="recuperationUsed">.50</td>
+                                <td id="recuperationBalance">3.00</td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Additional Info -->
+        <div class="section" style="margin-top: 15px;">
+            <div class="section-title">נתונים נוספים עפ"י חוק הגנת השכר</div>
+            <div class="section-content" style="font-size: 9px; line-height: 1.6;">
+                <div>תקופה בעדה בוצע ניתוח נוכחות: מ-<span id="periodStart">25/01/2025</span> עד <span id="periodEnd">24/02/2025</span></div>
+                <div>תקן בחודש הקלנדרי: <span id="calendarDays">20.00</span> ימי עבודה שבהם <span id="workHours">165.00</span> שעות עבודה</div>
+                <div>שכר מינימום: לחודש <span id="minMonthly">5,880.02</span> לשעה <span id="minHourly">31.61</span></div>
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <div class="footer">
+            <div>עיבוד והפקה - Drishti Consulting</div>
+            <div style="margin-top: 5px;">עמוד 1 מתוך 1</div>
+        </div>
+    </div>
+
+    <script>
+        // Load payslip data from URL parameters or localStorage
+        function loadPayslipData() {
+            const params = new URLSearchParams(window.location.search);
+            const dataParam = params.get('data');
+
+            if (dataParam) {
+                try {
+                    const data = JSON.parse(atob(dataParam));
+                    populatePayslip(data);
+                } catch (e) {
+                    console.error('Error loading payslip data:', e);
+                }
+            }
+        }
+
+        function populatePayslip(data) {
+            // Map data to fields
+            const fields = {
+                'companyName': data.companyName,
+                'payMonth': data.payMonth,
+                'employeeName': data.employeeName,
+                'employeeAddress': data.employeeAddress,
+                'employeeId': data.employeeId ? 'ת.ז: ' + data.employeeId : '',
+                'totalPayments': formatNumber(data.totalPayments),
+                'totalTaxDeductions': formatNumber(data.totalTaxDeductions),
+                'totalPensionDeductions': formatNumber(data.totalPensionDeductions),
+                'otherDeductions': formatNumber(data.otherDeductions || 0),
+                'netPay': '₪ ' + formatNumber(data.netPay),
+                'bankCode': data.bankCode,
+                'branchCode': data.branchCode,
+                'accountNumber': data.accountNumber,
+                'baseSalary': formatNumber(data.baseSalary),
+                'dailyRate': formatNumber(data.dailyRate),
+                'hourlyRate': formatNumber(data.hourlyRate)
+            };
+
+            for (const [id, value] of Object.entries(fields)) {
+                const el = document.getElementById(id);
+                if (el && value !== undefined) {
+                    el.textContent = value;
+                }
+            }
+        }
+
+        function formatNumber(num) {
+            if (typeof num !== 'number') return num;
+            return num.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+        }
+
+        function downloadPDF() {
+            window.print();
+            // For actual PDF generation, you'd use html2pdf.js or similar
+        }
+
+        // Initialize
+        loadPayslipData();
+    </script>
+</body>
+</html>

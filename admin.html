@@ -5221,10 +5221,27 @@ Webhook: Real-time updates`,
 
         // Stats
         function updateStats() {
-            document.getElementById('totalClients').textContent = clients.length;
-            document.getElementById('activeProjects').textContent = proposals.filter(p => p.status !== 'completed').length;
-            document.getElementById('proposalsSent').textContent = proposals.filter(p => p.status === 'sent').length;
-            document.getElementById('pendingProposals').textContent = proposals.filter(p => p.status === 'draft').length;
+            // Dashboard stats (with null checks for safety)
+            const totalClientsEl = document.getElementById('totalClients');
+            if (totalClientsEl) totalClientsEl.textContent = clients.length;
+
+            // Update pipeline counts on Dashboard
+            const leadsCountEl = document.getElementById('leadsCount');
+            if (leadsCountEl) leadsCountEl.textContent = clients.filter(c => c.pipelineStage === 'lead').length;
+
+            const qualifiedCountEl = document.getElementById('qualifiedCount');
+            if (qualifiedCountEl) qualifiedCountEl.textContent = clients.filter(c => c.pipelineStage === 'qualified').length;
+
+            const customersCountEl = document.getElementById('customersCount');
+            if (customersCountEl) customersCountEl.textContent = clients.filter(c => c.pipelineStage === 'customer').length;
+
+            // Projects page stats
+            const activeProjectsEl = document.getElementById('activeProjectsCount');
+            if (activeProjectsEl) activeProjectsEl.textContent = projects.filter(p => p.status === 'active' || p.status === 'in-progress').length;
+
+            const totalProjectsEl = document.getElementById('totalProjectsCount');
+            if (totalProjectsEl) totalProjectsEl.textContent = projects.length;
+
             updateAnalytics();
         }
 
