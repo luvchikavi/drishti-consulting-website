@@ -713,21 +713,6 @@
                     </div>
                 </div>
 
-                <!-- Bank Details -->
-                ${p.bankDetails ? `
-                <div class="section">
-                    <div style="padding: 24px; background: rgba(99, 102, 241, 0.05); border: 1px solid rgba(99, 102, 241, 0.2); border-radius: 16px;">
-                        <h4 style="color: var(--secondary); font-size: 14px; margin-bottom: 16px; text-align: center;">פרטי חשבון להעברה בנקאית</h4>
-                        <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; font-size: 13px;">
-                            <div><span style="color: var(--gray);">בנק:</span> <strong>${p.bankDetails.bank} (${p.bankDetails.bankCode})</strong></div>
-                            <div><span style="color: var(--gray);">סניף:</span> <strong>${p.bankDetails.branch} (${p.bankDetails.branchCode})</strong></div>
-                            <div><span style="color: var(--gray);">מספר חשבון:</span> <strong>${p.bankDetails.account}</strong></div>
-                            <div><span style="color: var(--gray);">על שם:</span> <strong>${p.bankDetails.name}</strong></div>
-                        </div>
-                    </div>
-                </div>
-                ` : ''}
-
                 <!-- Dual Signature Section -->
                 <div class="accept-section" id="signatureSection">
                     <h3 style="color: var(--secondary); margin-bottom: 25px;">חתימות לאישור ההצעה</h3>
@@ -802,10 +787,25 @@
                     </div>
                 </div>
 
+                <!-- Bank Details (moved below signature) -->
+                ${p.bankDetails ? `
+                <div class="section">
+                    <div style="padding: 24px; background: rgba(99, 102, 241, 0.05); border: 1px solid rgba(99, 102, 241, 0.2); border-radius: 16px;">
+                        <h4 style="color: var(--secondary); font-size: 14px; margin-bottom: 16px; text-align: center;">פרטי חשבון להעברה בנקאית</h4>
+                        <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; font-size: 13px;">
+                            <div><span style="color: var(--gray);">בנק:</span> <strong>${p.bankDetails.bank} (${p.bankDetails.bankCode})</strong></div>
+                            <div><span style="color: var(--gray);">סניף:</span> <strong>${p.bankDetails.branch} (${p.bankDetails.branchCode})</strong></div>
+                            <div><span style="color: var(--gray);">מספר חשבון:</span> <strong>${p.bankDetails.account}</strong></div>
+                            <div><span style="color: var(--gray);">על שם:</span> <strong>${p.bankDetails.name}</strong></div>
+                        </div>
+                    </div>
+                </div>
+                ` : ''}
+
                 <!-- Footer -->
                 <div class="footer">
                     <div class="footer-contact">
-                        Drishti Consulting | Dr. Avi Luvchik | avi@drishti.com
+                        © All rights reserved to Drishti Consulting 2025 | avi@drishti.com
                     </div>
                     <div class="validity">תוקף ההצעה: ${p.valid} יום</div>
                 </div>
