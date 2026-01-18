@@ -252,5 +252,75 @@
       { "v": "1.0", "date": "2026-01-05", "note": "גרסה ראשונית - מערכת RFQ עם דשבורד ומפת סיכונים" },
       { "v": "2.0", "date": "2026-01-07", "note": "הוספת מודול השוואת אישורי ביטוח באמצעות מנוע OCR/AI" }
     ]
+  },
+  "tag-001": {
+    "num": "PP-TAG-001-26",
+    "ver": "1.0",
+    "client": "Tag Urbanic Investment Management",
+    "sector": "ניהול השקעות",
+    "project": "Monday.com to Excel - Automatic Data Sync",
+    "projectName": "TAG Sales Dashboard",
+    "date": "2024-12-25",
+    "valid": 14,
+    "status": "accepted",
+    "amount": 7500,
+    "vat": 18,
+    "hours": 20,
+    "rate": 375,
+    "duration": "2 שבועות",
+    "contact": {
+      "name": "Guy Gafni",
+      "email": "guy@tagurbanic.com",
+      "phone": ""
+    },
+    "summary": "חיבור ממשק Monday.com לאקסל – סנכרון נתונים אוטומטי. ממשק תצוגה אינטרנטי שיסתנכרן בנתוני אמת מהמאנדיי כל 4 שעות.",
+    "objectives": [
+      "סנכרון אוטומטי של נתונים ממערכת Monday.com",
+      "יצירת דשבורד מכירות אינטראקטיבי",
+      "עדכון נתונים כל 4 שעות"
+    ],
+    "scope": [
+      { "module": "API Integration", "desc": "חיבור ל-Monday.com API" },
+      { "module": "Data Sync", "desc": "סנכרון אוטומטי כל 4 שעות" },
+      { "module": "Dashboard", "desc": "ממשק תצוגה אינטרנטי" }
+    ],
+    "items": [
+      { "desc": "חיבור API למאנדיי", "hours": 6, "notes": "" },
+      { "desc": "בניית מנוע סנכרון", "hours": 8, "notes": "" },
+      { "desc": "בניית דשבורד", "hours": 4, "notes": "" },
+      { "desc": "בדיקות והטמעה", "hours": 2, "notes": "" }
+    ],
+    "payment": [
+      { "pct": 50, "desc": "עם אישור עבודה" },
+      { "pct": 50, "desc": "עם קבלת העבודה ואישורה" }
+    ],
+    "bankDetails": {
+      "bank": "בנק דיסקונט",
+      "bankCode": "11",
+      "branch": "מרום נווה",
+      "branchCode": "096",
+      "account": "178380913",
+      "name": "אבי לובצ'יק"
+    },
+    "included": [
+      "חיבור API למערכת Monday.com",
+      "מנוע סנכרון אוטומטי",
+      "דשבורד מכירות אינטראקטיבי",
+      "תיעוד טכני"
+    ],
+    "excluded": [
+      "עלויות Monday.com",
+      "תחזוקה שוטפת"
+    ],
+    "comments": [
+      "מאושר: גיא גפני 01/01/2026"
+    ],
+    "timeline": [
+      { "week": "1", "desc": "API + מנוע סנכרון" },
+      { "week": "2", "desc": "דשבורד + בדיקות" }
+    ],
+    "versions": [
+      { "v": "1.0", "date": "2024-12-25", "note": "גרסה ראשונית" }
+    ]
   }
 }
