@@ -916,12 +916,14 @@
             document.getElementById('clientSignedInfo').style.display = 'block';
 
             try {
-                // Send to Formspree
+                // Send to Formspree with CC to both emails
                 const response = await fetch('https://formspree.io/f/mpqwgbqd', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({
                         _subject: 'הצעה נחתמה: ' + proposalNum + ' v' + version + ' - ' + client,
+                        _cc: 'luvchik.avi@gmail.com,avi@drishticonsulting.com',
+                        _replyto: formData.email,
                         signer_name: formData.name,
                         signer_title: formData.title,
                         signer_email: formData.email,
