@@ -768,19 +768,19 @@
                         <div style="display: grid; grid-template-columns: 1fr 1fr 1fr 1fr; gap: 12px; margin-bottom: 20px;" class="form-grid">
                             <div>
                                 <label style="display: block; font-size: 11px; color: var(--gray); margin-bottom: 4px;">שם מלא *</label>
-                                <input type="text" id="signerName" required placeholder="שם החותם" style="width: 100%; padding: 10px; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.15); border-radius: 6px; color: var(--light); font-size: 13px;">
+                                <input type="text" id="signerName" required placeholder="שם החותם" value="${p.contact?.name || ''}" style="width: 100%; padding: 10px; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.15); border-radius: 6px; color: var(--light); font-size: 13px;">
                             </div>
                             <div>
                                 <label style="display: block; font-size: 11px; color: var(--gray); margin-bottom: 4px;">תפקיד</label>
-                                <input type="text" id="signerTitle" placeholder="מנכ״ל / סמנכ״ל" style="width: 100%; padding: 10px; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.15); border-radius: 6px; color: var(--light); font-size: 13px;">
+                                <input type="text" id="signerTitle" placeholder="מנכ״ל / סמנכ״ל" value="${p.contact?.title || ''}" style="width: 100%; padding: 10px; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.15); border-radius: 6px; color: var(--light); font-size: 13px;">
                             </div>
                             <div>
                                 <label style="display: block; font-size: 11px; color: var(--gray); margin-bottom: 4px;">אימייל *</label>
-                                <input type="email" id="signerEmail" required placeholder="email@company.com" style="width: 100%; padding: 10px; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.15); border-radius: 6px; color: var(--light); font-size: 13px;">
+                                <input type="email" id="signerEmail" required placeholder="email@company.com" value="${p.contact?.email || ''}" style="width: 100%; padding: 10px; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.15); border-radius: 6px; color: var(--light); font-size: 13px;">
                             </div>
                             <div>
                                 <label style="display: block; font-size: 11px; color: var(--gray); margin-bottom: 4px;">טלפון</label>
-                                <input type="tel" id="signerPhone" placeholder="050-0000000" style="width: 100%; padding: 10px; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.15); border-radius: 6px; color: var(--light); font-size: 13px;">
+                                <input type="tel" id="signerPhone" placeholder="050-0000000" value="${p.contact?.phone || ''}" style="width: 100%; padding: 10px; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.15); border-radius: 6px; color: var(--light); font-size: 13px;">
                             </div>
                         </div>
                         <button type="submit" class="accept-btn" style="width: 100%; border: none; cursor: pointer;">
