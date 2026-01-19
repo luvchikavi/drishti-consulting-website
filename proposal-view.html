@@ -593,7 +593,7 @@
 
                 <!-- Pricing -->
                 <div class="section">
-                    <h2 class="section-title">4. הצעת מחיר</h2>
+                    <h2 class="section-title">5. הצעת מחיר</h2>
                     <div class="section-content">
                         <table>
                             <thead>
@@ -628,10 +628,11 @@
                     </div>
                 </div>
 
-                <!-- Payment Terms -->
+                <!-- Payment Terms & Timeline -->
                 <div class="section">
-                    <h2 class="section-title">5. תנאי תשלום</h2>
+                    <h2 class="section-title">6. תנאי תשלום ולוחות זמנים</h2>
                     <div class="section-content">
+                        <h4 style="color: var(--secondary); margin-bottom: 12px;">תנאי תשלום</h4>
                         <div class="payment-grid">
                             ${p.payment.map(term => `
                                 <div class="payment-item">
@@ -643,13 +644,8 @@
                         </div>
 
                         ${p.notes ? `<div class="note-box">${p.notes}</div>` : ''}
-                    </div>
-                </div>
 
-                <!-- Timeline -->
-                <div class="section">
-                    <h2 class="section-title">6. לוחות זמנים</h2>
-                    <div class="section-content">
+                        <h4 style="color: var(--secondary); margin: 20px 0 12px;">לוחות זמנים</h4>
                         <p style="text-align: center; margin-bottom: 15px;">משך הפרויקט המוערך: <strong>${p.duration}</strong></p>
                         <div class="timeline">
                             ${p.timeline.map(t => `
@@ -700,10 +696,10 @@
                 </div>
                 ` : ''}
 
-                <!-- General Terms -->
+                <!-- General Terms / IP -->
                 ${p.generalTerms ? `
                 <div class="section">
-                    <h2 class="section-title">${p.mvpLimits ? '9' : '8'}. תנאים כלליים</h2>
+                    <h2 class="section-title">9. קניין רוחני ותנאים כלליים</h2>
                     <div class="section-content">
                         <div style="background: rgba(139, 92, 246, 0.05); border: 1px solid rgba(139, 92, 246, 0.2); border-radius: 12px; padding: 20px;">
                             ${p.generalTerms.map((term, i) => `
@@ -717,10 +713,10 @@
                 </div>
                 ` : ''}
 
-                <!-- IP Ownership (legacy support) -->
+                <!-- IP Ownership (legacy support for old proposals) -->
                 ${p.ipOwnership && !p.generalTerms ? `
                 <div class="section">
-                    <h2 class="section-title">8. זכויות קניין רוחני (IP)</h2>
+                    <h2 class="section-title">9. זכויות קניין רוחני (IP)</h2>
                     <div class="section-content">
                         <div style="background: rgba(139, 92, 246, 0.05); border: 1px solid rgba(139, 92, 246, 0.2); border-radius: 12px; padding: 20px;">
                             <div style="font-size: 13px; color: var(--light); line-height: 2;">
@@ -736,7 +732,7 @@
                 <!-- Future Phases -->
                 ${p.futurePhases ? `
                 <div class="section">
-                    <h2 class="section-title">שלבים עתידיים (מחוץ ל-MVP)</h2>
+                    <h2 class="section-title">10. שלבים עתידיים (מחוץ ל-MVP)</h2>
                     <div class="section-content">
                         <div style="background: rgba(14, 165, 233, 0.05); border: 1px solid rgba(14, 165, 233, 0.2); border-radius: 12px; padding: 20px;">
                             <p style="color: var(--gray); font-size: 13px; margin-bottom: 15px;">התכונות הבאות אינן כלולות בהצעה זו אך יכולות להתווסף בשלבים הבאים:</p>
@@ -748,12 +744,12 @@
                 </div>
                 ` : ''}
 
-                <!-- Comments / Notes -->
+                <!-- Comments / Notes (no section number, displayed as note) -->
                 ${p.comments ? `
                 <div class="section">
-                    <h2 class="section-title">${p.generalTerms ? (p.mvpLimits ? '10' : '9') : (p.ipOwnership ? '9' : '8')}. הערות</h2>
-                    <div class="section-content">
-                        <div style="font-size: 13px; color: var(--gray); line-height: 2;">
+                    <div class="note-box" style="background: rgba(245, 158, 11, 0.1); border: 1px solid rgba(245, 158, 11, 0.3); border-radius: 8px; padding: 16px;">
+                        <h4 style="color: var(--warning); margin-bottom: 10px; font-size: 13px;">הערות</h4>
+                        <div style="font-size: 13px; color: var(--gray); line-height: 1.8;">
                             ${p.comments.map(c => `<p>${c}</p>`).join('')}
                         </div>
                     </div>
