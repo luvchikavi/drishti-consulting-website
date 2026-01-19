@@ -312,8 +312,8 @@
       }
     ]
   },
-  "LHD-001-26-v3": {
-    "num": "LHD-001-26-v3",
+  "PP-LHD-001-26": {
+    "num": "PP-LHD-001-26",
     "ver": "3.0",
     "client": "LHD Insurance Consulting",
     "sector": "ייעוץ ביטוח",
@@ -473,8 +473,8 @@
       }
     ]
   },
-  "LHD-001-26": {
-    "num": "LHD-001-26",
+  "PP-LHD-002-26": {
+    "num": "PP-LHD-002-26",
     "ver": "2.0",
     "client": "LHD Insurance Consulting",
     "sector": "ייעוץ ביטוח",
