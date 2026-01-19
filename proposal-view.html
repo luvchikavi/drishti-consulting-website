@@ -542,10 +542,42 @@
                 </div>
                 ` : ''}
 
+                <!-- User Types -->
+                ${p.userTypes ? `
+                <div class="section">
+                    <h2 class="section-title">3. סוגי משתמשים</h2>
+                    <div class="section-content">
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+                            ${p.userTypes.map(u => `
+                                <div style="background: rgba(99, 102, 241, 0.05); border: 1px solid rgba(99, 102, 241, 0.2); border-radius: 12px; padding: 20px;">
+                                    <h4 style="color: var(--primary); font-size: 15px; margin-bottom: 8px;">${u.type}</h4>
+                                    <p style="color: var(--gray); font-size: 12px; margin-bottom: 12px;">${u.audience}</p>
+                                    <ul style="list-style: none; padding: 0;">
+                                        ${u.capabilities.map(c => `<li style="padding: 4px 0; padding-right: 16px; position: relative; font-size: 12px; color: var(--light);"><span style="position: absolute; right: 0; color: var(--secondary);">•</span>${c}</li>`).join('')}
+                                    </ul>
+                                </div>
+                            `).join('')}
+                        </div>
+                    </div>
+                </div>
+                ` : ''}
+
+                <!-- Competitive Positioning -->
+                ${p.competitive ? `
+                <div class="section">
+                    <h2 class="section-title">${p.userTypes ? '4' : '3'}. ${p.competitive.title}</h2>
+                    <div class="section-content">
+                        <div style="background: rgba(16, 185, 129, 0.05); border: 1px solid rgba(16, 185, 129, 0.2); border-radius: 12px; padding: 20px;">
+                            <p style="color: var(--light); font-size: 14px; line-height: 1.8;">${p.competitive.content}</p>
+                        </div>
+                    </div>
+                </div>
+                ` : ''}
+
                 <!-- Sectors -->
                 ${p.sectors ? `
                 <div class="section">
-                    <h2 class="section-title">3. סקטורים נתמכים</h2>
+                    <h2 class="section-title">${p.userTypes && p.competitive ? '5' : p.userTypes || p.competitive ? '4' : '3'}. סקטורים נתמכים</h2>
                     <div class="section-content">
                         <div style="display: grid; grid-template-columns: repeat(5, 1fr); gap: 12px;">
                             ${p.sectors.map(s => `
@@ -696,6 +728,21 @@
                                     ? p.ipOwnership.map((item, i) => `<p style="margin-bottom: 12px;">${i+1}. ${item}</p>`).join('')
                                     : `<div style="white-space: pre-line;">${p.ipOwnership}</div>`}
                             </div>
+                        </div>
+                    </div>
+                </div>
+                ` : ''}
+
+                <!-- Future Phases -->
+                ${p.futurePhases ? `
+                <div class="section">
+                    <h2 class="section-title">שלבים עתידיים (מחוץ ל-MVP)</h2>
+                    <div class="section-content">
+                        <div style="background: rgba(14, 165, 233, 0.05); border: 1px solid rgba(14, 165, 233, 0.2); border-radius: 12px; padding: 20px;">
+                            <p style="color: var(--gray); font-size: 13px; margin-bottom: 15px;">התכונות הבאות אינן כלולות בהצעה זו אך יכולות להתווסף בשלבים הבאים:</p>
+                            <ul style="list-style: none; padding: 0; display: grid; grid-template-columns: 1fr 1fr; gap: 8px;">
+                                ${p.futurePhases.map(phase => `<li style="padding: 8px 16px; padding-right: 24px; position: relative; font-size: 13px; color: var(--light); background: rgba(255,255,255,0.02); border-radius: 6px;"><span style="position: absolute; right: 8px; color: var(--secondary);">→</span>${phase}</li>`).join('')}
+                            </ul>
                         </div>
                     </div>
                 </div>
