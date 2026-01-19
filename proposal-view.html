@@ -651,8 +651,42 @@
                     </div>
                 </div>
 
-                <!-- IP Ownership -->
-                ${p.ipOwnership ? `
+                <!-- MVP Limits -->
+                ${p.mvpLimits ? `
+                <div class="section">
+                    <h2 class="section-title">8. גבולות ה-MVP</h2>
+                    <div class="section-content">
+                        <div style="background: rgba(99, 102, 241, 0.05); border: 1px solid rgba(99, 102, 241, 0.2); border-radius: 12px; padding: 20px;">
+                            <table style="width: 100%; font-size: 13px;">
+                                <tr><td style="padding: 8px 0; color: var(--gray);">משתמשים רשומים</td><td style="text-align: left;">${p.mvpLimits.registeredUsers}</td></tr>
+                                <tr><td style="padding: 8px 0; color: var(--gray);">משתמשים פעילים במקביל</td><td style="text-align: left;">${p.mvpLimits.concurrentUsers}</td></tr>
+                                <tr><td style="padding: 8px 0; color: var(--gray);">נפח נתונים</td><td style="text-align: left;">${p.mvpLimits.dataVolume}</td></tr>
+                            </table>
+                            ${p.mvpLimits.note ? `<p style="margin-top: 12px; font-size: 12px; color: var(--gray); font-style: italic;">${p.mvpLimits.note}</p>` : ''}
+                        </div>
+                    </div>
+                </div>
+                ` : ''}
+
+                <!-- General Terms -->
+                ${p.generalTerms ? `
+                <div class="section">
+                    <h2 class="section-title">${p.mvpLimits ? '9' : '8'}. תנאים כלליים</h2>
+                    <div class="section-content">
+                        <div style="background: rgba(139, 92, 246, 0.05); border: 1px solid rgba(139, 92, 246, 0.2); border-radius: 12px; padding: 20px;">
+                            ${p.generalTerms.map((term, i) => `
+                                <div style="margin-bottom: 16px; ${i < p.generalTerms.length - 1 ? 'border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 16px;' : ''}">
+                                    <h4 style="font-size: 14px; color: var(--primary); margin-bottom: 8px;">${String.fromCharCode(1488 + i)}. ${term.title}</h4>
+                                    <p style="font-size: 13px; color: var(--light); line-height: 1.8;">${term.content}</p>
+                                </div>
+                            `).join('')}
+                        </div>
+                    </div>
+                </div>
+                ` : ''}
+
+                <!-- IP Ownership (legacy support) -->
+                ${p.ipOwnership && !p.generalTerms ? `
                 <div class="section">
                     <h2 class="section-title">8. זכויות קניין רוחני (IP)</h2>
                     <div class="section-content">
@@ -670,7 +704,7 @@
                 <!-- Comments / Notes -->
                 ${p.comments ? `
                 <div class="section">
-                    <h2 class="section-title">${p.ipOwnership ? '9' : '8'}. הערות</h2>
+                    <h2 class="section-title">${p.generalTerms ? (p.mvpLimits ? '10' : '9') : (p.ipOwnership ? '9' : '8')}. הערות</h2>
                     <div class="section-content">
                         <div style="font-size: 13px; color: var(--gray); line-height: 2;">
                             ${p.comments.map(c => `<p>${c}</p>`).join('')}
