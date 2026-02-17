@@ -998,15 +998,38 @@
             color: var(--text-body);
         }
 
-        /* Responsive */
+        /* Mobile Menu Toggle */
+        .mobile-menu-toggle {
+            display: none;
+            flex-direction: column;
+            gap: 6px;
+            cursor: pointer;
+            z-index: 1001;
+        }
+
+        .mobile-menu-toggle span {
+            width: 24px;
+            height: 2px;
+            background: var(--light);
+            border-radius: 2px;
+            transition: all 0.3s ease;
+        }
+
+        .mobile-menu-toggle.active span:nth-child(1) { transform: translateY(8px) rotate(45deg); }
+        .mobile-menu-toggle.active span:nth-child(2) { opacity: 0; }
+        .mobile-menu-toggle.active span:nth-child(3) { transform: translateY(-8px) rotate(-45deg); }
+
+        /* Tablet Breakpoint */
         @media (max-width: 1024px) {
             .founder-card {
                 grid-template-columns: 1fr;
                 text-align: center;
+                padding: 40px 30px;
+                gap: 40px;
             }
 
             .founder-image {
-                max-width: 300px;
+                max-width: 280px;
                 margin: 0 auto;
             }
 
@@ -1016,33 +1039,447 @@
 
             .project-card {
                 grid-template-columns: 1fr;
+                gap: 24px;
             }
 
             .project-card:nth-child(even) {
                 direction: ltr;
             }
+
+            .project-preview {
+                min-height: 280px;
+            }
+
+            .hero {
+                padding: 100px 5% 60px;
+            }
+
+            .meaning-card {
+                padding: 40px 30px;
+            }
+
+            .meaning-card::before {
+                font-size: 150px;
+            }
+
+            .contact-card {
+                padding: 40px 30px;
+            }
         }
 
+        /* Mobile Breakpoint */
         @media (max-width: 768px) {
+            nav {
+                padding: 16px 5%;
+            }
+
+            .logo-text {
+                font-size: 20px;
+            }
+
+            .logo-icon {
+                width: 32px;
+                height: 32px;
+            }
+
+            .logo-icon svg {
+                width: 32px;
+                height: 32px;
+            }
+
             .nav-links {
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100vh;
+                background: rgba(2, 6, 23, 0.98);
+                backdrop-filter: blur(20px);
+                flex-direction: column;
+                justify-content: center;
+                align-items: center;
+                gap: 30px;
+                transform: translateX(100%);
+                transition: transform 0.3s ease;
+                z-index: 999;
+            }
+
+            .nav-links.active {
+                transform: translateX(0);
+            }
+
+            .nav-links a {
+                font-size: 22px;
+            }
+
+            .mobile-menu-toggle {
+                display: flex;
+            }
+
+            .nav-cta {
                 display: none;
+            }
+
+            .hero {
+                padding: 100px 5% 50px;
+                min-height: auto;
+            }
+
+            .hero h1 {
+                font-size: 28px;
+                line-height: 1.3;
+            }
+
+            .hero-subtitle {
+                font-size: 15px;
+                line-height: 1.7;
+            }
+
+            .sanskrit-badge {
+                padding: 8px 16px;
+                font-size: 12px;
+            }
+
+            .hero-ctas {
+                flex-direction: column;
+                width: 100%;
+                max-width: 300px;
+                margin: 0 auto;
+            }
+
+            .btn-primary, .btn-secondary {
+                width: 100%;
+                justify-content: center;
+                padding: 14px 24px;
+            }
+
+            .meaning-section {
+                padding: 60px 5%;
+            }
+
+            .meaning-card {
+                padding: 30px 20px;
+                border-radius: 20px;
+            }
+
+            .meaning-card::before {
+                font-size: 100px;
+                top: -10px;
+                right: -10px;
+            }
+
+            .meaning-card h3 {
+                font-size: 22px;
+            }
+
+            .meaning-text {
+                font-size: 14px;
+                line-height: 1.8;
             }
 
             .meaning-features {
                 grid-template-columns: 1fr;
+                gap: 16px;
+                margin-top: 30px;
+            }
+
+            .meaning-feature {
+                padding: 20px;
+            }
+
+            .meaning-feature h4 {
+                font-size: 16px;
+            }
+
+            .meaning-feature p {
+                font-size: 14px;
+            }
+
+            .services {
+                padding: 60px 5%;
+            }
+
+            .section-header {
+                margin-bottom: 40px;
+            }
+
+            .section-header h2 {
+                font-size: 22px;
+            }
+
+            .section-header p {
+                font-size: 14px;
             }
 
             .services-grid {
                 grid-template-columns: 1fr;
+                gap: 16px;
+            }
+
+            .service-card {
+                padding: 24px 20px;
+            }
+
+            .service-icon {
+                width: 44px;
+                height: 44px;
+            }
+
+            .service-card h3 {
+                font-size: 16px;
+            }
+
+            .service-card p {
+                font-size: 14px;
+            }
+
+            .projects {
+                padding: 60px 5%;
+            }
+
+            .projects-grid {
+                gap: 24px;
+            }
+
+            .project-card {
+                padding: 24px 20px;
+                gap: 20px;
+            }
+
+            .project-content h3 {
+                font-size: 18px;
+            }
+
+            .project-content p {
+                font-size: 14px;
+                margin-bottom: 16px;
+            }
+
+            .project-tech {
+                gap: 8px;
+                margin-bottom: 20px;
+            }
+
+            .tech-tag {
+                font-size: 11px;
+                padding: 5px 10px;
+            }
+
+            .project-badge {
+                font-size: 10px;
+                padding: 5px 12px;
+            }
+
+            .project-preview {
+                min-height: 220px;
+                padding: 20px;
+            }
+
+            .project-link {
+                width: 100%;
+                text-align: center;
+                padding: 12px 20px;
+            }
+
+            .founder {
+                padding: 60px 5%;
+            }
+
+            .founder-card {
+                padding: 30px 20px;
+                gap: 30px;
+            }
+
+            .founder-image {
+                max-width: 200px;
+            }
+
+            .founder-image-container {
+                font-size: 80px;
+            }
+
+            .founder-badges {
+                gap: 8px;
+                margin-top: 16px;
+            }
+
+            .founder-badge {
+                font-size: 11px;
+                padding: 6px 12px;
+            }
+
+            .founder-info h3 {
+                font-size: 22px;
+            }
+
+            .founder-title {
+                font-size: 14px;
+            }
+
+            .founder-bio {
+                font-size: 14px;
+                line-height: 1.7;
+            }
+
+            .founder-stats {
+                grid-template-columns: repeat(3, 1fr);
+                gap: 16px;
+                margin-top: 24px;
+                padding-top: 24px;
+            }
+
+            .stat-value {
+                font-size: 22px;
+            }
+
+            .stat-label {
+                font-size: 11px;
+            }
+
+            .founder-links {
+                justify-content: center;
+                margin-top: 24px;
+            }
+
+            .founder-link {
+                width: 44px;
+                height: 44px;
+            }
+
+            .contact {
+                padding: 60px 5%;
+            }
+
+            .contact h2 {
+                font-size: 22px;
+            }
+
+            .contact p {
+                font-size: 14px;
+            }
+
+            .contact-card {
+                padding: 24px 20px;
+                border-radius: 20px;
             }
 
             .contact-methods {
                 grid-template-columns: 1fr;
+                gap: 16px;
+                margin-bottom: 24px;
+            }
+
+            .contact-method {
+                padding: 20px;
+            }
+
+            .contact-method-icon {
+                width: 48px;
+                height: 48px;
+            }
+
+            .contact-method-value {
+                font-size: 14px;
+            }
+
+            /* Calendly widget mobile height */
+            .calendly-inline-widget {
+                height: 500px !important;
+                min-width: 100% !important;
+            }
+
+            footer {
+                padding: 40px 5%;
+            }
+
+            .footer-tagline {
+                font-size: 14px;
+            }
+
+            .footer-copyright {
+                font-size: 12px;
+            }
+        }
+
+        /* Small Mobile Breakpoint */
+        @media (max-width: 480px) {
+            .hero h1 {
+                font-size: 24px;
+            }
+
+            .hero-subtitle {
+                font-size: 14px;
+            }
+
+            .meaning-card h3 {
+                font-size: 20px;
+            }
+
+            .meaning-card::before {
+                font-size: 80px;
+                opacity: 0.3;
             }
 
             .founder-stats {
                 grid-template-columns: 1fr;
+                gap: 12px;
+            }
+
+            .stat {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                padding: 12px 0;
+                border-bottom: 1px solid var(--glass-border);
+            }
+
+            .stat:last-child {
+                border-bottom: none;
+            }
+
+            .stat-value {
+                font-size: 24px;
+            }
+
+            .stat-label {
+                font-size: 12px;
+            }
+
+            .project-preview {
+                min-height: 180px;
+            }
+
+            .browser-mockup {
+                top: 35px;
+                left: 10px;
+                right: 10px;
+                bottom: 10px;
+            }
+
+            .contact-method {
+                flex-direction: column;
+                text-align: center;
+                gap: 12px;
+            }
+
+            .contact-method-info {
+                text-align: center;
+            }
+        }
+
+        /* Landscape Mobile */
+        @media (max-height: 500px) and (orientation: landscape) {
+            .hero {
+                min-height: auto;
+                padding: 80px 5% 40px;
+            }
+
+            .nav-links {
                 gap: 20px;
+            }
+
+            .nav-links a {
+                font-size: 18px;
             }
         }
     </style>
@@ -1067,11 +1504,14 @@
             </div>
             <span class="logo-text">Drishti</span>
         </a>
+        <div class="mobile-menu-toggle" onclick="toggleMobileMenu()">
+            <span></span><span></span><span></span>
+        </div>
         <ul class="nav-links">
-            <li><a href="#meaning">Our Vision</a></li>
-            <li><a href="#services">Services</a></li>
-            <li><a href="#projects">Projects</a></li>
-            <li><a href="#founder">Founder</a></li>
+            <li><a href="#meaning" onclick="toggleMobileMenu()">Our Vision</a></li>
+            <li><a href="#services" onclick="toggleMobileMenu()">Services</a></li>
+            <li><a href="#projects" onclick="toggleMobileMenu()">Projects</a></li>
+            <li><a href="#founder" onclick="toggleMobileMenu()">Founder</a></li>
         </ul>
         <a href="#contact" class="nav-cta">Get in Touch</a>
     </nav>
@@ -1236,7 +1676,7 @@
                         <span></span><span></span><span></span>
                     </div>
                     <div class="browser-mockup">
-                        <img src="screenshots/1climetrix.jpg" alt="Climetrix Platform">
+                        <img src="/static/screenshots/1climetrix.jpg" alt="Climetrix Platform">
                     </div>
                 </a>
             </div>
@@ -1262,7 +1702,7 @@
                         <span></span><span></span><span></span>
                     </div>
                     <div class="browser-mockup">
-                        <img src="screenshots/nectra1.jpeg" alt="Nectra Platform">
+                        <img src="/static/screenshots/nectra1.jpeg" alt="Nectra Platform">
                     </div>
                 </a>
             </div>
@@ -1288,25 +1728,26 @@
                         <span></span><span></span><span></span>
                     </div>
                     <div class="browser-mockup">
-                        <img src="screenshots/1tag.jpeg" alt="TAG Sales Dashboard">
+                        <img src="/static/screenshots/1tag.jpeg" alt="TAG Sales Dashboard">
                     </div>
                 </a>
             </div>
 
-            <!-- Riscovery -->
+            <!-- Riskcovery -->
             <div class="project-card">
                 <div class="project-content">
-                    <span class="project-badge badge-saas">In Development</span>
-                    <h3>RISCOVERY</h3>
-                    <p>AI-powered insurance compliance tracking system automating vendor certificate verification. Features OCR document extraction, human verification workflow, compliance gap detection, and automated expiration alerts.</p>
+                    <span class="project-badge badge-saas">SaaS Platform</span>
+                    <h3>RISKCOVERY</h3>
+                    <p>Insurance advisory management system for LHD Insurance Consulting. Features AI-powered OCR certificate verification, Smart RFQ generator with sector-based questionnaires, compliance gap detection across 12 insurance product types, and a comprehensive knowledge base covering 7 major Israeli insurers.</p>
                     <div class="project-tech">
-                        <span class="tech-tag">Next.js</span>
-                        <span class="tech-tag">Node.js</span>
+                        <span class="tech-tag">Next.js 14</span>
+                        <span class="tech-tag">Fastify</span>
                         <span class="tech-tag">PostgreSQL</span>
-                        <span class="tech-tag">Docupipe AI</span>
-                        <span class="tech-tag">Redis</span>
+                        <span class="tech-tag">Prisma</span>
+                        <span class="tech-tag">OpenAI</span>
                     </div>
-                    <p><strong>Solution:</strong> Reduces certificate processing from 15-30 min to 2-5 min with &lt;1% error rate.</p>
+                    <p><strong>Impact:</strong> Automates insurance certificate comparison and RFQ generation for corporate clients including El-Al, Teva, and Shikun & Binui, with 95+ coverage rules across 8 industry sectors.</p>
+                    <a href="https://riskcovery-api.vercel.app" target="_blank" class="project-link">View Project →</a>
                 </div>
                 <div class="project-preview">
                     <div class="preview-dots">
@@ -1318,9 +1759,35 @@
                                 <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="M9 12l2 2 4-4"/>
                             </svg>
                         </div>
-                        <div class="preview-title">Insurance Compliance System</div>
+                        <div class="preview-title">Insurance Advisory System</div>
                     </div>
                 </div>
+            </div>
+
+            <!-- Kolabma -->
+            <div class="project-card featured">
+                <div class="project-content">
+                    <span class="project-badge badge-saas">SaaS Platform</span>
+                    <h3>KOLABMA</h3>
+                    <p>Two-sided marketplace connecting Israeli and Jewish artists with communities worldwide. Features artist profiles with media galleries, community geolocation with map visualization, smart tour algorithm using Haversine distance clustering, booking management, in-app messaging, and bilingual Hebrew/English support.</p>
+                    <div class="project-tech">
+                        <span class="tech-tag">Next.js 14</span>
+                        <span class="tech-tag">FastAPI</span>
+                        <span class="tech-tag">PostgreSQL</span>
+                        <span class="tech-tag">TypeScript</span>
+                        <span class="tech-tag">Tailwind CSS</span>
+                    </div>
+                    <p><strong>Scope:</strong> 90+ API endpoints, 4 role-based dashboards (Artist, Community, Admin, Agent), 109 automated tests, and zero-downtime deployment across Vercel + Railway.</p>
+                    <a href="https://kolamba.vercel.app" target="_blank" class="project-link">View Project →</a>
+                </div>
+                <a href="https://kolamba.vercel.app" target="_blank" class="project-preview" style="text-decoration: none;">
+                    <div class="preview-dots">
+                        <span></span><span></span><span></span>
+                    </div>
+                    <div class="browser-mockup">
+                        <img src="/static/screenshots/kolabma1.jpeg" alt="Kolabma Platform">
+                    </div>
+                </a>
             </div>
         </div>
     </section>
@@ -1330,7 +1797,7 @@
         <div class="founder-card">
             <div class="founder-image">
                 <div class="founder-image-container" style="padding: 0; overflow: hidden;">
-                    <img src="avi.jpeg" alt="Dr. Avi Luvchik" style="width: 100%; height: 100%; object-fit: cover;">
+                    <img src="/static/avi.jpeg" alt="Dr. Avi Luvchik" style="width: 100%; height: 100%; object-fit: cover;">
                 </div>
                 <div class="founder-badges">
                     <span class="founder-badge">PhD Physics</span>
@@ -1439,6 +1906,12 @@
         </p>
     </footer>
 
+    <script>
+        function toggleMobileMenu() {
+            document.querySelector('.nav-links').classList.toggle('active');
+            document.querySelector('.mobile-menu-toggle').classList.toggle('active');
+        }
+    </script>
 </body>
 </html>
 <!-- deployed Wed Jan  7 02:33:01 EET 2026 -->
