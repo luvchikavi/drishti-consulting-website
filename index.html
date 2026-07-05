@@ -3,8 +3,76 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Drishti Consulting | Vision Into Reality</title>
-    <meta name="description" content="Drishti Consulting - Transforming business vision into technological reality. Expert consulting in sustainability, compliance, and digital transformation.">
+
+    <!-- Primary SEO -->
+    <title>Drishti Consulting | Custom Software, AI &amp; Sustainability</title>
+    <meta name="description" content="Drishti Consulting helps forward-thinking businesses adopt AI, build custom software, and meet sustainability &amp; compliance goals. Led by Dr. Avi Luvchik, PhD.">
+    <meta name="keywords" content="AI adoption, AI consulting, custom software development, sustainability consulting, ESG, CBAM compliance, business intelligence, digital transformation, Israel">
+    <meta name="author" content="Dr. Avi Luvchik, Drishti Consulting">
+    <meta name="robots" content="index, follow, max-image-preview:large">
+    <meta name="theme-color" content="#0f172a">
+    <link rel="canonical" href="https://drishticonsulting.com/">
+
+    <!-- Icons -->
+    <link rel="icon" type="image/svg+xml" href="/logo.svg">
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+
+    <!-- Open Graph (LinkedIn, WhatsApp, Facebook) -->
+    <meta property="og:type" content="website">
+    <meta property="og:site_name" content="Drishti Consulting">
+    <meta property="og:title" content="Drishti Consulting | Transform Your Vision Into Reality">
+    <meta property="og:description" content="Strategy, custom software & AI adoption for forward-thinking businesses. Sustainability, compliance & digital transformation, led by Dr. Avi Luvchik, PhD.">
+    <meta property="og:url" content="https://drishticonsulting.com/">
+    <meta property="og:image" content="https://drishticonsulting.com/og-image.png">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta property="og:image:alt" content="Drishti Consulting — Transform Your Vision Into Reality">
+    <meta property="og:locale" content="en_US">
+
+    <!-- Twitter / X Card -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Drishti Consulting | Transform Your Vision Into Reality">
+    <meta name="twitter:description" content="Strategy, custom software & AI adoption for forward-thinking businesses. Led by Dr. Avi Luvchik, PhD.">
+    <meta name="twitter:image" content="https://drishticonsulting.com/og-image.png">
+
+    <!-- Structured data (Google rich results) -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "ProfessionalService",
+      "name": "Drishti Consulting",
+      "url": "https://drishticonsulting.com/",
+      "logo": "https://drishticonsulting.com/apple-touch-icon.png",
+      "image": "https://drishticonsulting.com/og-image.png",
+      "description": "Drishti Consulting helps forward-thinking businesses adopt AI, build custom software, and meet sustainability and compliance goals.",
+      "email": "avi@drishticonsulting.com",
+      "slogan": "Focused Vision. Precise Execution.",
+      "areaServed": "Worldwide",
+      "knowsAbout": ["Artificial Intelligence adoption", "Custom software development", "Sustainability & ESG", "CBAM compliance", "System integration", "Business intelligence"],
+      "founder": {
+        "@type": "Person",
+        "name": "Dr. Avi Luvchik",
+        "jobTitle": "Founder & CEO",
+        "alumniOf": "Imperial College London",
+        "sameAs": "https://www.linkedin.com/in/avi-luvchik-phd-987a981b/"
+      },
+      "sameAs": ["https://www.linkedin.com/in/avi-luvchik-phd-987a981b/"]
+    }
+    </script>
+
+    <!-- Google Analytics (GA4): replace G-XXXXXXXXXX with your Measurement ID, then uncomment.
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-XXXXXXXXXX"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-XXXXXXXXXX');
+    </script>
+    -->
+    <!-- Google Search Console: paste the verification meta tag Google gives you here. -->
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <style>
         :root {
@@ -721,6 +789,45 @@
         .project-preview:hover .browser-mockup img {
             transform: translateY(-20%);
         }
+
+        /* Maakav rotating gallery */
+        .browser-mockup.gallery img {
+            position: absolute;
+            inset: 0;
+            opacity: 0;
+            object-fit: cover;
+            object-position: top center;
+            transition: opacity 0.6s ease;
+        }
+        .browser-mockup.gallery img.active { opacity: 1; }
+        .project-preview:hover .browser-mockup.gallery img { transform: none; }
+        .gallery-arrows {
+            position: absolute; inset: 0; z-index: 3; pointer-events: none;
+            display: flex; align-items: center; justify-content: space-between;
+        }
+        .gallery-arrows button {
+            pointer-events: auto; margin: 0 8px; width: 34px; height: 34px;
+            border: none; border-radius: 50%; cursor: pointer;
+            background: rgba(0,0,0,0.45); color: #fff; font-size: 20px; line-height: 1;
+            display: flex; align-items: center; justify-content: center; transition: background 0.2s;
+        }
+        .gallery-arrows button:hover { background: rgba(0,0,0,0.8); }
+        .gallery-dots {
+            position: absolute; bottom: 10px; left: 0; right: 0; z-index: 3;
+            display: flex; justify-content: center; gap: 7px;
+        }
+        .gallery-dots span {
+            width: 8px; height: 8px; border-radius: 50%; cursor: pointer;
+            background: rgba(255,255,255,0.4); transition: background 0.2s;
+        }
+        .gallery-dots span.active { background: var(--secondary, #d4a94a); }
+        .gallery-fallback {
+            position: absolute; inset: 0; z-index: 0;
+            display: flex; flex-direction: column; align-items: center; justify-content: center;
+            gap: 15px; text-align: center; padding: 20px;
+        }
+        .gallery.no-images .gallery-arrows,
+        .gallery.no-images .gallery-dots { display: none; }
 
         /* Founder Section */
         .founder {
@@ -1659,7 +1766,7 @@
             <div class="project-card featured">
                 <div class="project-content">
                     <span class="project-badge badge-flagship">Flagship Product</span>
-                    <h3>CLIMATERIX</h3>
+                    <h3>CLIMATRIX</h3>
                     <p>Comprehensive environmental compliance platform helping Israeli exporters meet EU regulations. Includes GHG inventory management, CBAM compliance module, and EPD tracking—making sustainability affordable and scalable.</p>
                     <div class="project-tech">
                         <span class="tech-tag">Next.js 14</span>
@@ -1676,7 +1783,7 @@
                         <span></span><span></span><span></span>
                     </div>
                     <div class="browser-mockup">
-                        <img src="/static/screenshots/1climetrix.jpg" alt="Climetrix Platform">
+                        <img src="/screenshots/climatrix-2026.png" alt="Climatrix Platform">
                     </div>
                 </a>
             </div>
@@ -1702,42 +1809,87 @@
                         <span></span><span></span><span></span>
                     </div>
                     <div class="browser-mockup">
-                        <img src="/static/screenshots/nectra1.jpeg" alt="Nectra Platform">
+                        <img src="/screenshots/nectra1.jpeg" alt="Nectra Platform">
                     </div>
                 </a>
             </div>
 
-            <!-- TAG -->
+            <!-- Maakav -->
             <div class="project-card">
                 <div class="project-content">
-                    <span class="project-badge badge-enterprise">Enterprise Solution</span>
-                    <h3>TAG Sales Dashboard</h3>
-                    <p>Business intelligence platform for TAG Urbanic (Portugal) featuring real-time sales analytics, broker performance tracking, and two-way Monday.com integration with complete audit trails and change logging.</p>
+                    <span class="project-badge badge-saas">SaaS Platform</span>
+                    <h3>MAAKAV</h3>
+                    <p>Construction project tracking system—a spin-off of Nectra built for the same real-estate client. Maakav (Hebrew: מעקב, "tracking") monitors on-site construction progress, milestones, and delivery status across active building projects.</p>
                     <div class="project-tech">
-                        <span class="tech-tag">Python</span>
-                        <span class="tech-tag">Streamlit</span>
-                        <span class="tech-tag">Monday.com API</span>
-                        <span class="tech-tag">Plotly</span>
-                        <span class="tech-tag">Pandas</span>
+                        <span class="tech-tag">Construction Tracking</span>
+                        <span class="tech-tag">Multi-project</span>
+                        <span class="tech-tag">Hebrew UI</span>
+                        <span class="tech-tag">Nectra Spin-off</span>
                     </div>
-                    <p><strong>Features:</strong> KPI dashboards, sales forecasting, decision-making tools, multi-project portfolio tracking.</p>
-                    <a href="https://luvchik.streamlit.app" target="_blank" class="project-link">View Project →</a>
+                    <p><strong>Scope:</strong> Real-time construction progress monitoring for real-estate developers, extending Nectra's project-finance workflows to on-the-ground build tracking.</p>
                 </div>
-                <a href="https://luvchik.streamlit.app" target="_blank" class="project-preview" style="text-decoration: none;">
+                <div class="project-preview">
+                    <div class="preview-dots">
+                        <span></span><span></span><span></span>
+                    </div>
+                    <div class="browser-mockup gallery" id="maakav-gallery">
+                        <div class="gallery-fallback">
+                            <div class="preview-icon">
+                                <svg width="60" height="60" viewBox="0 0 24 24" fill="none" stroke="var(--secondary)" stroke-width="1.5">
+                                    <path d="M3 21h18M5 21V7l8-4v18M19 21V11l-6-3M9 9v.01M9 13v.01M9 17v.01"/>
+                                </svg>
+                            </div>
+                            <div class="preview-title">Construction Project Tracking</div>
+                        </div>
+                        <img class="active" src="/screenshots/maakav-1.png" alt="Maakav — Bank reconciliation tracking report" onerror="this.style.display='none'">
+                        <img src="/screenshots/maakav-2.png" alt="Maakav — Financial exposure report" onerror="this.style.display='none'">
+                        <img src="/screenshots/maakav-3.png" alt="Maakav — Sources & uses statement" onerror="this.style.display='none'">
+                        <img src="/screenshots/maakav-4.png" alt="Maakav — Loans, deposits & equity" onerror="this.style.display='none'">
+                        <div class="gallery-arrows">
+                            <button type="button" onclick="maakavStep(-1)" aria-label="Previous screen">‹</button>
+                            <button type="button" onclick="maakavStep(1)" aria-label="Next screen">›</button>
+                        </div>
+                        <div class="gallery-dots" id="maakav-dots">
+                            <span class="active" onclick="maakavGo(0)"></span>
+                            <span onclick="maakavGo(1)"></span>
+                            <span onclick="maakavGo(2)"></span>
+                            <span onclick="maakavGo(3)"></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Urbanic Estate -->
+            <div class="project-card">
+                <div class="project-content">
+                    <span class="project-badge badge-saas">SaaS Platform</span>
+                    <h3>URBANIC ESTATE</h3>
+                    <p>End-to-end platform for real-estate developers, covering every stage of a project—from feasibility to keys. Model profitability, plan timelines, track construction, manage marketing and billing, and hand units over to buyers, all in one system.</p>
+                    <div class="project-tech">
+                        <span class="tech-tag">Multi-project</span>
+                        <span class="tech-tag">Multi-tenant</span>
+                        <span class="tech-tag">Inspection</span>
+                        <span class="tech-tag">After-sale</span>
+                        <span class="tech-tag">Bilingual PT / EN</span>
+                    </div>
+                    <p><strong>Scope:</strong> Built for TAG Urbanic Investment Management (Portugal). Post-construction modules—inspection & after-sale handover—shipping first, where the spreadsheets pile up.</p>
+                    <a href="https://www.urbanic.estate" target="_blank" class="project-link">View Project →</a>
+                </div>
+                <a href="https://www.urbanic.estate" target="_blank" class="project-preview" style="text-decoration: none;">
                     <div class="preview-dots">
                         <span></span><span></span><span></span>
                     </div>
                     <div class="browser-mockup">
-                        <img src="/static/screenshots/1tag.jpeg" alt="TAG Sales Dashboard">
+                        <img src="/screenshots/urbanic-estate-2026.png" alt="Urbanic Estate Platform">
                     </div>
                 </a>
             </div>
 
-            <!-- Riskcovery -->
+            <!-- Riscovery -->
             <div class="project-card">
                 <div class="project-content">
                     <span class="project-badge badge-saas">SaaS Platform</span>
-                    <h3>RISKCOVERY</h3>
+                    <h3>RISCOVERY</h3>
                     <p>Insurance advisory management system for LHD Insurance Consulting. Features AI-powered OCR certificate verification, Smart RFQ generator with sector-based questionnaires, compliance gap detection across 12 insurance product types, and a comprehensive knowledge base covering 7 major Israeli insurers.</p>
                     <div class="project-tech">
                         <span class="tech-tag">Next.js 14</span>
@@ -1747,28 +1899,23 @@
                         <span class="tech-tag">OpenAI</span>
                     </div>
                     <p><strong>Impact:</strong> Automates insurance certificate comparison and RFQ generation for corporate clients including El-Al, Teva, and Shikun & Binui, with 95+ coverage rules across 8 industry sectors.</p>
-                    <a href="https://riskcovery-api.vercel.app" target="_blank" class="project-link">View Project →</a>
+                    <a href="https://riskcovery-bgq152i8f-avi-luvchiks-projects.vercel.app/rfq-v3" target="_blank" class="project-link">View Live Demo →</a>
                 </div>
-                <div class="project-preview">
+                <a href="https://riskcovery-bgq152i8f-avi-luvchiks-projects.vercel.app/rfq-v3" target="_blank" class="project-preview" style="text-decoration: none;">
                     <div class="preview-dots">
                         <span></span><span></span><span></span>
                     </div>
-                    <div class="preview-content">
-                        <div class="preview-icon">
-                            <svg width="60" height="60" viewBox="0 0 24 24" fill="none" stroke="var(--secondary)" stroke-width="1.5">
-                                <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="M9 12l2 2 4-4"/>
-                            </svg>
-                        </div>
-                        <div class="preview-title">Insurance Advisory System</div>
+                    <div class="browser-mockup">
+                        <img src="/screenshots/riscovery-rfq-2026.png" alt="Riscovery RFQ Platform">
                     </div>
-                </div>
+                </a>
             </div>
 
-            <!-- Kolabma -->
+            <!-- Kolamba -->
             <div class="project-card featured">
                 <div class="project-content">
                     <span class="project-badge badge-saas">SaaS Platform</span>
-                    <h3>KOLABMA</h3>
+                    <h3>KOLAMBA</h3>
                     <p>Two-sided marketplace connecting Israeli and Jewish artists with communities worldwide. Features artist profiles with media galleries, community geolocation with map visualization, smart tour algorithm using Haversine distance clustering, booking management, in-app messaging, and bilingual Hebrew/English support.</p>
                     <div class="project-tech">
                         <span class="tech-tag">Next.js 14</span>
@@ -1785,7 +1932,7 @@
                         <span></span><span></span><span></span>
                     </div>
                     <div class="browser-mockup">
-                        <img src="/static/screenshots/kolabma1.jpeg" alt="Kolabma Platform">
+                        <img src="/screenshots/kolamba-2026.png" alt="Kolamba Platform">
                     </div>
                 </a>
             </div>
@@ -1902,7 +2049,7 @@
             Focused Vision. Precise Execution.
         </p>
         <p class="footer-copyright">
-            © 2025 Drishti Consulting. All rights reserved.
+            © 2026 Drishti Consulting. All rights reserved.
         </p>
     </footer>
 
@@ -1911,6 +2058,30 @@
             document.querySelector('.nav-links').classList.toggle('active');
             document.querySelector('.mobile-menu-toggle').classList.toggle('active');
         }
+
+        // Maakav screenshot gallery
+        let maakavIdx = 0;
+        function maakavRender() {
+            const imgs = document.querySelectorAll('#maakav-gallery img');
+            const dots = document.querySelectorAll('#maakav-dots span');
+            imgs.forEach((im, i) => im.classList.toggle('active', i === maakavIdx));
+            dots.forEach((d, i) => d.classList.toggle('active', i === maakavIdx));
+        }
+        function maakavGo(i) {
+            const imgs = document.querySelectorAll('#maakav-gallery img');
+            if (!imgs.length) return;
+            maakavIdx = (i + imgs.length) % imgs.length;
+            maakavRender();
+        }
+        function maakavStep(dir) { maakavGo(maakavIdx + dir); }
+        window.addEventListener('load', function () {
+            const g = document.querySelector('#maakav-gallery');
+            if (!g) return;
+            const imgs = g.querySelectorAll('img');
+            const loaded = Array.prototype.filter.call(imgs, im => im.complete && im.naturalWidth > 0);
+            if (loaded.length === 0) { g.classList.add('no-images'); return; }
+            setInterval(() => maakavStep(1), 4000);
+        });
     </script>
 </body>
 </html>
