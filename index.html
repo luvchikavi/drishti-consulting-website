@@ -829,6 +829,34 @@
         .gallery.no-images .gallery-arrows,
         .gallery.no-images .gallery-dots { display: none; }
 
+        /* Language toggle + RTL */
+        .lang-toggle {
+            background: transparent;
+            border: 1px solid var(--glass-border);
+            color: var(--light);
+            padding: 8px 15px;
+            border-radius: 8px;
+            font-family: inherit;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            white-space: nowrap;
+        }
+        .lang-toggle:hover { background: var(--glass); border-color: var(--primary); color: #fff; }
+        [dir="rtl"] .service-card,
+        [dir="rtl"] .project-content,
+        [dir="rtl"] .meaning-text,
+        [dir="rtl"] .founder-info,
+        [dir="rtl"] .contact-info,
+        [dir="rtl"] .contact-method { text-align: right; }
+        [dir="rtl"] .hero-content,
+        [dir="rtl"] .section-header,
+        [dir="rtl"] .meaning-card > h2,
+        [dir="rtl"] .meaning-card > h3,
+        [dir="rtl"] .meaning-feature,
+        [dir="rtl"] .footer-content { text-align: center; }
+
         /* Founder Section */
         .founder {
             padding: 100px 5%;
@@ -1615,31 +1643,32 @@
             <span></span><span></span><span></span>
         </div>
         <ul class="nav-links">
-            <li><a href="#meaning" onclick="toggleMobileMenu()">Our Vision</a></li>
-            <li><a href="#services" onclick="toggleMobileMenu()">Services</a></li>
-            <li><a href="#projects" onclick="toggleMobileMenu()">Projects</a></li>
-            <li><a href="#founder" onclick="toggleMobileMenu()">Founder</a></li>
+            <li><a href="#meaning" onclick="toggleMobileMenu()" data-en="Our Vision" data-he="החזון שלנו">Our Vision</a></li>
+            <li><a href="#services" onclick="toggleMobileMenu()" data-en="Services" data-he="שירותים">Services</a></li>
+            <li><a href="#projects" onclick="toggleMobileMenu()" data-en="Projects" data-he="פרויקטים">Projects</a></li>
+            <li><a href="#founder" onclick="toggleMobileMenu()" data-en="Founder" data-he="המייסד">Founder</a></li>
         </ul>
-        <a href="#contact" class="nav-cta">Get in Touch</a>
+        <button class="lang-toggle" onclick="toggleLang()" aria-label="Switch language">עברית</button>
+        <a href="#contact" class="nav-cta" data-en="Get in Touch" data-he="צור קשר">Get in Touch</a>
     </nav>
 
     <!-- Hero Section -->
     <section class="hero">
         <div class="hero-content">
             <div class="sanskrit-badge">
-                <span>Focused Vision. Precise Execution.</span>
+                <span data-en="Focused Vision. Precise Execution." data-he="חזון ממוקד. ביצוע מדויק.">Focused Vision. Precise Execution.</span>
             </div>
-            <h1>Transform Your <span>Vision</span><br>Into Reality</h1>
-            <p class="hero-subtitle">
-                We help forward-thinking businesses focus their strategic vision and build technology solutions that drive sustainable growth and regulatory compliance.
+            <h1 data-en="Transform Your <span>Vision</span><br>Into Reality" data-he="הופכים את <span>החזון</span> שלך<br>למציאות">Transform Your <span>Vision</span><br>Into Reality</h1>
+            <p class="hero-subtitle" data-en="We help forward-thinking businesses adopt AI, build custom software, and turn strategic vision into technology that drives sustainable growth and regulatory compliance." data-he="אנחנו עוזרים לעסקים חדשניים לאמץ בינה מלאכותית, לפתח תוכנה בהתאמה אישית, ולהפוך חזון אסטרטגי לטכנולוגיה שמניעה צמיחה בת-קיימא ועמידה ברגולציה.">
+                We help forward-thinking businesses adopt AI, build custom software, and turn strategic vision into technology that drives sustainable growth and regulatory compliance.
             </p>
             <div class="hero-ctas">
                 <a href="#contact" class="btn-primary">
-                    Start Your Journey
+                    <span data-en="Start Your Journey" data-he="יוצאים לדרך">Start Your Journey</span>
                     <span>→</span>
                 </a>
                 <a href="#projects" class="btn-secondary">
-                    View Our Work
+                    <span data-en="View Our Work" data-he="לעבודות שלנו">View Our Work</span>
                     <span>↓</span>
                 </a>
             </div>
@@ -1649,9 +1678,9 @@
     <!-- Meaning Section -->
     <section class="meaning-section" id="meaning">
         <div class="meaning-card">
-            <h2>The Philosophy</h2>
-            <h3>Why <span>Drishti</span>?</h3>
-            <p class="meaning-text">
+            <h2 data-en="The Philosophy" data-he="הפילוסופיה">The Philosophy</h2>
+            <h3 data-en="Why <span>Drishti</span>?" data-he="למה <span>Drishti</span>?">Why <span>Drishti</span>?</h3>
+            <p class="meaning-text" data-en="In Sanskrit, <strong>Drishti (दृष्टि)</strong> means far more than simply &quot;vision&quot; or &quot;sight.&quot; It represents the ability to see beyond the surface—to perceive with <strong>divine insight</strong>, <strong>focused intention</strong>, and <strong>inner wisdom</strong>. In yogic philosophy, drishti is the practice of concentrated gaze that leads to deeper understanding and clarity.<br><br>At Drishti Consulting, we embody this principle: helping businesses <strong>focus their vision</strong> on the right strategic point, cutting through complexity to see the path forward with crystal clarity. We transform abstract business goals into concrete, technology-driven solutions." data-he="בסנסקריט, <strong>Drishti (דרישטי)</strong> משמעו הרבה מעבר ל'חזון' או 'ראייה'. זו היכולת לראות מעבר לפני השטח — לתפוס בעזרת <strong>תובנה עמוקה</strong>, <strong>כוונה ממוקדת</strong> ו<strong>חוכמה פנימית</strong>. בפילוסופיה היוגית, drishti היא תרגול של מבט מרוכז המוביל להבנה ובהירות עמוקות יותר.<br><br>ב-Drishti Consulting אנחנו מגלמים עיקרון זה: עוזרים לעסקים <strong>למקד את החזון</strong> בנקודה האסטרטגית הנכונה, לחתוך דרך המורכבות ולראות את הדרך קדימה בבהירות מוחלטת. אנחנו הופכים מטרות עסקיות מופשטות לפתרונות טכנולוגיים קונקרטיים.">
                 In Sanskrit, <strong>Drishti (दृष्टि)</strong> means far more than simply "vision" or "sight." It represents the ability to see beyond the surface—to perceive with <strong>divine insight</strong>, <strong>focused intention</strong>, and <strong>inner wisdom</strong>. In yogic philosophy, drishti is the practice of concentrated gaze that leads to deeper understanding and clarity.
                 <br><br>
                 At Drishti Consulting, we embody this principle: helping businesses <strong>focus their vision</strong> on the right strategic point, cutting through complexity to see the path forward with crystal clarity. We transform abstract business goals into concrete, technology-driven solutions.
@@ -1663,8 +1692,8 @@
                             <circle cx="12" cy="12" r="3"/><path d="M12 5c-7 0-10 7-10 7s3 7 10 7 10-7 10-7-3-7-10-7z"/>
                         </svg>
                     </div>
-                    <h4>Focused Vision</h4>
-                    <p>Clarity through strategic focus and concentrated expertise</p>
+                    <h4 data-en="Focused Vision" data-he="חזון ממוקד">Focused Vision</h4>
+                    <p data-en="Clarity through strategic focus and concentrated expertise" data-he="בהירות באמצעות מיקוד אסטרטגי ומומחיות מרוכזת">Clarity through strategic focus and concentrated expertise</p>
                 </div>
                 <div class="meaning-feature">
                     <div class="meaning-feature-icon">
@@ -1673,8 +1702,8 @@
                             <circle cx="12" cy="12" r="3"/>
                         </svg>
                     </div>
-                    <h4>Divine Insight</h4>
-                    <p>Deep understanding that transforms challenges into opportunities</p>
+                    <h4 data-en="Divine Insight" data-he="תובנה עמוקה">Divine Insight</h4>
+                    <p data-en="Deep understanding that transforms challenges into opportunities" data-he="הבנה מעמיקה שהופכת אתגרים להזדמנויות">Deep understanding that transforms challenges into opportunities</p>
                 </div>
                 <div class="meaning-feature">
                     <div class="meaning-feature-icon">
@@ -1682,8 +1711,8 @@
                             <circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2" fill="currentColor"/>
                         </svg>
                     </div>
-                    <h4>Precise Execution</h4>
-                    <p>From vision to reality with technological excellence</p>
+                    <h4 data-en="Precise Execution" data-he="ביצוע מדויק">Precise Execution</h4>
+                    <p data-en="From vision to reality with technological excellence" data-he="מחזון למציאות במצוינות טכנולוגית">From vision to reality with technological excellence</p>
                 </div>
             </div>
         </div>
@@ -1692,19 +1721,28 @@
     <!-- Services Section -->
     <section class="services" id="services">
         <div class="section-header">
-            <span class="section-label">What We Do</span>
-            <h2>Our Expertise</h2>
-            <p>End-to-end consulting and development services that turn your business vision into powerful digital solutions</p>
+            <span class="section-label" data-en="What We Do" data-he="מה אנחנו עושים">What We Do</span>
+            <h2 data-en="Our Expertise" data-he="המומחיות שלנו">Our Expertise</h2>
+            <p data-en="End-to-end consulting and development—from AI adoption to custom software—that turns your business vision into powerful digital solutions" data-he="ייעוץ ופיתוח מקצה לקצה — מאימוץ בינה מלאכותית ועד תוכנה בהתאמה אישית — שהופכים את החזון העסקי שלך לפתרונות דיגיטליים עוצמתיים">End-to-end consulting and development—from AI adoption to custom software—that turns your business vision into powerful digital solutions</p>
         </div>
         <div class="services-grid">
+            <div class="service-card">
+                <div class="service-icon">
+                    <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1.5">
+                        <rect x="4" y="7" width="16" height="12" rx="2"/><path d="M9 7V4m6 3V4M8.5 13h.01M15.5 13h.01M2 12h2m16 0h2"/>
+                    </svg>
+                </div>
+                <h3 data-en="AI Adoption &amp; Integration" data-he="אימוץ ושילוב בינה מלאכותית">AI Adoption & Integration</h3>
+                <p data-en="Practical AI for your business—identifying high-impact use cases, integrating LLMs and automation into your workflows, and building AI-powered tools that cut costs and unlock new capabilities." data-he="בינה מלאכותית מעשית לעסק שלך — זיהוי מקרי שימוש בעלי ערך גבוה, שילוב מודלי שפה (LLM) ואוטומציה בתהליכי העבודה, ובניית כלים מבוססי-AI שחוסכים עלויות ופותחים יכולות חדשות.">Practical AI for your business—identifying high-impact use cases, integrating LLMs and automation into your workflows, and building AI-powered tools that cut costs and unlock new capabilities.</p>
+            </div>
             <div class="service-card">
                 <div class="service-icon">
                     <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1.5">
                         <path d="M12 22c4-2 8-6 8-12a8 8 0 10-16 0c0 6 4 10 8 12z"/><path d="M12 8v8m-4-4h8"/>
                     </svg>
                 </div>
-                <h3>Sustainability & ESG</h3>
-                <p>GHG inventory management, CBAM compliance, carbon footprint tracking, and Environmental Product Declarations (EPD) for businesses navigating the evolving regulatory landscape.</p>
+                <h3 data-en="Sustainability &amp; ESG" data-he="קיימות ו-ESG">Sustainability & ESG</h3>
+                <p data-en="GHG inventory management, CBAM compliance, carbon footprint tracking, and Environmental Product Declarations (EPD) for businesses navigating the evolving regulatory landscape." data-he="ניהול מצאי גזי חממה, עמידה ב-CBAM, מעקב טביעת רגל פחמנית והצהרות סביבתיות למוצר (EPD) עבור עסקים המתמודדים עם רגולציה מתפתחת.">GHG inventory management, CBAM compliance, carbon footprint tracking, and Environmental Product Declarations (EPD) for businesses navigating the evolving regulatory landscape.</p>
             </div>
             <div class="service-card">
                 <div class="service-icon">
@@ -1712,8 +1750,8 @@
                         <rect x="4" y="4" width="16" height="16" rx="2"/><path d="M9 9h6m-6 3h6m-6 3h4"/>
                     </svg>
                 </div>
-                <h3>Custom Software Development</h3>
-                <p>Full-stack development of enterprise applications, from concept to deployment. Modern architectures using React, Django, Next.js, and cloud-native technologies.</p>
+                <h3 data-en="Custom Software Development" data-he="פיתוח תוכנה בהתאמה אישית">Custom Software Development</h3>
+                <p data-en="Full-stack development of enterprise applications, from concept to deployment. Modern architectures using React, Django, Next.js, and cloud-native technologies." data-he="פיתוח Full-Stack של אפליקציות ארגוניות, מרעיון ועד השקה. ארכיטקטורות מודרניות עם React, Django, Next.js וטכנולוגיות ענן.">Full-stack development of enterprise applications, from concept to deployment. Modern architectures using React, Django, Next.js, and cloud-native technologies.</p>
             </div>
             <div class="service-card">
                 <div class="service-icon">
@@ -1721,8 +1759,8 @@
                         <path d="M8 12h8m-8 0a4 4 0 110-8 4 4 0 010 8zm8 0a4 4 0 110 8 4 4 0 010-8z"/>
                     </svg>
                 </div>
-                <h3>System Integration</h3>
-                <p>Seamless integration between business tools, CRMs, ERPs, and third-party platforms. API development, data synchronization, and workflow automation.</p>
+                <h3 data-en="System Integration" data-he="אינטגרציית מערכות">System Integration</h3>
+                <p data-en="Seamless integration between business tools, CRMs, ERPs, and third-party platforms. API development, data synchronization, and workflow automation." data-he="אינטגרציה חלקה בין כלים עסקיים, מערכות CRM ו-ERP ופלטפורמות צד-שלישי. פיתוח API, סנכרון נתונים ואוטומציה של תהליכים.">Seamless integration between business tools, CRMs, ERPs, and third-party platforms. API development, data synchronization, and workflow automation.</p>
             </div>
             <div class="service-card">
                 <div class="service-icon">
@@ -1730,8 +1768,8 @@
                         <path d="M3 3v18h18"/><path d="M7 16l4-4 4 4 5-6"/>
                     </svg>
                 </div>
-                <h3>Business Intelligence</h3>
-                <p>Transform raw data into actionable insights. Custom dashboards, KPI tracking, predictive analytics, and decision-support tools for strategic advantage.</p>
+                <h3 data-en="Business Intelligence" data-he="בינה עסקית">Business Intelligence</h3>
+                <p data-en="Transform raw data into actionable insights. Custom dashboards, KPI tracking, predictive analytics, and decision-support tools for strategic advantage." data-he="הפיכת נתונים גולמיים לתובנות מעשיות. דשבורדים מותאמים, מעקב מדדי KPI, אנליטיקה חזויה וכלי תמיכה בקבלת החלטות ליתרון אסטרטגי.">Transform raw data into actionable insights. Custom dashboards, KPI tracking, predictive analytics, and decision-support tools for strategic advantage.</p>
             </div>
             <div class="service-card">
                 <div class="service-icon">
@@ -1739,8 +1777,8 @@
                         <path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5M2 12l10 5 10-5"/>
                     </svg>
                 </div>
-                <h3>Compliance Management</h3>
-                <p>Regulatory compliance systems for insurance, environmental reporting, and industry-specific requirements. Automated tracking and audit-ready documentation.</p>
+                <h3 data-en="Compliance Management" data-he="ניהול ציות ורגולציה">Compliance Management</h3>
+                <p data-en="Regulatory compliance systems for insurance, environmental reporting, and industry-specific requirements. Automated tracking and audit-ready documentation." data-he="מערכות ציות רגולטורי לביטוח, דיווח סביבתי ודרישות ענפיות. מעקב אוטומטי ותיעוד מוכן לביקורת.">Regulatory compliance systems for insurance, environmental reporting, and industry-specific requirements. Automated tracking and audit-ready documentation.</p>
             </div>
             <div class="service-card">
                 <div class="service-icon">
@@ -1748,8 +1786,8 @@
                         <path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><path d="M14 2v6h6M16 13H8m8 4H8m2-8H8"/>
                     </svg>
                 </div>
-                <h3>Project Characterization</h3>
-                <p>Comprehensive requirements gathering, functional specifications, UI/UX design, and technical architecture planning before development begins.</p>
+                <h3 data-en="Project Characterization" data-he="אפיון פרויקטים">Project Characterization</h3>
+                <p data-en="Comprehensive requirements gathering, functional specifications, UI/UX design, and technical architecture planning before development begins." data-he="איסוף דרישות מקיף, מפרטים פונקציונליים, עיצוב UI/UX ותכנון ארכיטקטורה טכנית לפני תחילת הפיתוח.">Comprehensive requirements gathering, functional specifications, UI/UX design, and technical architecture planning before development begins.</p>
             </div>
         </div>
     </section>
@@ -1757,17 +1795,17 @@
     <!-- Projects Section -->
     <section class="projects" id="projects">
         <div class="section-header">
-            <span class="section-label">Our Portfolio</span>
-            <h2>Featured Projects</h2>
-            <p>Real solutions delivering real impact for businesses across industries</p>
+            <span class="section-label" data-en="Our Portfolio" data-he="תיק העבודות">Our Portfolio</span>
+            <h2 data-en="Featured Projects" data-he="פרויקטים נבחרים">Featured Projects</h2>
+            <p data-en="Real solutions delivering real impact for businesses across industries" data-he="פתרונות אמיתיים שמייצרים ערך אמיתי לעסקים במגוון תעשיות">Real solutions delivering real impact for businesses across industries</p>
         </div>
         <div class="projects-grid">
             <!-- CLIMATERIX - Flagship -->
             <div class="project-card featured">
                 <div class="project-content">
-                    <span class="project-badge badge-flagship">Flagship Product</span>
+                    <span class="project-badge badge-flagship" data-en="Flagship Product" data-he="מוצר דגל">Flagship Product</span>
                     <h3>CLIMATRIX</h3>
-                    <p>Comprehensive environmental compliance platform helping Israeli exporters meet EU regulations. Includes GHG inventory management, CBAM compliance module, and EPD tracking—making sustainability affordable and scalable.</p>
+                    <p data-en="Comprehensive environmental compliance platform helping Israeli exporters meet EU regulations. Includes GHG inventory management, CBAM compliance module, and EPD tracking—making sustainability affordable and scalable." data-he="פלטפורמה מקיפה לציות סביבתי המסייעת ליצואנים ישראלים לעמוד ברגולציה האירופית. כוללת ניהול מצאי גזי חממה, מודול עמידה ב-CBAM ומעקב EPD — והופכת את הקיימות לזמינה ובת-הרחבה.">Comprehensive environmental compliance platform helping Israeli exporters meet EU regulations. Includes GHG inventory management, CBAM compliance module, and EPD tracking—making sustainability affordable and scalable.</p>
                     <div class="project-tech">
                         <span class="tech-tag">Next.js 14</span>
                         <span class="tech-tag">Django REST</span>
@@ -1775,8 +1813,8 @@
                         <span class="tech-tag">TypeScript</span>
                         <span class="tech-tag">Tailwind CSS</span>
                     </div>
-                    <p><strong>Impact:</strong> Enabling 5,000+ Israeli companies to comply with EU CBAM regulations effective 2026, with potential savings of 10-20% on carbon costs through actual vs. default data reporting.</p>
-                    <a href="https://climetrix.io" target="_blank" class="project-link">View Project →</a>
+                    <p data-en="<strong>Impact:</strong> Enabling 5,000+ Israeli companies to comply with EU CBAM regulations effective 2026, with potential savings of 10-20% on carbon costs through actual vs. default data reporting." data-he="<strong>השפעה:</strong> מאפשרת ליותר מ-5,000 חברות ישראליות לעמוד ברגולציית ה-CBAM האירופית שנכנסת לתוקף ב-2026, עם חיסכון פוטנציאלי של 10-20% בעלויות פחמן באמצעות דיווח נתונים בפועל במקום ברירת מחדל."><strong>Impact:</strong> Enabling 5,000+ Israeli companies to comply with EU CBAM regulations effective 2026, with potential savings of 10-20% on carbon costs through actual vs. default data reporting.</p>
+                    <a href="https://climetrix.io" target="_blank" class="project-link" data-en="View Project →" data-he="לצפייה בפרויקט ←">View Project →</a>
                 </div>
                 <a href="https://climetrix.io" target="_blank" class="project-preview" style="text-decoration: none;">
                     <div class="preview-dots">
@@ -1791,9 +1829,9 @@
             <!-- Nectra -->
             <div class="project-card">
                 <div class="project-content">
-                    <span class="project-badge badge-saas">SaaS Platform</span>
+                    <span class="project-badge badge-saas" data-en="SaaS Platform" data-he="פלטפורמת SaaS">SaaS Platform</span>
                     <h3>NECTRA</h3>
-                    <p>Enterprise real estate project management system for appraisal offices managing 150+ construction projects annually. Features 7-stage workflow, 16 budget calculators, monthly financial supervision, and multi-tenant SaaS architecture.</p>
+                    <p data-en="Enterprise real estate project management system for appraisal offices managing 150+ construction projects annually. Features 7-stage workflow, 16 budget calculators, monthly financial supervision, and multi-tenant SaaS architecture." data-he="מערכת ארגונית לניהול פרויקטי נדל&quot;ן עבור משרדי שמאות המנהלים 150+ פרויקטי בנייה בשנה. כוללת תהליך עבודה ב-7 שלבים, 16 מחשבוני תקציב, ליווי פיננסי חודשי וארכיטקטורת SaaS רב-דיירים.">Enterprise real estate project management system for appraisal offices managing 150+ construction projects annually. Features 7-stage workflow, 16 budget calculators, monthly financial supervision, and multi-tenant SaaS architecture.</p>
                     <div class="project-tech">
                         <span class="tech-tag">Django 5.0</span>
                         <span class="tech-tag">React 18</span>
@@ -1801,8 +1839,8 @@
                         <span class="tech-tag">Celery</span>
                         <span class="tech-tag">Redis</span>
                     </div>
-                    <p><strong>Scope:</strong> 27-30 month financial supervision lifecycle, equity approval workflows, automated monthly balance calculations.</p>
-                    <a href="https://frontendmaterialdashboard.vercel.app" target="_blank" class="project-link">View Project →</a>
+                    <p data-en="<strong>Scope:</strong> 27-30 month financial supervision lifecycle, equity approval workflows, automated monthly balance calculations." data-he="<strong>היקף:</strong> מחזור ליווי פיננסי של 27-30 חודשים, תהליכי אישור הון עצמי וחישובי יתרה חודשיים אוטומטיים."><strong>Scope:</strong> 27-30 month financial supervision lifecycle, equity approval workflows, automated monthly balance calculations.</p>
+                    <a href="https://frontendmaterialdashboard.vercel.app" target="_blank" class="project-link" data-en="View Project →" data-he="לצפייה בפרויקט ←">View Project →</a>
                 </div>
                 <a href="https://frontendmaterialdashboard.vercel.app" target="_blank" class="project-preview" style="text-decoration: none;">
                     <div class="preview-dots">
@@ -1817,16 +1855,16 @@
             <!-- Maakav -->
             <div class="project-card">
                 <div class="project-content">
-                    <span class="project-badge badge-saas">SaaS Platform</span>
+                    <span class="project-badge badge-saas" data-en="SaaS Platform" data-he="פלטפורמת SaaS">SaaS Platform</span>
                     <h3>MAAKAV</h3>
-                    <p>Construction project tracking system—a spin-off of Nectra built for the same real-estate client. Maakav (Hebrew: מעקב, "tracking") monitors on-site construction progress, milestones, and delivery status across active building projects.</p>
+                    <p data-en="Construction project tracking system—a spin-off of Nectra built for the same real-estate client. Maakav (Hebrew: מעקב, &quot;tracking&quot;) monitors on-site construction progress, milestones, and delivery status across active building projects." data-he="מערכת למעקב אחר פרויקטי בנייה — הרחבה (spin-off) של Nectra שנבנתה עבור אותו לקוח נדל&quot;ן. &quot;מעקב&quot; עוקבת אחר התקדמות הבנייה באתר, אבני דרך וסטטוס מסירה לאורך פרויקטי בנייה פעילים.">Construction project tracking system—a spin-off of Nectra built for the same real-estate client. Maakav (Hebrew: מעקב, "tracking") monitors on-site construction progress, milestones, and delivery status across active building projects.</p>
                     <div class="project-tech">
                         <span class="tech-tag">Construction Tracking</span>
                         <span class="tech-tag">Multi-project</span>
                         <span class="tech-tag">Hebrew UI</span>
                         <span class="tech-tag">Nectra Spin-off</span>
                     </div>
-                    <p><strong>Scope:</strong> Real-time construction progress monitoring for real-estate developers, extending Nectra's project-finance workflows to on-the-ground build tracking.</p>
+                    <p data-en="<strong>Scope:</strong> Real-time construction progress monitoring for real-estate developers, extending Nectra's project-finance workflows to on-the-ground build tracking." data-he="<strong>היקף:</strong> ניטור התקדמות בנייה בזמן אמת עבור יזמי נדל&quot;ן, המרחיב את תהליכי המימון של Nectra למעקב ביצוע בשטח."><strong>Scope:</strong> Real-time construction progress monitoring for real-estate developers, extending Nectra's project-finance workflows to on-the-ground build tracking.</p>
                 </div>
                 <div class="project-preview">
                     <div class="preview-dots">
@@ -1862,9 +1900,9 @@
             <!-- Urbanic Estate -->
             <div class="project-card">
                 <div class="project-content">
-                    <span class="project-badge badge-saas">SaaS Platform</span>
+                    <span class="project-badge badge-saas" data-en="SaaS Platform" data-he="פלטפורמת SaaS">SaaS Platform</span>
                     <h3>URBANIC ESTATE</h3>
-                    <p>End-to-end platform for real-estate developers, covering every stage of a project—from feasibility to keys. Model profitability, plan timelines, track construction, manage marketing and billing, and hand units over to buyers, all in one system.</p>
+                    <p data-en="End-to-end platform for real-estate developers, covering every stage of a project—from feasibility to keys. Model profitability, plan timelines, track construction, manage marketing and billing, and hand units over to buyers, all in one system." data-he="פלטפורמה מקצה לקצה ליזמי נדל&quot;ן, המכסה כל שלב בפרויקט — מהיתכנות ועד מסירת מפתחות. מידול רווחיות, תכנון לוחות זמנים, מעקב בנייה, ניהול שיווק וחיוב ומסירת יחידות לרוכשים — הכל במערכת אחת.">End-to-end platform for real-estate developers, covering every stage of a project—from feasibility to keys. Model profitability, plan timelines, track construction, manage marketing and billing, and hand units over to buyers, all in one system.</p>
                     <div class="project-tech">
                         <span class="tech-tag">Multi-project</span>
                         <span class="tech-tag">Multi-tenant</span>
@@ -1872,8 +1910,8 @@
                         <span class="tech-tag">After-sale</span>
                         <span class="tech-tag">Bilingual PT / EN</span>
                     </div>
-                    <p><strong>Scope:</strong> Built for TAG Urbanic Investment Management (Portugal). Post-construction modules—inspection & after-sale handover—shipping first, where the spreadsheets pile up.</p>
-                    <a href="https://www.urbanic.estate" target="_blank" class="project-link">View Project →</a>
+                    <p data-en="<strong>Scope:</strong> Built for TAG Urbanic Investment Management (Portugal). Post-construction modules—inspection &amp; after-sale handover—shipping first, where the spreadsheets pile up." data-he="<strong>היקף:</strong> נבנתה עבור TAG Urbanic Investment Management (פורטוגל). מודולי הפוסט-בנייה — בדק ומסירה לאחר מכירה — משוחררים ראשונים, שם נערמים הגיליונות."><strong>Scope:</strong> Built for TAG Urbanic Investment Management (Portugal). Post-construction modules—inspection & after-sale handover—shipping first, where the spreadsheets pile up.</p>
+                    <a href="https://www.urbanic.estate" target="_blank" class="project-link" data-en="View Project →" data-he="לצפייה בפרויקט ←">View Project →</a>
                 </div>
                 <a href="https://www.urbanic.estate" target="_blank" class="project-preview" style="text-decoration: none;">
                     <div class="preview-dots">
@@ -1888,9 +1926,9 @@
             <!-- Riscovery -->
             <div class="project-card">
                 <div class="project-content">
-                    <span class="project-badge badge-saas">SaaS Platform</span>
+                    <span class="project-badge badge-saas" data-en="SaaS Platform" data-he="פלטפורמת SaaS">SaaS Platform</span>
                     <h3>RISCOVERY</h3>
-                    <p>Insurance advisory management system for LHD Insurance Consulting. Features AI-powered OCR certificate verification, Smart RFQ generator with sector-based questionnaires, compliance gap detection across 12 insurance product types, and a comprehensive knowledge base covering 7 major Israeli insurers.</p>
+                    <p data-en="Insurance advisory management system for LHD Insurance Consulting. Features AI-powered OCR certificate verification, Smart RFQ generator with sector-based questionnaires, compliance gap detection across 12 insurance product types, and a comprehensive knowledge base covering 7 major Israeli insurers." data-he="מערכת לניהול ייעוץ ביטוחי עבור LHD Insurance Consulting. כוללת אימות תעודות מבוסס-AI‏ (OCR), מחולל בקשות להצעת מחיר (RFQ) חכם עם שאלונים לפי ענף, זיהוי פערי ציות ב-12 סוגי מוצרי ביטוח, ומאגר ידע מקיף המכסה 7 מחברות הביטוח הגדולות בישראל.">Insurance advisory management system for LHD Insurance Consulting. Features AI-powered OCR certificate verification, Smart RFQ generator with sector-based questionnaires, compliance gap detection across 12 insurance product types, and a comprehensive knowledge base covering 7 major Israeli insurers.</p>
                     <div class="project-tech">
                         <span class="tech-tag">Next.js 14</span>
                         <span class="tech-tag">Fastify</span>
@@ -1898,8 +1936,8 @@
                         <span class="tech-tag">Prisma</span>
                         <span class="tech-tag">OpenAI</span>
                     </div>
-                    <p><strong>Impact:</strong> Automates insurance certificate comparison and RFQ generation for corporate clients including El-Al, Teva, and Shikun & Binui, with 95+ coverage rules across 8 industry sectors.</p>
-                    <a href="https://riskcovery-bgq152i8f-avi-luvchiks-projects.vercel.app/rfq-v3" target="_blank" class="project-link">View Live Demo →</a>
+                    <p data-en="<strong>Impact:</strong> Automates insurance certificate comparison and RFQ generation for corporate clients including El-Al, Teva, and Shikun &amp; Binui, with 95+ coverage rules across 8 industry sectors." data-he="<strong>השפעה:</strong> מאוטמת השוואת תעודות ביטוח והפקת בקשות להצעת מחיר עבור לקוחות ארגוניים כמו אל-על, טבע ושיכון ובינוי, עם 95+ כללי כיסוי ב-8 מגזרי תעשייה."><strong>Impact:</strong> Automates insurance certificate comparison and RFQ generation for corporate clients including El-Al, Teva, and Shikun & Binui, with 95+ coverage rules across 8 industry sectors.</p>
+                    <a href="https://riskcovery-bgq152i8f-avi-luvchiks-projects.vercel.app/rfq-v3" target="_blank" class="project-link" data-en="View Live Demo →" data-he="לדמו חי ←">View Live Demo →</a>
                 </div>
                 <a href="https://riskcovery-bgq152i8f-avi-luvchiks-projects.vercel.app/rfq-v3" target="_blank" class="project-preview" style="text-decoration: none;">
                     <div class="preview-dots">
@@ -1914,9 +1952,9 @@
             <!-- Kolamba -->
             <div class="project-card featured">
                 <div class="project-content">
-                    <span class="project-badge badge-saas">SaaS Platform</span>
+                    <span class="project-badge badge-saas" data-en="SaaS Platform" data-he="פלטפורמת SaaS">SaaS Platform</span>
                     <h3>KOLAMBA</h3>
-                    <p>Two-sided marketplace connecting Israeli and Jewish artists with communities worldwide. Features artist profiles with media galleries, community geolocation with map visualization, smart tour algorithm using Haversine distance clustering, booking management, in-app messaging, and bilingual Hebrew/English support.</p>
+                    <p data-en="Two-sided marketplace connecting Israeli and Jewish artists with communities worldwide. Features artist profiles with media galleries, community geolocation with map visualization, smart tour algorithm using Haversine distance clustering, booking management, in-app messaging, and bilingual Hebrew/English support." data-he="זירת מסחר דו-צדדית המחברת אמנים ישראלים ויהודים עם קהילות ברחבי העולם. כוללת פרופילי אמנים עם גלריות מדיה, מיקום גאוגרפי של קהילות עם תצוגת מפה, אלגוריתם סיור חכם מבוסס אשכולות מרחק (Haversine), ניהול הזמנות, הודעות בתוך האפליקציה ותמיכה דו-לשונית עברית/אנגלית.">Two-sided marketplace connecting Israeli and Jewish artists with communities worldwide. Features artist profiles with media galleries, community geolocation with map visualization, smart tour algorithm using Haversine distance clustering, booking management, in-app messaging, and bilingual Hebrew/English support.</p>
                     <div class="project-tech">
                         <span class="tech-tag">Next.js 14</span>
                         <span class="tech-tag">FastAPI</span>
@@ -1924,8 +1962,8 @@
                         <span class="tech-tag">TypeScript</span>
                         <span class="tech-tag">Tailwind CSS</span>
                     </div>
-                    <p><strong>Scope:</strong> 90+ API endpoints, 4 role-based dashboards (Artist, Community, Admin, Agent), 109 automated tests, and zero-downtime deployment across Vercel + Railway.</p>
-                    <a href="https://kolamba.vercel.app" target="_blank" class="project-link">View Project →</a>
+                    <p data-en="<strong>Scope:</strong> 90+ API endpoints, 4 role-based dashboards (Artist, Community, Admin, Agent), 109 automated tests, and zero-downtime deployment across Vercel + Railway." data-he="<strong>היקף:</strong> 90+ נקודות קצה של API, 4 דשבורדים לפי תפקיד (אמן, קהילה, מנהל, סוכן), 109 בדיקות אוטומטיות, ופריסה ללא זמן השבתה על Vercel + Railway."><strong>Scope:</strong> 90+ API endpoints, 4 role-based dashboards (Artist, Community, Admin, Agent), 109 automated tests, and zero-downtime deployment across Vercel + Railway.</p>
+                    <a href="https://kolamba.vercel.app" target="_blank" class="project-link" data-en="View Project →" data-he="לצפייה בפרויקט ←">View Project →</a>
                 </div>
                 <a href="https://kolamba.vercel.app" target="_blank" class="project-preview" style="text-decoration: none;">
                     <div class="preview-dots">
@@ -1944,19 +1982,19 @@
         <div class="founder-card">
             <div class="founder-image">
                 <div class="founder-image-container" style="padding: 0; overflow: hidden;">
-                    <img src="/static/avi.jpeg" alt="Dr. Avi Luvchik" style="width: 100%; height: 100%; object-fit: cover;">
+                    <img src="/avi.jpeg" alt="Dr. Avi Luvchik" style="width: 100%; height: 100%; object-fit: cover;">
                 </div>
                 <div class="founder-badges">
-                    <span class="founder-badge">PhD Physics</span>
-                    <span class="founder-badge">Imperial College</span>
-                    <span class="founder-badge">Ex-Intel</span>
+                    <span class="founder-badge" data-en="PhD Physics" data-he="דוקטור לפיזיקה">PhD Physics</span>
+                    <span class="founder-badge" data-en="Imperial College" data-he="Imperial College">Imperial College</span>
+                    <span class="founder-badge" data-en="Ex-Intel" data-he="לשעבר Intel">Ex-Intel</span>
                 </div>
             </div>
             <div class="founder-info">
-                <h2>Meet the Founder</h2>
-                <h3>Dr. Avi Luvchik</h3>
-                <div class="founder-title">Founder & CEO, Drishti Consulting</div>
-                <p class="founder-bio">
+                <h2 data-en="Meet the Founder" data-he="הכירו את המייסד">Meet the Founder</h2>
+                <h3 data-en="Dr. Avi Luvchik" data-he="ד&quot;ר אבי לובצ'יק">Dr. Avi Luvchik</h3>
+                <div class="founder-title" data-en="Founder &amp; CEO, Drishti Consulting" data-he="מייסד ומנכ&quot;ל, Drishti Consulting">Founder & CEO, Drishti Consulting</div>
+                <p class="founder-bio" data-en="Dr. Avi Luvchik brings a unique combination of deep scientific expertise and real-world business acumen to every project. With a <strong>PhD in Physics from Imperial College London</strong>, he spent years at <strong>Intel</strong> as Environmental Engineer and Head of Sustainability in Israel, gaining hands-on experience in corporate environmental management and regulatory compliance.<br><br>As former <strong>VP of Business Development at Capital Nature</strong> and <strong>Co-founder of Noah Capital</strong>, a Climate-tech VC investing up to $3M per company, Avi has been at the forefront of the sustainability revolution. This background gives him rare insight into both the technical challenges and business opportunities of environmental compliance.<br><br>Today, through Drishti Consulting, Avi helps businesses transform their vision into technology-driven reality—with a special focus on sustainability, compliance, and digital transformation." data-he="ד&quot;ר אבי לובצ'יק מביא לכל פרויקט שילוב ייחודי של מומחיות מדעית עמוקה וחוש עסקי מהעולם האמיתי. בעל <strong>דוקטורט בפיזיקה מ-Imperial College London</strong>, בילה שנים ב-<strong>Intel</strong> כמהנדס סביבה וראש תחום קיימות בישראל, וצבר ניסיון מעשי בניהול סביבתי ארגוני ובעמידה ברגולציה.<br><br>כסמנכ&quot;ל פיתוח עסקי לשעבר ב-<strong>Capital Nature</strong> ו<strong>שותף-מייסד של Noah Capital</strong>, קרן הון-סיכון בתחום הקלימט-טק המשקיעה עד 3 מיליון דולר לחברה, אבי נמצא בחזית מהפכת הקיימות. רקע זה מעניק לו תובנה נדירה הן באתגרים הטכניים והן בהזדמנויות העסקיות שברגולציה הסביבתית.<br><br>כיום, באמצעות Drishti Consulting, אבי מסייע לעסקים להפוך את החזון שלהם למציאות מונעת-טכנולוגיה — עם דגש מיוחד על קיימות, ציות רגולטורי וטרנספורמציה דיגיטלית.">
                     Dr. Avi Luvchik brings a unique combination of deep scientific expertise and real-world business acumen to every project. With a <strong>PhD in Physics from Imperial College London</strong>, he spent years at <strong>Intel</strong> as Environmental Engineer and Head of Sustainability in Israel, gaining hands-on experience in corporate environmental management and regulatory compliance.
                     <br><br>
                     As former <strong>VP of Business Development at Capital Nature</strong> and <strong>Co-founder of Noah Capital</strong>, a Climate-tech VC investing up to $3M per company, Avi has been at the forefront of the sustainability revolution. This background gives him rare insight into both the technical challenges and business opportunities of environmental compliance.
@@ -1966,15 +2004,15 @@
                 <div class="founder-stats">
                     <div class="stat">
                         <div class="stat-value">15+</div>
-                        <div class="stat-label">Years Experience</div>
+                        <div class="stat-label" data-en="Years Experience" data-he="שנות ניסיון">Years Experience</div>
                     </div>
                     <div class="stat">
                         <div class="stat-value">20+</div>
-                        <div class="stat-label">Projects Delivered</div>
+                        <div class="stat-label" data-en="Projects Delivered" data-he="פרויקטים שנמסרו">Projects Delivered</div>
                     </div>
                     <div class="stat">
                         <div class="stat-value">5+</div>
-                        <div class="stat-label">Industries Served</div>
+                        <div class="stat-label" data-en="Industries Served" data-he="תעשיות">Industries Served</div>
                     </div>
                 </div>
                 <div class="founder-links">
@@ -1996,9 +2034,9 @@
     <!-- Contact Section -->
     <section class="contact" id="contact">
         <div class="contact-container">
-            <span class="section-label">Let's Connect</span>
-            <h2>Ready to Focus Your Vision?</h2>
-            <p>Let's discuss how we can help transform your business goals into powerful technology solutions</p>
+            <span class="section-label" data-en="Let's Connect" data-he="בואו נתחבר">Let's Connect</span>
+            <h2 data-en="Ready to Focus Your Vision?" data-he="מוכנים למקד את החזון שלכם?">Ready to Focus Your Vision?</h2>
+            <p data-en="Let's discuss how we can help transform your business goals into powerful technology solutions" data-he="בואו נדבר על איך נוכל להפוך את המטרות העסקיות שלכם לפתרונות טכנולוגיים עוצמתיים">Let's discuss how we can help transform your business goals into powerful technology solutions</p>
             <div class="contact-card">
                 <div class="contact-methods">
                     <a href="mailto:avi@drishticonsulting.com" class="contact-method">
@@ -2008,7 +2046,7 @@
                             </svg>
                         </div>
                         <div class="contact-method-info">
-                            <div class="contact-method-label">Email Us</div>
+                            <div class="contact-method-label" data-en="Email Us" data-he="כתבו לנו">Email Us</div>
                             <div class="contact-method-value">avi@drishticonsulting.com</div>
                         </div>
                     </a>
@@ -2019,8 +2057,8 @@
                             </svg>
                         </div>
                         <div class="contact-method-info">
-                            <div class="contact-method-label">Connect on LinkedIn</div>
-                            <div class="contact-method-value">Dr. Avi Luvchik</div>
+                            <div class="contact-method-label" data-en="Connect on LinkedIn" data-he="התחברו בלינקדאין">Connect on LinkedIn</div>
+                            <div class="contact-method-value" data-en="Dr. Avi Luvchik" data-he="ד&quot;ר אבי לובצ'יק">Dr. Avi Luvchik</div>
                         </div>
                     </a>
                 </div>
@@ -2045,10 +2083,10 @@
             </div>
             <span class="logo-text">Drishti</span>
         </div>
-        <p class="footer-tagline">
+        <p class="footer-tagline" data-en="Focused Vision. Precise Execution." data-he="חזון ממוקד. ביצוע מדויק.">
             Focused Vision. Precise Execution.
         </p>
-        <p class="footer-copyright">
+        <p class="footer-copyright" data-en="© 2026 Drishti Consulting. All rights reserved." data-he="© 2026 Drishti Consulting. כל הזכויות שמורות.">
             © 2026 Drishti Consulting. All rights reserved.
         </p>
     </footer>
@@ -2082,6 +2120,29 @@
             if (loaded.length === 0) { g.classList.add('no-images'); return; }
             setInterval(() => maakavStep(1), 4000);
         });
+
+        // Bilingual EN / HE
+        function applyLang(lang) {
+            const html = document.documentElement;
+            html.lang = lang;
+            html.dir = lang === 'he' ? 'rtl' : 'ltr';
+            document.querySelectorAll('[data-en]').forEach(function (el) {
+                const val = el.getAttribute('data-' + lang);
+                if (val !== null) el.innerHTML = val;
+            });
+            const btn = document.querySelector('.lang-toggle');
+            if (btn) btn.textContent = lang === 'he' ? 'EN' : 'עברית';
+            try { localStorage.setItem('drishti-lang', lang); } catch (e) {}
+        }
+        function toggleLang() {
+            const cur = document.documentElement.lang === 'he' ? 'he' : 'en';
+            applyLang(cur === 'he' ? 'en' : 'he');
+        }
+        (function () {
+            let saved = 'en';
+            try { saved = localStorage.getItem('drishti-lang') || 'en'; } catch (e) {}
+            applyLang(saved);
+        })();
     </script>
 </body>
 </html>
