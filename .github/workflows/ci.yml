@@ -1,0 +1,21 @@
+name: CI
+
+# This site has no build step: it is static HTML served by GitHub Pages, and
+# pages-build-deployment only runs after a push to main, which is too late to
+# stop anything. This is the PR-time gate that "Build" on main requires.
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+jobs:
+  build:
+    name: Build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Check JSON data and local links
+        run: python3 scripts/check_site.py
